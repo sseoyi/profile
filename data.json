@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updatedAt": "2026-07-20T08:08:57.687Z",
+  "updatedAt": "2026-07-20T08:12:39.832Z",
   "content": {
     "profileName": "Seoyi",
     "profileHandle": "@s_seoyi",
@@ -46,7 +46,7 @@
     "paymentValue4": "TÊN FACEBOOK",
     "quickTransferLabel": "Chuyển khoản nhanh ↗",
     "storeTitle": "Store",
-    "storeNote": "Một vài món fanmade hoặc slot đang mở.",
+    "storeNote": "Hàng có sẵn",
     "productArt1": "✦",
     "productTitle1": "Sketch request",
     "productPrice1": "100K+",
@@ -67,7 +67,7 @@
     "productPrice4": "Free",
     "productDescription4": "Hình nền điện thoại dành cho follower.",
     "productButton4": "Tải xuống",
-    "footerText": "Vẽ vì vui ♡ Vui lòng không repost, trace hoặc sử dụng tranh để huấn luyện AI."
+    "footerText": "@s_seoyi"
   },
   "html": {
     "noticeHtml": "<b>ALIEN STAGE&nbsp;</b>"
