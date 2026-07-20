@@ -49,7 +49,7 @@
       position: relative;
       z-index: 2;
       width: min(820px, calc(100% - 24px));
-      margin: 18px auto 34px;
+      margin: 10px auto 26px;
     }
 
     /* Minimal falling stars in the empty desktop side gutters */
@@ -95,8 +95,10 @@
     .profile-card {
       position: relative;
       display: grid;
-      grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+      grid-template-columns: minmax(280px, 330px) minmax(0, 1fr);
       align-items: stretch;
+      width: min(700px, 100%);
+      margin: 0 auto;
       overflow: visible;
       background: transparent;
     }
@@ -167,7 +169,7 @@
       flex-direction: column;
       justify-content: center;
       min-width: 0;
-      padding: clamp(18px, 4.5vw, 42px);
+      padding: clamp(14px, 3vw, 28px);
       color: var(--ink);
     }
 
@@ -181,7 +183,7 @@
     }
 
     .handle {
-      margin: 16px 0 0;
+      margin: 12px 0 0;
       font-size: 14px;
       font-weight: 700;
       opacity: .82;
@@ -191,7 +193,7 @@
       display: flex;
       flex-wrap: wrap;
       gap: 6px;
-      margin-top: 18px;
+      margin-top: 13px;
     }
 
     .mini-tag {
@@ -209,7 +211,7 @@
       align-items: center;
       flex-wrap: wrap;
       gap: 8px;
-      margin-top: 19px;
+      margin-top: 14px;
     }
 
     .social-button {
@@ -235,8 +237,8 @@
 
     .notice {
       position: relative;
-      margin: 14px 0;
-      padding: 13px 16px;
+      margin: 10px 0;
+      padding: 11px 14px;
       border: 2px solid var(--ink);
       border-radius: 14px;
       color: var(--ink);
@@ -257,7 +259,7 @@
       position: relative;
       z-index: 3;
       width: 100%;
-      min-height: 72px;
+      min-height: 56px;
       overflow: hidden;
       background-color: var(--ink);
       background-position: center;
@@ -344,7 +346,7 @@
       background: var(--mint);
     }
 
-    .panel { display: none; padding: 16px; background: var(--mint); }
+    .panel { display: none; padding: 13px; background: var(--mint); }
     .panel.active { display: block; animation: show .18s ease; }
 
     @keyframes show {
@@ -661,7 +663,7 @@
     }
 
     footer {
-      padding: 13px 5px 0;
+      padding: 9px 5px 0;
       text-align: center;
       color: rgba(35, 31, 32, .68);
       font-size: 10px;
@@ -705,7 +707,7 @@
     .editor-access-wrap {
       display: flex;
       justify-content: center;
-      padding-top: 12px;
+      padding-top: 8px;
     }
 
     .editor-access-btn {
@@ -981,19 +983,26 @@
       .side-star { animation: none; display: none; }
     }
 
+    @media (max-width: 700px) {
+      .profile-card {
+        grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+        width: 100%;
+      }
+    }
+
     @media (max-width: 620px) {
-      .shell { width: min(100% - 14px, 820px); margin-top: 7px; }
+      .shell { width: min(100% - 14px, 820px); margin: 6px auto 20px; }
       .profile-card { grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); }
       .art-slot { width: 100%; aspect-ratio: 1 / 1; }
-      .profile-info { padding: 13px 8px 14px; }
+      .profile-info { padding: 10px 7px 11px; }
       h1 { font-size: clamp(60px, 19.5vw, 96px); }
-      .handle { margin-top: 10px; font-size: 11px; }
-      .mini-tags { gap: 4px; margin-top: 11px; }
+      .handle { margin-top: 8px; font-size: 11px; }
+      .mini-tags { gap: 4px; margin-top: 8px; }
       .mini-tag { padding: 4px 6px; font-size: 8px; border-width: 1.5px; }
-      .socials { gap: 6px; margin-top: 11px; }
+      .socials { gap: 6px; margin-top: 8px; }
       .social-button { min-height: 34px; padding: 0 10px; font-size: 10px; }
       .tabs { grid-template-columns: none; grid-auto-flow: column; grid-auto-columns: max-content; justify-content: start; }
-      .panel { padding: 13px 11px; }
+      .panel { padding: 11px 9px; }
       .payment-layout { grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 7px; }
       .payment-info { padding: 0; }
       .payment-row { padding: 6px 5px; gap: 5px; }
