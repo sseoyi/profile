@@ -249,7 +249,6 @@
 
     .content-card {
       overflow: hidden;
-      border: 2px solid var(--ink);
       border-radius: 18px;
       color: var(--ink);
       background: transparent;
@@ -329,6 +328,8 @@
     }
 
     .tab-btn {
+      position: relative;
+      isolation: isolate;
       min-height: 38px;
       padding: 0 10px;
       border: 0;
@@ -341,16 +342,68 @@
       cursor: pointer;
     }
 
-    .tab-btn.active {
-      color: var(--ink);
+    .tab-btn::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      z-index: -1;
+      border-radius: 9px;
       background: var(--mint);
+      opacity: 0;
+      transform: translateY(0) scale(1);
+    }
+
+    .tab-btn > span {
+      display: inline-block;
+      pointer-events: none;
+    }
+
+    .tab-btn.active { color: var(--ink); }
+    .tab-btn.active::before { opacity: 1; }
+
+    .tab-btn.tab-enter::before {
+      animation: tabBoxPop .3s cubic-bezier(.2, .85, .28, 1) both;
+    }
+
+    .tab-btn.tab-enter > span {
+      animation: tabTextPop .3s cubic-bezier(.22, 1, .36, 1) both;
+    }
+
+    @keyframes tabBoxPop {
+      0% { opacity: .72; transform: translateY(4px) scale(.96); }
+      62% { opacity: 1; transform: translateY(-2px) scale(1.02); }
+      100% { opacity: 1; transform: translateY(0) scale(1); }
+    }
+
+    @keyframes tabTextPop {
+      0% { opacity: .55; transform: translateY(5px) scale(.88); }
+      65% { opacity: 1; transform: translateY(-2px) scale(1.08); }
+      100% { opacity: 1; transform: translateY(0) scale(1); }
+    }
+
+    .content-card {
+      position: relative;
+      border: 0;
+    }
+
+    .content-card::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      z-index: 6;
+      border: 2px solid var(--ink);
+      border-radius: 18px;
+      pointer-events: none;
     }
 
     .panel { display: none; padding: 13px; background: var(--mint); }
-    .panel.active { display: block; animation: show .18s ease; }
+    .panel.active { display: block; }
+    .panel.panel-content-enter {
+      animation: panelContentIn .2s cubic-bezier(.22, 1, .36, 1) both;
+    }
 
-    @keyframes show {
-      from { opacity: 0; transform: translateY(3px); }
+    @keyframes panelContentIn {
+      from { opacity: 0; transform: translateY(8px); }
       to { opacity: 1; transform: translateY(0); }
     }
 
@@ -660,6 +713,153 @@
       background: var(--ink);
       font-size: 10px;
       font-weight: 800;
+    }
+
+    .feedback-modal {
+      position: fixed;
+      inset: 0;
+      z-index: 95;
+      display: none;
+      place-items: center;
+      padding: 18px;
+      background: rgba(35, 31, 32, .52);
+    }
+
+    .feedback-modal.open { display: grid; }
+
+    .feedback-box {
+      width: min(760px, 100%);
+      max-height: min(760px, calc(100vh - 36px));
+      overflow: auto;
+      padding: 15px;
+      border: 2px solid var(--ink);
+      border-radius: 16px;
+      color: var(--ink);
+      background: #ffffff;
+    }
+
+    .feedback-head {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      margin-bottom: 12px;
+    }
+
+    .feedback-head h2 {
+      margin: 0;
+      font-size: 18px;
+      line-height: 1.1;
+    }
+
+    .feedback-head-actions {
+      display: flex;
+      align-items: center;
+      gap: 7px;
+    }
+
+    .feedback-upload,
+    .feedback-close {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 32px;
+      padding: 0 10px;
+      border: 1.5px solid var(--ink);
+      border-radius: 9px;
+      color: var(--mint);
+      background: var(--ink);
+      font-size: 9px;
+      font-weight: 850;
+      cursor: pointer;
+    }
+
+    .feedback-close {
+      width: 32px;
+      padding: 0;
+      color: var(--ink);
+      background: var(--mint);
+      font-size: 15px;
+    }
+
+    .feedback-upload input { display: none; }
+
+    .feedback-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 9px;
+    }
+
+    .feedback-item {
+      position: relative;
+      overflow: hidden;
+      aspect-ratio: 1 / 1;
+      border: 1.5px solid var(--ink);
+      border-radius: 11px;
+      background: var(--mint);
+    }
+
+    .feedback-item img {
+      display: block;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      cursor: zoom-in;
+    }
+
+    .feedback-remove {
+      position: absolute;
+      top: 6px;
+      right: 6px;
+      z-index: 2;
+      display: none;
+      width: 27px;
+      height: 27px;
+      padding: 0;
+      border: 1.5px solid #ffffff;
+      border-radius: 8px;
+      color: #ffffff;
+      background: var(--ink);
+      font-size: 13px;
+      font-weight: 900;
+      cursor: pointer;
+    }
+
+    body.edit-mode .feedback-remove { display: grid; place-items: center; }
+
+    .feedback-empty {
+      padding: 36px 14px;
+      border: 1.5px dashed rgba(35, 31, 32, .38);
+      border-radius: 11px;
+      color: rgba(35, 31, 32, .58);
+      text-align: center;
+      font-size: 11px;
+      line-height: 1.5;
+    }
+
+    .feedback-preview {
+      position: fixed;
+      inset: 0;
+      z-index: 115;
+      display: none;
+      place-items: center;
+      padding: 24px;
+      background: rgba(35, 31, 32, .82);
+      cursor: zoom-out;
+    }
+
+    .feedback-preview.open { display: grid; }
+    .feedback-preview img {
+      display: block;
+      max-width: min(980px, 94vw);
+      max-height: 90vh;
+      object-fit: contain;
+      border-radius: 10px;
+    }
+
+    .legit-action[type="button"] {
+      width: 100%;
+      cursor: pointer;
     }
 
     footer {
@@ -981,6 +1181,9 @@
 
     @media (prefers-reduced-motion: reduce) {
       .side-star { animation: none; display: none; }
+      .tab-btn.tab-enter::before,
+      .tab-btn.tab-enter > span,
+      .panel.panel-content-enter { animation: none !important; }
     }
 
     @media (max-width: 700px) {
@@ -1012,6 +1215,8 @@
       .qr-placeholder { padding: 8px; font-size: 9px; }
       .qr-placeholder small { font-size: 7px; }
       .store-grid { grid-template-columns: 1fr; }
+      .feedback-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 7px; }
+      .feedback-box { padding: 12px; }
       .editor-toolbar span { display: none; }
       .editor-toolbar { justify-content: flex-end; }
       .github-fields { grid-template-columns: 1fr; }
@@ -1060,10 +1265,10 @@
     </div>
 <section class="content-card">
 <nav aria-label="Thông tin profile" class="tabs">
-<button class="tab-btn active" data-edit-key="tabLegit" data-tab="legit" type="button">Check legit</button>
-<button class="tab-btn" data-edit-key="tabRules" data-tab="rules" type="button">Rules giao dịch</button>
-<button class="tab-btn" data-edit-key="tabPayment" data-tab="payment" type="button">Chuyển khoản</button>
-<button class="tab-btn" data-edit-key="tabStore" data-tab="store" type="button">Store</button>
+<button class="tab-btn active" data-tab="legit" type="button"><span data-edit-key="tabLegit">Check legit</span></button>
+<button class="tab-btn" data-tab="rules" type="button"><span data-edit-key="tabRules">Rules giao dịch</span></button>
+<button class="tab-btn" data-tab="payment" type="button"><span data-edit-key="tabPayment">Chuyển khoản</span></button>
+<button class="tab-btn" data-tab="store" type="button"><span data-edit-key="tabStore">Store</span></button>
 </nav>
 <section class="panel active" id="legit">
 <div class="list-card">
@@ -1088,7 +1293,7 @@
 </div>
 <div class="legit-actions">
 <a class="legit-action" data-edit-key="legitButton1" data-edit-link-key="legitPostUrl" href="https://facebook.com/" rel="noopener" target="_blank">Bài check legit</a>
-<a class="legit-action" data-edit-key="legitButton2" data-edit-link-key="feedbackUrl" href="https://facebook.com/" rel="noopener" target="_blank">Feedback</a>
+<button class="legit-action" data-edit-key="legitButton2" id="feedbackOpen" type="button">Feedback</button>
 </div>
 </section>
 <section class="panel" id="rules">
@@ -1202,7 +1407,7 @@
 </section>
 <footer data-edit-key="footerText">
       Vẽ vì vui ♡ Vui lòng không repost, trace hoặc sử dụng tranh để huấn luyện AI.
-    </footer><div class="editor-access-wrap"><button class="editor-access-btn" id="editorAccess" type="button">✎ Edit</button></div><div class="data-source-badge" id="dataSourceBadge">data.json: <span id="dataSourceText">đang kiểm tra…</span></div><div class="editor-toolbar" id="editorToolbar"><span>Chạm vào chữ để sửa · Nhấp đúp nút/liên kết để đổi URL</span><button class="secondary" id="githubSettingsOpen" type="button">GitHub</button><button id="githubPublish" type="button">Publish data.json</button><button id="editorSave" type="button">Lưu nháp</button><button class="secondary" id="editorExit" type="button">Lưu &amp; thoát</button></div>
+    </footer><div class="editor-access-wrap"><button class="editor-access-btn" id="editorAccess" type="button">✎ Edit</button></div><div class="data-source-badge" id="dataSourceBadge">data.json: <span id="dataSourceText">đang kiểm tra…</span></div><div class="editor-toolbar" id="editorToolbar"><span>Chạm vào chữ để sửa · Nhấp đúp nút/liên kết để đổi URL · Lưu & thoát để publish</span><button class="secondary" id="githubSettingsOpen" type="button">GitHub</button><button class="secondary" id="editorSave" type="button">Hủy thay đổi</button><button id="editorExit" type="button">Lưu &amp; thoát</button></div>
 </main>
 <div aria-hidden="true" class="editor-modal" id="editorModal"><div class="editor-modal-box"><h2>Mở chế độ chỉnh sửa</h2><p>Nhập mật khẩu để hiện các công cụ chỉnh sửa.</p><input autocomplete="current-password" id="editorPassword" placeholder="Password" type="password"/><div class="editor-error" id="editorError"></div><div class="editor-modal-actions"><button class="secondary" id="editorCancel" type="button">Hủy</button><button id="editorUnlock" type="button">Mở khóa</button></div></div></div>
 <div aria-hidden="true" class="github-settings-modal" id="githubSettingsModal">
@@ -1219,9 +1424,23 @@
     </div>
     <div class="github-warning">Token được lưu trong localStorage của trình duyệt này và không bị xóa sau khi refresh. Chỉ dùng fine-grained token giới hạn cho repo này với quyền Contents: Read and write. Không nhập token trên máy dùng chung.</div>
     <div aria-live="polite" class="github-status" id="githubStatus"></div>
-    <div class="github-actions"><button class="secondary" id="githubSaveSettings" type="button">Lưu cài đặt</button><button id="githubPublishModal" type="button">Publish data.json</button></div>
+    <div class="github-actions"><button id="githubSaveSettings" type="button">Lưu cài đặt</button></div>
   </div>
 </div>
+<div aria-hidden="true" aria-labelledby="feedbackTitle" class="feedback-modal" id="feedbackModal">
+  <div class="feedback-box" role="dialog" aria-modal="true">
+    <div class="feedback-head">
+      <h2 id="feedbackTitle">Feedback</h2>
+      <div class="feedback-head-actions">
+        <label class="feedback-upload edit-only">+ Thêm ảnh<input accept="image/png,image/jpeg,image/webp" id="feedbackInput" multiple type="file"/></label>
+        <button aria-label="Đóng thư viện feedback" class="feedback-close" id="feedbackClose" type="button">×</button>
+      </div>
+    </div>
+    <div class="feedback-empty" id="feedbackEmpty">Chưa có ảnh feedback.<br/>Mở Edit để tải ảnh lên.</div>
+    <div class="feedback-grid" id="feedbackGrid"></div>
+  </div>
+</div>
+<div aria-hidden="true" class="feedback-preview" id="feedbackPreview"><img alt="Ảnh feedback phóng to" id="feedbackPreviewImage"/></div>
 <div aria-live="polite" class="toast" id="toast" role="status">Đã sao chép</div>
 <script>
     const DATA_FILE_URL = './data.json';
@@ -1258,17 +1477,174 @@
     const tabButtons = document.querySelectorAll('.tab-btn');
     const panels = document.querySelectorAll('.panel');
 
-    function openTab(id) {
-      tabButtons.forEach(button => button.classList.toggle('active', button.dataset.tab === id));
-      panels.forEach(panel => panel.classList.toggle('active', panel.id === id));
+    function restartClassAnimation(element, className, duration) {
+      if (!element) return;
+      element.classList.remove(className);
+      void element.offsetWidth;
+      element.classList.add(className);
+      window.setTimeout(() => element.classList.remove(className), duration);
+    }
+
+    function openTab(id, animate = true) {
+      const activeButton = Array.from(tabButtons).find(button => button.dataset.tab === id);
+      let activePanel = null;
+
+      tabButtons.forEach(button => button.classList.toggle('active', button === activeButton));
+      panels.forEach(panel => {
+        const shouldOpen = panel.id === id;
+        panel.classList.toggle('active', shouldOpen);
+        panel.classList.remove('panel-content-enter');
+        if (shouldOpen) activePanel = panel;
+      });
+
+      if (!animate || window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+
+      restartClassAnimation(activeButton, 'tab-enter', 300);
+
+      // Keep the outline static; animate only the newly selected content.
+      if (activePanel?.classList.contains('active')) {
+        void activePanel.offsetWidth;
+        activePanel.classList.add('panel-content-enter');
+        window.setTimeout(() => activePanel.classList.remove('panel-content-enter'), 220);
+      }
     }
 
     tabButtons.forEach(button => {
-      button.addEventListener('click', event => {
+      button.addEventListener('click', () => {
         if (document.body.classList.contains('edit-mode')) return;
-        openTab(button.dataset.tab);
+        openTab(button.dataset.tab, true);
       });
     });
+
+    const FEEDBACK_STORAGE_KEY = 'fanartistFeedbackImages';
+    const feedbackOpen = document.getElementById('feedbackOpen');
+    const feedbackModal = document.getElementById('feedbackModal');
+    const feedbackClose = document.getElementById('feedbackClose');
+    const feedbackInput = document.getElementById('feedbackInput');
+    const feedbackGrid = document.getElementById('feedbackGrid');
+    const feedbackEmpty = document.getElementById('feedbackEmpty');
+    const feedbackPreview = document.getElementById('feedbackPreview');
+    const feedbackPreviewImage = document.getElementById('feedbackPreviewImage');
+    let feedbackImages = [];
+
+    function readFeedbackImages() {
+      try {
+        const saved = JSON.parse(localStorage.getItem(FEEDBACK_STORAGE_KEY) || '[]');
+        return Array.isArray(saved) ? saved.filter(src => typeof src === 'string' && src) : [];
+      } catch (error) {
+        return [];
+      }
+    }
+
+    function persistFeedbackImages() {
+      localStorage.setItem(FEEDBACK_STORAGE_KEY, JSON.stringify(feedbackImages));
+    }
+
+    function renderFeedbackGallery() {
+      feedbackGrid.innerHTML = '';
+      feedbackEmpty.style.display = feedbackImages.length ? 'none' : 'block';
+      feedbackImages.forEach((src, index) => {
+        const item = document.createElement('div');
+        item.className = 'feedback-item';
+        const image = document.createElement('img');
+        image.src = src;
+        image.alt = `Feedback ${index + 1}`;
+        image.loading = 'lazy';
+        image.addEventListener('click', () => {
+          feedbackPreviewImage.src = src;
+          feedbackPreview.classList.add('open');
+          feedbackPreview.setAttribute('aria-hidden', 'false');
+        });
+        const remove = document.createElement('button');
+        remove.type = 'button';
+        remove.className = 'feedback-remove';
+        remove.setAttribute('aria-label', `Xóa feedback ${index + 1}`);
+        remove.textContent = '×';
+        remove.addEventListener('click', event => {
+          event.stopPropagation();
+          if (!document.body.classList.contains('edit-mode')) return;
+          feedbackImages.splice(index, 1);
+          try { persistFeedbackImages(); }
+          catch (error) { showToast('Không thể lưu thay đổi ảnh vào trình duyệt'); }
+          renderFeedbackGallery();
+          markLocalDraft();
+          showToast('Đã xóa ảnh feedback');
+        });
+        item.append(image, remove);
+        feedbackGrid.appendChild(item);
+      });
+    }
+
+    function setFeedbackImages(images, persist = true, draft = false) {
+      feedbackImages = Array.isArray(images) ? images.filter(src => typeof src === 'string' && src) : [];
+      if (persist) {
+        try { persistFeedbackImages(); }
+        catch (error) { console.warn('Unable to cache feedback images:', error); }
+      }
+      renderFeedbackGallery();
+      if (draft) markLocalDraft();
+    }
+
+    function openFeedbackLibrary() {
+      feedbackModal.classList.add('open');
+      feedbackModal.setAttribute('aria-hidden', 'false');
+    }
+
+    function closeFeedbackLibrary() {
+      feedbackModal.classList.remove('open');
+      feedbackModal.setAttribute('aria-hidden', 'true');
+    }
+
+    feedbackOpen.addEventListener('click', event => {
+      event.preventDefault();
+      openFeedbackLibrary();
+    });
+    feedbackClose.addEventListener('click', closeFeedbackLibrary);
+    feedbackModal.addEventListener('click', event => {
+      if (event.target === feedbackModal) closeFeedbackLibrary();
+    });
+    feedbackPreview.addEventListener('click', () => {
+      feedbackPreview.classList.remove('open');
+      feedbackPreview.setAttribute('aria-hidden', 'true');
+      feedbackPreviewImage.removeAttribute('src');
+    });
+
+    feedbackInput.addEventListener('change', async event => {
+      const files = Array.from(event.target.files || []).filter(file => file.type.startsWith('image/'));
+      if (!files.length) return;
+      const available = Math.max(0, 30 - feedbackImages.length);
+      if (!available) return showToast('Thư viện đã đạt tối đa 30 ảnh');
+      const selected = files.slice(0, available);
+      const loaded = await Promise.all(selected.map(file => new Promise(resolve => {
+        const reader = new FileReader();
+        reader.onload = readEvent => resolve(readEvent.target.result);
+        reader.onerror = () => resolve('');
+        reader.readAsDataURL(file);
+      })));
+      feedbackImages.push(...loaded.filter(Boolean));
+      try {
+        persistFeedbackImages();
+        renderFeedbackGallery();
+        markLocalDraft();
+        showToast(`Đã thêm ${loaded.filter(Boolean).length} ảnh feedback`);
+      } catch (error) {
+        feedbackImages.splice(feedbackImages.length - loaded.filter(Boolean).length);
+        renderFeedbackGallery();
+        showToast('Ảnh quá lớn để lưu trong trình duyệt');
+      }
+      feedbackInput.value = '';
+    });
+
+    document.addEventListener('keydown', event => {
+      if (event.key !== 'Escape') return;
+      if (feedbackPreview.classList.contains('open')) {
+        feedbackPreview.click();
+      } else if (feedbackModal.classList.contains('open')) {
+        closeFeedbackLibrary();
+      }
+    });
+
+    setFeedbackImages(readFeedbackImages(), false, false);
 
     const toast = document.getElementById('toast');
     let toastTimer;
@@ -1426,6 +1802,42 @@
     const editorCancel = document.getElementById('editorCancel');
     const editorSave = document.getElementById('editorSave');
     const editorExit = document.getElementById('editorExit');
+    let editSessionSnapshot = null;
+
+    const EDIT_STORAGE_KEYS = [
+      'fanartistEditableContent',
+      'fanartistEditableHtml',
+      'fanartistEditableLinks',
+      'fanartistMintImage',
+      'fanartistPaymentQr',
+      'fanartistShopPattern',
+      'fanartistFeedbackImages',
+      'fanartistLocalDraft'
+    ];
+
+    function captureEditSession() {
+      const storage = {};
+      EDIT_STORAGE_KEYS.forEach(key => {
+        storage[key] = localStorage.getItem(key);
+      });
+      editSessionSnapshot = {
+        data: collectSiteData(),
+        storage,
+        sourceText: document.getElementById('dataSourceText')?.textContent || ''
+      };
+    }
+
+    function restoreEditSession() {
+      if (!editSessionSnapshot) return;
+      applySiteData(editSessionSnapshot.data);
+      EDIT_STORAGE_KEYS.forEach(key => {
+        const value = editSessionSnapshot.storage[key];
+        if (value === null) localStorage.removeItem(key);
+        else localStorage.setItem(key, value);
+      });
+      const sourceText = document.getElementById('dataSourceText');
+      if (sourceText) sourceText.textContent = editSessionSnapshot.sourceText;
+    }
 
     function markLocalDraft() {
       localStorage.setItem('fanartistLocalDraft', '1');
@@ -1465,26 +1877,7 @@
         const key = link.dataset.editLinkKey;
         if (Object.prototype.hasOwnProperty.call(links, key)) link.href = links[key];
       });
-    }
-
-    function saveEdits(silent = false) {
-      const content = {};
-      document.querySelectorAll('[data-edit-key]').forEach(element => {
-        content[element.dataset.editKey] = element.textContent.trim();
-      });
-      const htmlContent = {};
-      document.querySelectorAll('[data-edit-html-key]').forEach(element => {
-        htmlContent[element.dataset.editHtmlKey] = element.innerHTML;
-      });
-      const links = {};
-      document.querySelectorAll('[data-edit-link-key]').forEach(link => {
-        links[link.dataset.editLinkKey] = link.getAttribute('href') || '#';
-      });
-      localStorage.setItem('fanartistEditableContent', JSON.stringify(content));
-      localStorage.setItem('fanartistEditableHtml', JSON.stringify(htmlContent));
-      localStorage.setItem('fanartistEditableLinks', JSON.stringify(links));
-      markLocalDraft();
-      if (!silent) showToast('Đã lưu nháp trên trình duyệt');
+      setFeedbackImages(readFeedbackImages(), false, false);
     }
 
     function setEditMode(enabled) {
@@ -1524,6 +1917,7 @@
         return;
       }
       closeEditorModal();
+      captureEditSession();
       setEditMode(true);
       showToast('Đã mở chế độ chỉnh sửa');
     }
@@ -1537,12 +1931,16 @@
     editorModal.addEventListener('click', event => {
       if (event.target === editorModal) closeEditorModal();
     });
-    editorSave.addEventListener('click', () => saveEdits());
-    editorExit.addEventListener('click', () => {
-      saveEdits(true);
+    editorSave.addEventListener('click', () => {
+      restoreEditSession();
       setEditMode(false);
-      showToast('Đã lưu và thoát chỉnh sửa');
+      editSessionSnapshot = null;
+      closeGithubSettings();
+      closeFeedbackModal();
+      showToast('Đã hủy thay đổi');
     });
+
+    editorExit.addEventListener('click', () => publishDataJson({ exitOnSuccess: true }));
 
     document.querySelectorAll('[data-edit-link-key]').forEach(link => {
       link.addEventListener('click', event => {
@@ -1554,13 +1952,12 @@
         const nextUrl = prompt('Nhập đường dẫn mới:', link.getAttribute('href') || '');
         if (nextUrl === null) return;
         link.setAttribute('href', nextUrl.trim() || '#');
-        showToast('Đã cập nhật đường dẫn — bấm Lưu để giữ lại');
+        showToast('Đã cập nhật đường dẫn — bấm Lưu & thoát để publish');
       });
     });
 
     /* data.json runtime loading + GitHub publishing */
     const githubSettingsOpen = document.getElementById('githubSettingsOpen');
-    const githubPublish = document.getElementById('githubPublish');
     const githubSettingsModal = document.getElementById('githubSettingsModal');
     const githubSettingsClose = document.getElementById('githubSettingsClose');
     const githubRepo = document.getElementById('githubRepo');
@@ -1569,7 +1966,6 @@
     const githubToken = document.getElementById('githubToken');
     const githubTokenToggle = document.getElementById('githubTokenToggle');
     const githubSaveSettings = document.getElementById('githubSaveSettings');
-    const githubPublishModal = document.getElementById('githubPublishModal');
     const githubStatus = document.getElementById('githubStatus');
     const dataSourceText = document.getElementById('dataSourceText');
 
@@ -1656,7 +2052,8 @@
         assets: {
           profileImage: profileImage.dataset.source || profileImage.getAttribute('src') || '',
           qrImage: qrImage.dataset.source || qrImage.getAttribute('src') || '',
-          patternImage: shopPattern.dataset.patternSrc || ''
+          patternImage: shopPattern.dataset.patternSrc || '',
+          feedbackImages: feedbackImages.slice()
         }
       };
     }
@@ -1674,6 +2071,7 @@
         else localStorage.removeItem('fanartistPaymentQr');
         if (assets.patternImage) localStorage.setItem('fanartistShopPattern', assets.patternImage);
         else localStorage.removeItem('fanartistShopPattern');
+        localStorage.setItem(FEEDBACK_STORAGE_KEY, JSON.stringify(Array.isArray(assets.feedbackImages) ? assets.feedbackImages : []));
         localStorage.setItem('fanartistLocalDraft', asDraft ? '1' : '0');
       } catch (error) {
         console.warn('Unable to cache complete site data:', error);
@@ -1707,6 +2105,7 @@
       else clearQrImage();
       if (assets.patternImage) showPattern(assets.patternImage);
       else resetPattern(false, false);
+      setFeedbackImages(Array.isArray(assets.feedbackImages) ? assets.feedbackImages : [], true, false);
     }
 
     async function loadDataJson() {
@@ -1745,9 +2144,8 @@
       return `https://api.github.com/repos/${encodeURIComponent(owner)}/${encodeURIComponent(repo)}/contents/${safePath}`;
     }
 
-    async function publishDataJson() {
+    async function publishDataJson({ exitOnSuccess = false } = {}) {
       if (!document.body.classList.contains('edit-mode')) return;
-      saveEdits(true);
       const settings = saveGithubSettings(false);
       const repoParts = settings.repo.split('/').filter(Boolean);
       if (repoParts.length !== 2) {
@@ -1769,8 +2167,10 @@
         'X-GitHub-Api-Version': '2022-11-28',
         'Content-Type': 'application/json'
       };
-      const buttons = [githubPublish, githubPublishModal];
+      const buttons = [editorExit].filter(Boolean);
       buttons.forEach(button => { button.disabled = true; });
+      const originalExitLabel = editorExit.textContent;
+      editorExit.textContent = 'Đang lưu…';
       setGithubStatus('Đang kiểm tra data.json trên GitHub…');
       showToast('Đang publish data.json…');
 
@@ -1806,7 +2206,15 @@
         cacheSiteData(data, false);
         dataSourceText.textContent = 'đã publish lên data.json';
         setGithubStatus(`Publish thành công vào ${settings.repo}/${settings.path}.`, 'success');
-        showToast('Đã publish data.json lên GitHub');
+        if (exitOnSuccess) {
+          setEditMode(false);
+          editSessionSnapshot = null;
+          closeGithubSettings();
+          closeFeedbackModal();
+          showToast('Đã lưu, publish và thoát chỉnh sửa');
+        } else {
+          showToast('Đã publish data.json lên GitHub');
+        }
       } catch (error) {
         console.error(error);
         openGithubSettings();
@@ -1814,6 +2222,7 @@
         showToast('Publish thất bại — mở GitHub settings để kiểm tra');
       } finally {
         buttons.forEach(button => { button.disabled = false; });
+        editorExit.textContent = originalExitLabel;
       }
     }
 
@@ -1823,8 +2232,6 @@
       if (event.target === githubSettingsModal) closeGithubSettings();
     });
     githubSaveSettings.addEventListener('click', () => saveGithubSettings(true));
-    githubPublish.addEventListener('click', publishDataJson);
-    githubPublishModal.addEventListener('click', publishDataJson);
     githubTokenToggle.addEventListener('click', () => {
       const showing = githubToken.type === 'text';
       githubToken.type = showing ? 'password' : 'text';
