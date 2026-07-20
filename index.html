@@ -483,8 +483,8 @@
 
     .legit-actions {
       display: grid;
-      grid-template-columns: repeat(2, minmax(0, 1fr));
-      gap: 8px;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 6px;
       margin-top: 10px;
     }
 
@@ -492,17 +492,35 @@
       display: inline-flex;
       align-items: center;
       justify-content: center;
-      min-height: 46px;
-      padding: 0 14px;
+      min-width: 0;
+      min-height: 43px;
+      padding: 6px 8px;
       border: 2px solid var(--ink);
-      border-radius: 11px;
+      border-radius: 10px;
       color: var(--mint);
       background: var(--ink);
-      font-size: 12px;
+      font-size: 10px;
       font-weight: 850;
+      line-height: 1.15;
       text-align: center;
+      overflow-wrap: anywhere;
       text-decoration: none !important;
       transition: transform .15s ease, opacity .15s ease;
+    }
+
+    .legit-link-config {
+      align-items: center;
+      justify-content: center;
+      margin-top: 8px;
+      min-height: 32px;
+      padding: 0 10px;
+      border: 1.5px dashed var(--ink);
+      border-radius: 9px;
+      color: var(--ink);
+      background: transparent;
+      font-size: 9px;
+      font-weight: 800;
+      cursor: pointer;
     }
 
     .legit-action:hover {
@@ -1511,6 +1529,8 @@
       .social-button { min-height: 34px; padding: 0 10px; font-size: 10px; }
       .tabs { grid-template-columns: none; grid-auto-flow: column; grid-auto-columns: max-content; justify-content: start; }
       .panel { padding: 11px 9px; }
+      .legit-actions { gap: 5px; }
+      .legit-action { min-height: 42px; padding: 5px 4px; font-size: 9px; }
       .payment-layout { grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 7px; }
       .payment-info { padding: 0; }
       .payment-row { padding: 6px 5px; gap: 5px; }
@@ -1633,7 +1653,9 @@
 <div class="legit-actions">
 <a class="legit-action" data-edit-key="legitButton1" data-edit-link-key="legitPostUrl" href="https://facebook.com/" rel="noopener" target="_blank">Bài check legit</a>
 <button class="legit-action" data-edit-key="legitButton2" id="feedbackOpen" type="button">Feedback</button>
+<a class="legit-action" data-edit-key="legitButton3" data-edit-link-key="legitButton3Url" href="https://facebook.com/" rel="noopener" target="_blank">Link mới</a>
 </div>
+<button class="legit-link-config edit-only" id="legitButton3Config" type="button">✎ Nhập tên &amp; link cho nút thứ ba</button>
 </section>
 <section class="panel" id="rules">
 <h2 class="section-title" data-edit-key="rulesTitle">Rules giao dịch</h2>
@@ -1687,6 +1709,23 @@
     </footer><div class="editor-access-wrap"><button class="editor-access-btn" id="editorAccess" type="button">✎ Edit</button></div><div class="data-source-badge" id="dataSourceBadge">data.json: <span id="dataSourceText">đang kiểm tra…</span></div><div class="editor-toolbar" id="editorToolbar"><span>Chạm vào chữ để sửa · Chuyển qua mọi tab trong cùng một phiên · Nhấp đúp liên kết để đổi URL</span><button class="secondary" id="githubSettingsOpen" type="button">GitHub</button><button class="secondary" id="editorSave" type="button">Hủy thay đổi</button><button id="editorExit" type="button">Lưu &amp; thoát</button></div>
 </main>
 <div aria-hidden="true" class="editor-modal" id="editorModal"><div class="editor-modal-box"><h2>Mở chế độ chỉnh sửa</h2><p>Nhập mật khẩu để hiện các công cụ chỉnh sửa.</p><input autocomplete="current-password" id="editorPassword" placeholder="Password" type="password"/><div class="editor-error" id="editorError"></div><div class="editor-modal-actions"><button class="secondary" id="editorCancel" type="button">Hủy</button><button id="editorUnlock" type="button">Mở khóa</button></div></div></div>
+<div aria-hidden="true" class="editor-modal" id="legitButton3Modal">
+  <div class="editor-modal-box">
+    <h2>Nút liên kết thứ ba</h2>
+    <p>Nhập tên hiển thị và đường dẫn mở khi khách bấm vào nút.</p>
+    <label for="legitButton3Name" style="display:grid;gap:5px;margin-top:9px;font-size:10px;font-weight:800;">Tên nút
+      <input id="legitButton3Name" maxlength="40" placeholder="Ví dụ: Form order" type="text"/>
+    </label>
+    <label for="legitButton3Link" style="display:grid;gap:5px;margin-top:9px;font-size:10px;font-weight:800;">Đường dẫn
+      <input id="legitButton3Link" inputmode="url" placeholder="https://..." spellcheck="false" type="url"/>
+    </label>
+    <div class="editor-error" id="legitButton3Error"></div>
+    <div class="editor-modal-actions">
+      <button class="secondary" id="legitButton3Cancel" type="button">Hủy</button>
+      <button id="legitButton3Save" type="button">Lưu nút</button>
+    </div>
+  </div>
+</div>
 <div aria-hidden="true" class="editor-modal" id="bgmSettingsModal"><div class="editor-modal-box bgm-modal-box"><h2>Cài đặt BGM</h2><p>File mặc định là <strong>bgm.mp3</strong> nằm cùng thư mục với file HTML, nên đường dẫn đúng là <strong>./bgm.mp3</strong>. Khách vẫn cần chạm Play một lần vì trình duyệt điện thoại chặn tự phát nhạc.</p><div class="bgm-modal-field"><label for="bgmTitleInput">Tên bài nhạc</label><input id="bgmTitleInput" placeholder="Background music" type="text"/></div><div class="bgm-modal-field"><label>Thay file nhạc</label><label class="bgm-file-picker">Chọn MP3 / M4A / OGG<input accept="audio/*,.mp3,.m4a,.aac,.ogg,.wav" id="bgmFileInput" type="file"/></label><div class="bgm-selected-file" id="bgmSelectedFile">Đang dùng ./bgm.mp3</div></div><div class="bgm-modal-field"><label for="bgmUrlInput">Đường dẫn / audio URL</label><input id="bgmUrlInput" placeholder="./bgm.mp3" spellcheck="false" type="text"/></div><div class="editor-error" id="bgmSettingsError"></div><div class="editor-modal-actions"><button class="secondary bgm-remove" id="bgmRemove" type="button">Gỡ nhạc</button><button class="secondary" id="bgmSettingsCancel" type="button">Hủy</button><button id="bgmSettingsSave" type="button">Lưu BGM</button></div></div></div>
 <div aria-hidden="true" class="github-settings-modal" id="githubSettingsModal">
   <div class="github-settings-box">
@@ -2313,6 +2352,8 @@
       if (event.key !== 'Escape') return;
       if (feedbackPreview.classList.contains('open')) {
         feedbackPreview.click();
+      } else if (legitButton3Modal?.classList.contains('open')) {
+        closeLegitButton3Modal();
       } else if (feedbackModal.classList.contains('open')) {
         closeFeedbackLibrary();
       }
@@ -2906,6 +2947,63 @@
         link.setAttribute('href', nextUrl.trim() || '#');
         showToast('Đã cập nhật đường dẫn — bấm Lưu & thoát để publish');
       });
+    });
+
+    /* Mobile-friendly editor for the third Check legit action button. */
+    const legitButton3 = document.querySelector('[data-edit-link-key="legitButton3Url"]');
+    const legitButton3Config = document.getElementById('legitButton3Config');
+    const legitButton3Modal = document.getElementById('legitButton3Modal');
+    const legitButton3Name = document.getElementById('legitButton3Name');
+    const legitButton3Link = document.getElementById('legitButton3Link');
+    const legitButton3Error = document.getElementById('legitButton3Error');
+    const legitButton3Cancel = document.getElementById('legitButton3Cancel');
+    const legitButton3Save = document.getElementById('legitButton3Save');
+
+    function normalizeExternalLink(value) {
+      const trimmed = String(value || '').trim();
+      if (!trimmed) return '#';
+      if (/^(https?:\/\/|mailto:|tel:|#|\.\/|\.\.\/|\/)/i.test(trimmed)) return trimmed;
+      return `https://${trimmed}`;
+    }
+
+    function openLegitButton3Modal() {
+      if (!document.body.classList.contains('edit-mode') || !legitButton3) return;
+      legitButton3Name.value = legitButton3.textContent.trim();
+      legitButton3Link.value = legitButton3.getAttribute('href') || '';
+      legitButton3Error.textContent = '';
+      legitButton3Modal.classList.add('open');
+      legitButton3Modal.setAttribute('aria-hidden', 'false');
+      setTimeout(() => legitButton3Name.focus(), 40);
+    }
+
+    function closeLegitButton3Modal() {
+      legitButton3Modal.classList.remove('open');
+      legitButton3Modal.setAttribute('aria-hidden', 'true');
+    }
+
+    function saveLegitButton3() {
+      const name = legitButton3Name.value.trim();
+      const link = normalizeExternalLink(legitButton3Link.value);
+      if (!name) {
+        legitButton3Error.textContent = 'Hãy nhập tên cho nút.';
+        legitButton3Name.focus();
+        return;
+      }
+      legitButton3.textContent = name;
+      legitButton3.setAttribute('href', link);
+      markLocalDraft();
+      closeLegitButton3Modal();
+      showToast('Đã cập nhật tên và đường dẫn của nút');
+    }
+
+    legitButton3Config.addEventListener('click', openLegitButton3Modal);
+    legitButton3Cancel.addEventListener('click', closeLegitButton3Modal);
+    legitButton3Save.addEventListener('click', saveLegitButton3);
+    legitButton3Link.addEventListener('keydown', event => {
+      if (event.key === 'Enter') saveLegitButton3();
+    });
+    legitButton3Modal.addEventListener('click', event => {
+      if (event.target === legitButton3Modal) closeLegitButton3Modal();
     });
 
     /* data.json runtime loading + clean GitHub publisher */
