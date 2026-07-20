@@ -539,6 +539,70 @@
     .details-body ul { margin: 3px 0 0; padding-left: 17px; }
     .details-body li + li { margin-top: 4px; }
 
+    .rule-item { display: flex; align-items: flex-start; gap: 6px; }
+    .rule-item-text { flex: 1; min-width: 0; }
+    .rule-item-delete {
+      flex-shrink: 0;
+      border: none;
+      background: none;
+      color: var(--ink);
+      font-family: inherit;
+      font-size: 15px;
+      line-height: 1;
+      opacity: .5;
+      cursor: pointer;
+      padding: 0 2px;
+    }
+    .rule-item-delete:hover { opacity: 1; }
+
+    .rule-add-item {
+      display: inline-block;
+      margin-top: 6px;
+      border: none;
+      background: none;
+      color: var(--ink);
+      font-family: inherit;
+      font-size: 10px;
+      font-weight: 800;
+      opacity: .6;
+      cursor: pointer;
+      padding: 0;
+    }
+    .rule-add-item:hover { opacity: 1; }
+
+    .rule-summary-title { flex: 1; min-width: 0; }
+    .rule-section-delete {
+      flex-shrink: 0;
+      border: 1.5px solid var(--ink);
+      border-radius: 8px;
+      background: none;
+      color: var(--ink);
+      font-family: inherit;
+      font-size: 10px;
+      font-weight: 800;
+      opacity: .65;
+      cursor: pointer;
+      padding: 4px 8px;
+    }
+    .rule-section-delete:hover { opacity: 1; }
+
+    .rule-add-section {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      margin-top: 10px;
+      padding: 10px 16px;
+      border: 2px solid var(--ink);
+      border-radius: var(--radius-small);
+      background: transparent;
+      color: var(--ink);
+      font-family: inherit;
+      font-size: 11px;
+      font-weight: 800;
+      cursor: pointer;
+    }
+    .rule-add-section:hover { opacity: .8; }
+
     .payment-layout {
       display: grid;
       grid-template-columns: minmax(0, .92fr) minmax(0, 1.08fr);
@@ -654,30 +718,6 @@
       cursor: pointer;
     }
 
-    .quick-transfer {
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      width: 100%;
-      min-height: 39px;
-      margin-top: auto;
-      padding: 0 12px;
-      border: 2px solid var(--ink);
-      border-radius: 10px;
-      color: var(--mint);
-      background: var(--ink);
-      font-size: 11px;
-      font-weight: 850;
-      text-align: center;
-      text-decoration: none !important;
-      transition: transform .15s ease, opacity .15s ease;
-    }
-
-    .quick-transfer:hover {
-      transform: translateY(-2px);
-      opacity: .9;
-    }
-
     .store-grid {
       display: grid;
       grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -700,6 +740,139 @@
     .product h3 { margin: 0; font-size: 12px; }
     .price { color: var(--ink); font-size: 11px; font-weight: 900; white-space: nowrap; }
     .product p { margin: 6px 0 9px; color: rgba(35, 31, 32, .62); font-size: 10px; line-height: 1.5; }
+
+    .subsection-title {
+      margin: 16px 0 8px;
+      font-size: 13px;
+      font-weight: 850;
+      letter-spacing: -.01em;
+    }
+
+    .subsection-title:first-of-type { margin-top: 2px; }
+
+    .add-entry-btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      margin-top: 10px;
+      padding: 10px 16px;
+      border: 2px solid var(--ink);
+      border-radius: var(--radius-small);
+      background: transparent;
+      color: var(--ink);
+      font-family: inherit;
+      font-size: 11px;
+      font-weight: 800;
+      cursor: pointer;
+    }
+    .add-entry-btn:hover { opacity: .8; }
+
+    .item-delete-btn {
+      position: absolute;
+      top: 8px;
+      right: 8px;
+      z-index: 3;
+      border: 1.5px solid var(--ink);
+      border-radius: 8px;
+      background: #ffffff;
+      color: var(--ink);
+      font-family: inherit;
+      font-size: 9px;
+      font-weight: 800;
+      opacity: .7;
+      cursor: pointer;
+      padding: 4px 8px;
+    }
+    .item-delete-btn:hover { opacity: 1; }
+
+    .services-list { display: flex; flex-direction: column; gap: 8px; }
+
+    .service-card {
+      position: relative;
+      border: 1.5px solid var(--ink);
+      border-radius: 12px;
+      background: #ffffff;
+      padding: 10px 12px;
+    }
+
+    .service-card-top {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 8px;
+      padding-right: 50px;
+    }
+
+    .service-name { font-size: 12px; font-weight: 850; }
+    .service-price { font-size: 11px; font-weight: 900; white-space: nowrap; }
+
+    .service-details {
+      margin-top: 6px;
+      color: rgba(35, 31, 32, .62);
+      font-size: 10px;
+      line-height: 1.5;
+    }
+
+    .store-item-card { position: relative; }
+
+    .store-item-image {
+      position: relative;
+      aspect-ratio: 16 / 9;
+      overflow: hidden;
+      background: var(--ink);
+    }
+
+    .store-item-img {
+      display: none;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .store-item-upload-label {
+      position: absolute;
+      inset: 0;
+      display: grid;
+      place-items: center;
+      padding: 10px;
+      color: var(--mint);
+      text-align: center;
+      font-size: 11px;
+      font-weight: 800;
+      line-height: 1.4;
+      cursor: pointer;
+    }
+
+    .store-item-upload-label small {
+      display: block;
+      margin-top: 4px;
+      color: rgba(198, 230, 241, .75);
+      font-size: 9px;
+      font-weight: 650;
+    }
+
+    .store-item-upload-label input { display: none; }
+
+    .store-item-change {
+      position: absolute;
+      right: 8px;
+      bottom: 8px;
+      z-index: 3;
+      min-height: 28px;
+      padding: 0 9px;
+      border: 0;
+      border-radius: 8px;
+      color: var(--ink);
+      background: var(--mint);
+      font-size: 9px;
+      font-weight: 850;
+      cursor: pointer;
+    }
+
+    .store-item-type,
+    .store-item-quantity {
+      margin: 4px 0 0 !important;
+    }
 
     .btn {
       display: inline-flex;
@@ -1211,7 +1384,6 @@
       .payment-row { padding: 6px 5px; gap: 5px; }
       .payment-value { font-size: 9px; }
       .copy-btn { min-height: 24px; padding: 0 6px; font-size: 8px; }
-      .quick-transfer { min-height: 34px; padding: 0 7px; font-size: 9px; }
       .qr-placeholder { padding: 8px; font-size: 9px; }
       .qr-placeholder small { font-size: 7px; }
       .store-grid { grid-template-columns: 1fr; }
@@ -1268,7 +1440,7 @@
 <button class="tab-btn active" data-tab="legit" type="button"><span data-edit-key="tabLegit">Check legit</span></button>
 <button class="tab-btn" data-tab="rules" type="button"><span data-edit-key="tabRules">Rules giao dịch</span></button>
 <button class="tab-btn" data-tab="payment" type="button"><span data-edit-key="tabPayment">Chuyển khoản</span></button>
-<button class="tab-btn" data-tab="store" type="button"><span data-edit-key="tabStore">Store</span></button>
+<button class="tab-btn" data-tab="store" type="button"><span data-edit-key="tabStore">Store &amp; Service</span></button>
 </nav>
 <section class="panel active" id="legit">
 <div class="list-card">
@@ -1299,42 +1471,8 @@
 <section class="panel" id="rules">
 <h2 class="section-title" data-edit-key="rulesTitle">Rules giao dịch</h2>
 <p class="section-note" data-edit-key="rulesNote">Sửa lại các nội dung mẫu bên dưới theo cách giao dịch của bạn.</p>
-<details open="">
-<summary><span data-edit-key="ruleTitle1">Đặt hàng / đặt vẽ</span></summary>
-<div class="details-body">
-<ul>
-<li data-edit-key="rule1Item1">Gửi mô tả, ảnh tham khảo và thời hạn mong muốn.</li>
-<li data-edit-key="rule1Item2">Chốt giá trước khi bắt đầu.</li>
-<li data-edit-key="rule1Item3">Đơn được xếp lịch sau khi nhận cọc.</li>
-</ul>
-</div>
-</details>
-<details>
-<summary><span data-edit-key="ruleTitle2">Thanh toán và hoàn tiền</span></summary>
-<div class="details-body">
-<ul>
-<li data-edit-key="rule2Item1">Cọc 50% hoặc theo thỏa thuận của từng đơn.</li>
-<li data-edit-key="rule2Item2">Không hoàn cọc sau khi đã bắt đầu làm.</li>
-<li data-edit-key="rule2Item3">Đơn gấp hoặc thay đổi lớn có thể tính thêm phí.</li>
-</ul>
-</div>
-</details>
-<details>
-<summary><span data-edit-key="ruleTitle3">Sử dụng tranh</span></summary>
-<div class="details-body">
-<ul>
-<li data-edit-key="rule3Item1">Không repost, trace, xóa chữ ký hoặc dùng cho AI.</li>
-<li data-edit-key="rule3Item2">Khi đăng lại vui lòng ghi credit.</li>
-<li data-edit-key="rule3Item3">Mục đích thương mại cần hỏi trước.</li>
-</ul>
-</div>
-</details>
-<details>
-<summary><span data-edit-key="ruleTitle4">Ship và thời gian chờ</span></summary>
-<div class="details-body" data-edit-key="ruleBody4">
-            Thời gian làm và gửi hàng tùy lịch cá nhân. Mình sẽ báo trước khi có chậm trễ. Vui lòng quay video mở hàng để hỗ trợ khiếu nại nếu có.
-          </div>
-</details>
+<div id="rulesContainer"></div>
+<button class="rule-add-section edit-only" id="addRuleSection" type="button">+ Thêm mục quy định</button>
 </section>
 <section class="panel" id="payment">
 <h2 class="section-title" data-edit-key="paymentTitle">Thông tin chuyển khoản</h2>
@@ -1361,48 +1499,20 @@
 <div><div class="payment-label" data-edit-key="paymentLabel4">Nội dung</div><div class="payment-value" data-edit-key="paymentValue4" id="paymentValue4">TÊN + MÃ ĐƠN</div></div>
 <button class="copy-btn" data-copy-target="paymentValue4" type="button">Copy</button>
 </div>
-<!-- Replace app, account number, bank code, name and transfer note below. -->
-<a class="quick-transfer" data-edit-key="quickTransferLabel" data-edit-link-key="quickTransferUrl" href="https://dl.vietqr.io/pay?app=mb&amp;ba=000000000000@mb&amp;tn=TEN%20MA%20DON&amp;bn=NGUYEN%20VAN%20A" rel="noopener" target="_blank">Chuyển khoản nhanh ↗</a>
 </div>
 </div>
 </section>
 <section class="panel" id="store">
-<h2 class="section-title" data-edit-key="storeTitle">Store</h2>
+<h2 class="section-title" data-edit-key="storeTitle">Store &amp; Service</h2>
 <p class="section-note" data-edit-key="storeNote">Một vài món fanmade hoặc slot đang mở.</p>
-<div class="store-grid">
-<article class="product">
-<div class="product-art" data-edit-key="productArt1">✦</div>
-<div class="product-body">
-<div class="product-top"><h3 data-edit-key="productTitle1">Sketch request</h3><span class="price" data-edit-key="productPrice1">100K+</span></div>
-<p data-edit-key="productDescription1">Sketch đơn giản một nhân vật, file PNG.</p>
-<a class="btn" data-edit-key="productButton1" data-edit-link-key="productUrl1" href="https://facebook.com/" rel="noopener" target="_blank">Nhắn mình</a>
-</div>
-</article>
-<article class="product">
-<div class="product-art" data-edit-key="productArt2">♡</div>
-<div class="product-body">
-<div class="product-top"><h3 data-edit-key="productTitle2">Sticker set</h3><span class="price" data-edit-key="productPrice2">45K</span></div>
-<p data-edit-key="productDescription2">Set sticker fanmade, số lượng có hạn.</p>
-<a class="btn" data-edit-key="productButton2" data-edit-link-key="productUrl2" href="#">Xem thêm</a>
-</div>
-</article>
-<article class="product">
-<div class="product-art" data-edit-key="productArt3">☆</div>
-<div class="product-body">
-<div class="product-top"><h3 data-edit-key="productTitle3">Art print</h3><span class="price" data-edit-key="productPrice3">60K</span></div>
-<p data-edit-key="productDescription3">Print A5 trên giấy mỹ thuật.</p>
-<a class="btn" data-edit-key="productButton3" data-edit-link-key="productUrl3" href="#">Xem thêm</a>
-</div>
-</article>
-<article class="product">
-<div class="product-art" data-edit-key="productArt4">☁</div>
-<div class="product-body">
-<div class="product-top"><h3 data-edit-key="productTitle4">Free wallpaper</h3><span class="price" data-edit-key="productPrice4">Free</span></div>
-<p data-edit-key="productDescription4">Hình nền điện thoại dành cho follower.</p>
-<a class="btn" data-edit-key="productButton4" data-edit-link-key="productUrl4" href="#">Tải xuống</a>
-</div>
-</article>
-</div>
+
+<h3 class="subsection-title" data-edit-key="servicesTitle">Dịch vụ</h3>
+<div class="services-list" id="servicesContainer"></div>
+<button class="add-entry-btn edit-only" id="addServiceBtn" type="button">+ Thêm dịch vụ</button>
+
+<h3 class="subsection-title" data-edit-key="storesTitle">Sản phẩm</h3>
+<div class="store-grid" id="storeItemsContainer"></div>
+<button class="add-entry-btn edit-only" id="addStoreItemBtn" type="button">+ Thêm sản phẩm</button>
 </section>
 </section>
 <footer data-edit-key="footerText">
@@ -1517,7 +1627,398 @@
       });
     });
 
-    const FEEDBACK_STORAGE_KEY = 'ArtistFeedbackImages';
+    const RULES_STORAGE_KEY = 'ArtistRulesData';
+
+    const DEFAULT_RULES = [
+      {
+        title: 'Đặt hàng / đặt vẽ',
+        items: [
+          'Gửi mô tả, ảnh tham khảo và thời hạn mong muốn.',
+          'Chốt giá trước khi bắt đầu.',
+          'Đơn được xếp lịch sau khi nhận cọc.'
+        ]
+      },
+      {
+        title: 'Thanh toán và hoàn tiền',
+        items: [
+          'Cọc 50% hoặc theo thỏa thuận của từng đơn.',
+          'Không hoàn cọc sau khi đã bắt đầu làm.',
+          'Đơn gấp hoặc thay đổi lớn có thể tính thêm phí.'
+        ]
+      },
+      {
+        title: 'Sử dụng tranh',
+        items: [
+          'Không repost, trace, xóa chữ ký hoặc dùng cho AI.',
+          'Khi đăng lại vui lòng ghi credit.',
+          'Mục đích thương mại cần hỏi trước.'
+        ]
+      },
+      {
+        title: 'Ship và thời gian chờ',
+        items: [
+          'Thời gian làm và gửi hàng tùy lịch cá nhân.',
+          'Mình sẽ báo trước khi có chậm trễ.',
+          'Vui lòng quay video mở hàng để hỗ trợ khiếu nại nếu có.'
+        ]
+      }
+    ];
+
+    function cloneDefaultRules() {
+      return DEFAULT_RULES.map(section => ({ title: section.title, items: section.items.slice() }));
+    }
+
+    let rulesData = cloneDefaultRules();
+    const rulesContainer = document.getElementById('rulesContainer');
+    const addRuleSectionBtn = document.getElementById('addRuleSection');
+
+    function normalizeRulesData(rules) {
+      if (!Array.isArray(rules) || !rules.length) return cloneDefaultRules();
+      return rules
+        .filter(section => section && typeof section === 'object')
+        .map(section => ({
+          title: typeof section.title === 'string' ? section.title : '',
+          items: Array.isArray(section.items) ? section.items.filter(item => typeof item === 'string') : []
+        }));
+    }
+
+    function renderRules() {
+      if (!rulesContainer) return;
+      rulesContainer.innerHTML = '';
+      const isEditing = document.body.classList.contains('edit-mode');
+
+      rulesData.forEach((section, sectionIndex) => {
+        const details = document.createElement('details');
+        if (sectionIndex === 0) details.setAttribute('open', '');
+
+        const summary = document.createElement('summary');
+        const titleSpan = document.createElement('span');
+        titleSpan.className = 'rule-summary-title';
+        titleSpan.contentEditable = isEditing ? 'true' : 'false';
+        titleSpan.spellcheck = isEditing;
+        titleSpan.textContent = section.title;
+        titleSpan.addEventListener('input', () => {
+          rulesData[sectionIndex].title = titleSpan.textContent.trim();
+          markLocalDraft();
+        });
+        titleSpan.addEventListener('click', event => { if (isEditing) event.preventDefault(); });
+
+        const deleteSectionBtn = document.createElement('button');
+        deleteSectionBtn.type = 'button';
+        deleteSectionBtn.className = 'rule-section-delete edit-only';
+        deleteSectionBtn.textContent = 'Xóa mục';
+        deleteSectionBtn.addEventListener('click', event => {
+          event.preventDefault();
+          event.stopPropagation();
+          if (!document.body.classList.contains('edit-mode')) return;
+          if (rulesData.length <= 1) { showToast('Cần giữ lại ít nhất một mục quy định'); return; }
+          rulesData.splice(sectionIndex, 1);
+          renderRules();
+          markLocalDraft();
+          showToast('Đã xóa mục quy định');
+        });
+
+        summary.append(titleSpan, deleteSectionBtn);
+
+        const body = document.createElement('div');
+        body.className = 'details-body';
+
+        const ul = document.createElement('ul');
+        section.items.forEach((itemText, itemIndex) => {
+          const li = document.createElement('li');
+          li.className = 'rule-item';
+
+          const itemSpan = document.createElement('span');
+          itemSpan.className = 'rule-item-text';
+          itemSpan.contentEditable = isEditing ? 'true' : 'false';
+          itemSpan.spellcheck = isEditing;
+          itemSpan.textContent = itemText;
+          itemSpan.addEventListener('input', () => {
+            rulesData[sectionIndex].items[itemIndex] = itemSpan.textContent.trim();
+            markLocalDraft();
+          });
+
+          const deleteItemBtn = document.createElement('button');
+          deleteItemBtn.type = 'button';
+          deleteItemBtn.className = 'rule-item-delete edit-only';
+          deleteItemBtn.setAttribute('aria-label', 'Xóa gạch đầu dòng');
+          deleteItemBtn.textContent = '×';
+          deleteItemBtn.addEventListener('click', event => {
+            event.preventDefault();
+            event.stopPropagation();
+            if (!document.body.classList.contains('edit-mode')) return;
+            rulesData[sectionIndex].items.splice(itemIndex, 1);
+            renderRules();
+            markLocalDraft();
+            showToast('Đã xóa gạch đầu dòng');
+          });
+
+          li.append(itemSpan, deleteItemBtn);
+          ul.appendChild(li);
+        });
+        body.appendChild(ul);
+
+        const addItemBtn = document.createElement('button');
+        addItemBtn.type = 'button';
+        addItemBtn.className = 'rule-add-item edit-only';
+        addItemBtn.textContent = '+ Thêm gạch đầu dòng';
+        addItemBtn.addEventListener('click', event => {
+          event.preventDefault();
+          event.stopPropagation();
+          if (!document.body.classList.contains('edit-mode')) return;
+          rulesData[sectionIndex].items.push('Nội dung mới');
+          details.setAttribute('open', '');
+          renderRules();
+          markLocalDraft();
+        });
+        body.appendChild(addItemBtn);
+
+        details.append(summary, body);
+        rulesContainer.appendChild(details);
+      });
+    }
+
+    if (addRuleSectionBtn) {
+      addRuleSectionBtn.addEventListener('click', () => {
+        if (!document.body.classList.contains('edit-mode')) return;
+        rulesData.push({ title: 'Mục quy định mới', items: ['Nội dung mới'] });
+        renderRules();
+        markLocalDraft();
+        showToast('Đã thêm mục quy định — chạm để sửa nội dung');
+      });
+    }
+
+    /* Store & Service: dynamic services list + store items with per-item image upload */
+    const STORE_STORAGE_KEY = 'ArtistStoreData';
+
+    const DEFAULT_SERVICES = [
+      { name: 'Sketch request', price: '100K+', details: 'Sketch đơn giản một nhân vật, file PNG.' },
+      { name: 'Art print', price: '60K', details: 'Print A5 trên giấy mỹ thuật.' }
+    ];
+
+    const DEFAULT_STORE_ITEMS = [
+      { name: 'Sticker set', type: 'Sticker fanmade', price: '45K', quantity: 'Số lượng có hạn', image: '' },
+      { name: 'Free wallpaper', type: 'Wallpaper điện thoại', price: 'Free', quantity: 'Không giới hạn', image: '' }
+    ];
+
+    function cloneDefaultServices() {
+      return DEFAULT_SERVICES.map(service => ({ ...service }));
+    }
+
+    function cloneDefaultStoreItems() {
+      return DEFAULT_STORE_ITEMS.map(item => ({ ...item }));
+    }
+
+    let servicesData = cloneDefaultServices();
+    let storeItemsData = cloneDefaultStoreItems();
+
+    function normalizeServicesData(list) {
+      if (!Array.isArray(list) || !list.length) return cloneDefaultServices();
+      return list
+        .filter(service => service && typeof service === 'object')
+        .map(service => ({
+          name: typeof service.name === 'string' ? service.name : '',
+          price: typeof service.price === 'string' ? service.price : '',
+          details: typeof service.details === 'string' ? service.details : ''
+        }));
+    }
+
+    function normalizeStoreItemsData(list) {
+      if (!Array.isArray(list) || !list.length) return cloneDefaultStoreItems();
+      return list
+        .filter(item => item && typeof item === 'object')
+        .map(item => ({
+          name: typeof item.name === 'string' ? item.name : '',
+          type: typeof item.type === 'string' ? item.type : '',
+          price: typeof item.price === 'string' ? item.price : '',
+          quantity: typeof item.quantity === 'string' ? item.quantity : '',
+          image: typeof item.image === 'string' ? item.image : ''
+        }));
+    }
+
+    const servicesContainer = document.getElementById('servicesContainer');
+    const storeItemsContainer = document.getElementById('storeItemsContainer');
+    const addServiceBtn = document.getElementById('addServiceBtn');
+    const addStoreItemBtn = document.getElementById('addStoreItemBtn');
+
+    function readFileAsDataUrl(file) {
+      return new Promise(resolve => {
+        const reader = new FileReader();
+        reader.onload = event => resolve(event.target.result);
+        reader.onerror = () => resolve('');
+        reader.readAsDataURL(file);
+      });
+    }
+
+    function makeEditableField(tag, className, text, onInput) {
+      const el = document.createElement(tag);
+      if (className) el.className = className;
+      el.textContent = text;
+      const isEditing = document.body.classList.contains('edit-mode');
+      el.contentEditable = isEditing ? 'true' : 'false';
+      el.spellcheck = isEditing;
+      el.addEventListener('input', () => {
+        onInput(el.textContent.trim());
+        markLocalDraft();
+      });
+      return el;
+    }
+
+    function renderServices() {
+      if (!servicesContainer) return;
+      servicesContainer.innerHTML = '';
+
+      servicesData.forEach((service, index) => {
+        const card = document.createElement('div');
+        card.className = 'service-card';
+
+        const deleteBtn = document.createElement('button');
+        deleteBtn.type = 'button';
+        deleteBtn.className = 'item-delete-btn edit-only';
+        deleteBtn.textContent = 'Xóa';
+        deleteBtn.addEventListener('click', () => {
+          if (!document.body.classList.contains('edit-mode')) return;
+          if (servicesData.length <= 1) { showToast('Cần giữ lại ít nhất một dịch vụ'); return; }
+          servicesData.splice(index, 1);
+          renderServices();
+          markLocalDraft();
+          showToast('Đã xóa dịch vụ');
+        });
+
+        const top = document.createElement('div');
+        top.className = 'service-card-top';
+        const nameEl = makeEditableField('span', 'service-name', service.name, value => { servicesData[index].name = value; });
+        const priceEl = makeEditableField('span', 'service-price', service.price, value => { servicesData[index].price = value; });
+        top.append(nameEl, priceEl);
+
+        const detailsEl = makeEditableField('div', 'service-details', service.details, value => { servicesData[index].details = value; });
+
+        card.append(deleteBtn, top, detailsEl);
+        servicesContainer.appendChild(card);
+      });
+    }
+
+    function renderStoreItems() {
+      if (!storeItemsContainer) return;
+      storeItemsContainer.innerHTML = '';
+
+      storeItemsData.forEach((item, index) => {
+        const card = document.createElement('article');
+        card.className = 'product store-item-card';
+
+        const deleteBtn = document.createElement('button');
+        deleteBtn.type = 'button';
+        deleteBtn.className = 'item-delete-btn edit-only';
+        deleteBtn.textContent = 'Xóa';
+        deleteBtn.addEventListener('click', () => {
+          if (!document.body.classList.contains('edit-mode')) return;
+          if (storeItemsData.length <= 1) { showToast('Cần giữ lại ít nhất một sản phẩm'); return; }
+          storeItemsData.splice(index, 1);
+          renderStoreItems();
+          markLocalDraft();
+          showToast('Đã xóa sản phẩm');
+        });
+
+        const imageWrap = document.createElement('div');
+        imageWrap.className = 'store-item-image';
+
+        const img = document.createElement('img');
+        img.className = 'store-item-img';
+        img.alt = item.name || 'Ảnh sản phẩm';
+
+        const uploadLabel = document.createElement('label');
+        uploadLabel.className = 'store-item-upload-label';
+        uploadLabel.innerHTML = '<span class="public-only">Ảnh sản phẩm</span><span class="edit-only">Thêm ảnh<small>Chọn ảnh PNG / JPG</small></span>';
+
+        const fileInput = document.createElement('input');
+        fileInput.type = 'file';
+        fileInput.accept = 'image/png,image/jpeg,image/webp';
+
+        function showItemImage(src) {
+          img.src = src;
+          img.style.display = 'block';
+          uploadLabel.style.display = 'none';
+        }
+
+        function clearItemImage() {
+          img.removeAttribute('src');
+          img.style.display = 'none';
+          uploadLabel.style.display = '';
+        }
+
+        if (item.image) showItemImage(item.image); else clearItemImage();
+
+        fileInput.addEventListener('change', async event => {
+          const file = event.target.files && event.target.files[0];
+          if (!file) return;
+          if (!file.type.startsWith('image/')) { showToast('Vui lòng chọn một file ảnh'); return; }
+          const dataUrl = await readFileAsDataUrl(file);
+          if (!dataUrl) { showToast('Không thể đọc ảnh này'); return; }
+          storeItemsData[index].image = dataUrl;
+          showItemImage(dataUrl);
+          try { markLocalDraft(); }
+          catch (error) { showToast('Ảnh đã hiển thị nhưng quá lớn để lưu'); }
+          fileInput.value = '';
+        });
+
+        uploadLabel.appendChild(fileInput);
+
+        const changeBtn = document.createElement('button');
+        changeBtn.type = 'button';
+        changeBtn.className = 'store-item-change edit-only';
+        changeBtn.textContent = 'Đổi ảnh';
+        changeBtn.addEventListener('click', event => {
+          event.preventDefault();
+          if (!document.body.classList.contains('edit-mode')) return;
+          fileInput.click();
+        });
+
+        imageWrap.append(img, uploadLabel, changeBtn);
+
+        const body = document.createElement('div');
+        body.className = 'product-body';
+
+        const topRow = document.createElement('div');
+        topRow.className = 'product-top';
+        const nameEl = makeEditableField('h3', '', item.name, value => { storeItemsData[index].name = value; });
+        const priceEl = makeEditableField('span', 'price', item.price, value => { storeItemsData[index].price = value; });
+        topRow.append(nameEl, priceEl);
+
+        const typeEl = makeEditableField('p', 'store-item-type', item.type, value => { storeItemsData[index].type = value; });
+        const qtyEl = makeEditableField('p', 'store-item-quantity', item.quantity, value => { storeItemsData[index].quantity = value; });
+
+        body.append(topRow, typeEl, qtyEl);
+        card.append(deleteBtn, imageWrap, body);
+        storeItemsContainer.appendChild(card);
+      });
+    }
+
+    function renderStoreAndServices() {
+      renderServices();
+      renderStoreItems();
+    }
+
+    if (addServiceBtn) {
+      addServiceBtn.addEventListener('click', () => {
+        if (!document.body.classList.contains('edit-mode')) return;
+        servicesData.push({ name: 'Dịch vụ mới', price: 'Giá', details: 'Mô tả dịch vụ' });
+        renderServices();
+        markLocalDraft();
+        showToast('Đã thêm dịch vụ — chạm để sửa nội dung');
+      });
+    }
+
+    if (addStoreItemBtn) {
+      addStoreItemBtn.addEventListener('click', () => {
+        if (!document.body.classList.contains('edit-mode')) return;
+        storeItemsData.push({ name: 'Sản phẩm mới', type: 'Loại', price: 'Giá', quantity: 'Số lượng', image: '' });
+        renderStoreItems();
+        markLocalDraft();
+        showToast('Đã thêm sản phẩm — chạm để sửa nội dung');
+      });
+    }
+
+
     const feedbackOpen = document.getElementById('feedbackOpen');
     const feedbackModal = document.getElementById('feedbackModal');
     const feedbackClose = document.getElementById('feedbackClose');
@@ -1813,6 +2314,8 @@
       'ArtistPaymentQr',
       'ArtistShopPattern',
       'ArtistFeedbackImages',
+      'ArtistRulesData',
+      'ArtistStoreData',
       'ArtistLocalDraft'
     ];
 
@@ -1861,6 +2364,24 @@
       catch (error) { return {}; }
     }
 
+    function savedRules() {
+      try {
+        const raw = JSON.parse(localStorage.getItem(RULES_STORAGE_KEY) || 'null');
+        return raw ? normalizeRulesData(raw) : null;
+      } catch (error) { return null; }
+    }
+
+    function savedStoreData() {
+      try {
+        const raw = JSON.parse(localStorage.getItem(STORE_STORAGE_KEY) || 'null');
+        if (!raw || typeof raw !== 'object') return null;
+        return {
+          services: Array.isArray(raw.services) ? normalizeServicesData(raw.services) : null,
+          stores: Array.isArray(raw.stores) ? normalizeStoreItemsData(raw.stores) : null
+        };
+      } catch (error) { return null; }
+    }
+
     function applySavedEdits() {
       const content = savedContent();
       document.querySelectorAll('[data-edit-key]').forEach(element => {
@@ -1878,8 +2399,16 @@
         const key = link.dataset.editLinkKey;
         if (Object.prototype.hasOwnProperty.call(links, key)) link.href = links[key];
       });
+      rulesData = savedRules() || cloneDefaultRules();
+      renderRules();
+      const storeSaved = savedStoreData();
+      servicesData = (storeSaved && storeSaved.services) || cloneDefaultServices();
+      storeItemsData = (storeSaved && storeSaved.stores) || cloneDefaultStoreItems();
+      renderStoreAndServices();
       setFeedbackImages(readFeedbackImages(), false, false);
     }
+
+
 
     function setEditMode(enabled) {
       document.body.classList.toggle('edit-mode', enabled);
@@ -1887,6 +2416,8 @@
         element.contentEditable = enabled ? 'true' : 'false';
         element.spellcheck = enabled;
       });
+      renderRules();
+      renderStoreAndServices();
       sessionStorage.removeItem('ArtistEditorSession');
     }
 
@@ -2063,6 +2594,8 @@
         content,
         html: htmlContent,
         links,
+        rules: rulesData,
+        store: { services: servicesData, stores: storeItemsData },
         assets: {
           profileImage: profileImage.dataset.source || profileImage.getAttribute('src') || '',
           qrImage: qrImage.dataset.source || qrImage.getAttribute('src') || '',
@@ -2078,6 +2611,12 @@
         localStorage.setItem('ArtistEditableContent', JSON.stringify(data.content || {}));
         localStorage.setItem('ArtistEditableHtml', JSON.stringify(data.html || {}));
         localStorage.setItem('ArtistEditableLinks', JSON.stringify(data.links || {}));
+        localStorage.setItem(RULES_STORAGE_KEY, JSON.stringify(normalizeRulesData(data.rules)));
+        const storeSource = data.store || {};
+        localStorage.setItem(STORE_STORAGE_KEY, JSON.stringify({
+          services: normalizeServicesData(storeSource.services),
+          stores: normalizeStoreItemsData(storeSource.stores)
+        }));
         const assets = data.assets || {};
         if (assets.profileImage) localStorage.setItem('ArtistMintImage', assets.profileImage);
         else localStorage.removeItem('ArtistMintImage');
@@ -2111,6 +2650,14 @@
         const key = link.dataset.editLinkKey;
         if (Object.prototype.hasOwnProperty.call(links, key)) link.setAttribute('href', links[key]);
       });
+
+      rulesData = Array.isArray(data.rules) && data.rules.length ? normalizeRulesData(data.rules) : cloneDefaultRules();
+      renderRules();
+
+      const storeSource = data.store || {};
+      servicesData = Array.isArray(storeSource.services) && storeSource.services.length ? normalizeServicesData(storeSource.services) : cloneDefaultServices();
+      storeItemsData = Array.isArray(storeSource.stores) && storeSource.stores.length ? normalizeStoreItemsData(storeSource.stores) : cloneDefaultStoreItems();
+      renderStoreAndServices();
 
       const assets = data.assets || {};
       if (assets.profileImage) showImage(assets.profileImage);
