@@ -5,7 +5,7 @@
 <meta charset="utf-8"/>
 <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
 <meta content="#c6e6f1" name="theme-color"/>
-<title>Seoyi Profile</title>
+<title>Seoyi — Profile</title>
 <link rel="preconnect" href="https://fonts.googleapis.com"/>
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
 <link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@400..800&amp;display=swap" rel="stylesheet"/>
@@ -1237,9 +1237,9 @@
 </div>
 </div>
 <main class="shell">
-<section aria-label="Fanartist profile" class="profile-card">
+<section aria-label="Profile" class="profile-card">
 <div class="art-slot">
-<img alt="Ảnh PNG của fanartist" id="profileImage"/>
+<img alt="Ảnh PNG" id="profileImage"/>
 <div class="art-placeholder" id="imagePlaceholder"><div class="public-only empty-art-mark">♡</div><div class="edit-only">drop your png here ♡<span>transparent background supported</span></div></div>
 <label class="upload-label edit-only" title="Thêm ảnh PNG">
           add png +
@@ -1250,7 +1250,7 @@
 <h1 data-edit-key="profileName">Seoyi</h1>
 <p class="handle" data-edit-key="profileHandle">@username</p>
 <div aria-label="Tags" class="mini-tags">
-<span class="mini-tag" data-edit-key="profileTag1">fanart</span>
+<span class="mini-tag" data-edit-key="profileTag1">Artist</span>
 <span class="mini-tag" data-edit-key="profileTag2">multifandom</span>
 <span class="mini-tag" data-edit-key="profileTag3">OC</span>
 </div>
@@ -1516,7 +1516,7 @@
       });
     });
 
-    const FEEDBACK_STORAGE_KEY = 'fanartistFeedbackImages';
+    const FEEDBACK_STORAGE_KEY = 'artistFeedbackImages';
     const feedbackOpen = document.getElementById('feedbackOpen');
     const feedbackModal = document.getElementById('feedbackModal');
     const feedbackClose = document.getElementById('feedbackClose');
@@ -1674,7 +1674,7 @@
       imagePlaceholder.style.display = '';
     }
 
-    const savedImage = localStorage.getItem('fanartistMintImage');
+    const savedImage = localStorage.getItem('artistMintImage');
     if (savedImage) showImage(savedImage);
 
     imageInput.addEventListener('change', event => {
@@ -1684,7 +1684,7 @@
       const reader = new FileReader();
       reader.onload = e => {
         showImage(e.target.result);
-        try { localStorage.setItem('fanartistMintImage', e.target.result); }
+        try { localStorage.setItem('artistMintImage', e.target.result); }
         catch (error) { showToast('Ảnh đã hiển thị nhưng quá lớn để lưu'); }
         markLocalDraft();
       };
@@ -1705,13 +1705,13 @@
       shopPattern.style.backgroundImage = '';
       delete shopPattern.dataset.patternSrc;
       shopPattern.classList.remove('custom-pattern');
-      localStorage.removeItem('fanartistShopPattern');
+      localStorage.removeItem('artistShopPattern');
       patternInput.value = '';
       if (markDraft) markLocalDraft();
       if (notify) showToast('Đã trở về pattern mặc định');
     }
 
-    const savedPattern = localStorage.getItem('fanartistShopPattern');
+    const savedPattern = localStorage.getItem('artistShopPattern');
     if (savedPattern) showPattern(savedPattern);
 
     patternInput.addEventListener('change', event => {
@@ -1722,7 +1722,7 @@
       reader.onload = e => {
         showPattern(e.target.result);
         try {
-          localStorage.setItem('fanartistShopPattern', e.target.result);
+          localStorage.setItem('artistShopPattern', e.target.result);
           markLocalDraft();
           showToast('Đã cập nhật pattern');
         } catch (error) { showToast('Pattern đã hiển thị nhưng quá lớn để lưu'); }
@@ -1752,7 +1752,7 @@
       qrChange.style.display = 'none';
     }
 
-    const savedQrImage = localStorage.getItem('fanartistPaymentQr');
+    const savedQrImage = localStorage.getItem('artistPaymentQr');
     if (savedQrImage) showQrImage(savedQrImage);
     qrChange.addEventListener('click', () => qrInput.click());
 
@@ -1763,7 +1763,7 @@
       const reader = new FileReader();
       reader.onload = e => {
         showQrImage(e.target.result);
-        try { localStorage.setItem('fanartistPaymentQr', e.target.result); }
+        try { localStorage.setItem('artistPaymentQr', e.target.result); }
         catch (error) { showToast('QR đã hiển thị nhưng quá lớn để lưu'); }
         markLocalDraft();
       };
@@ -1805,14 +1805,14 @@
     let editSessionSnapshot = null;
 
     const EDIT_STORAGE_KEYS = [
-      'fanartistEditableContent',
-      'fanartistEditableHtml',
-      'fanartistEditableLinks',
-      'fanartistMintImage',
-      'fanartistPaymentQr',
-      'fanartistShopPattern',
-      'fanartistFeedbackImages',
-      'fanartistLocalDraft'
+      'artistEditableContent',
+      'artistEditableHtml',
+      'artistEditableLinks',
+      'artistMintImage',
+      'artistPaymentQr',
+      'artistShopPattern',
+      'artistFeedbackImages',
+      'artistLocalDraft'
     ];
 
     function captureEditSession() {
@@ -1840,23 +1840,23 @@
     }
 
     function markLocalDraft() {
-      localStorage.setItem('fanartistLocalDraft', '1');
+      localStorage.setItem('artistLocalDraft', '1');
       const sourceText = document.getElementById('dataSourceText');
       if (sourceText) sourceText.textContent = 'có thay đổi chưa publish';
     }
 
     function savedContent() {
-      try { return JSON.parse(localStorage.getItem('fanartistEditableContent') || '{}'); }
+      try { return JSON.parse(localStorage.getItem('artistEditableContent') || '{}'); }
       catch (error) { return {}; }
     }
 
     function savedHtmlContent() {
-      try { return JSON.parse(localStorage.getItem('fanartistEditableHtml') || '{}'); }
+      try { return JSON.parse(localStorage.getItem('artistEditableHtml') || '{}'); }
       catch (error) { return {}; }
     }
 
     function savedLinks() {
-      try { return JSON.parse(localStorage.getItem('fanartistEditableLinks') || '{}'); }
+      try { return JSON.parse(localStorage.getItem('artistEditableLinks') || '{}'); }
       catch (error) { return {}; }
     }
 
@@ -1886,7 +1886,7 @@
         element.contentEditable = enabled ? 'true' : 'false';
         element.spellcheck = enabled;
       });
-      sessionStorage.removeItem('fanartistEditorSession');
+      sessionStorage.removeItem('artistEditorSession');
     }
 
     async function sha256(value) {
@@ -1956,7 +1956,7 @@
       });
     });
 
-    /* data.json runtime loading + GitHub publishing */
+    /* data.json runtime loading + clean GitHub publisher */
     const githubSettingsOpen = document.getElementById('githubSettingsOpen');
     const githubSettingsModal = document.getElementById('githubSettingsModal');
     const githubSettingsClose = document.getElementById('githubSettingsClose');
@@ -1969,19 +1969,26 @@
     const githubStatus = document.getElementById('githubStatus');
     const dataSourceText = document.getElementById('dataSourceText');
 
-    const GITHUB_KEYS = {
-      repo: 'fanartistGithubRepo',
-      branch: 'fanartistGithubBranch',
-      path: 'fanartistGithubDataPath',
-      token: 'fanartistGithubToken'
-    };
+    const GITHUB_KEYS = Object.freeze({
+      repo: 'artistGithubRepo',
+      branch: 'artistGithubBranch',
+      path: 'artistGithubDataPath',
+      token: 'artistGithubToken'
+    });
+
+    function cleanRepositoryPath(value) {
+      return String(value || '')
+        .trim()
+        .replace(/^\/+|\/+$/g, '')
+        .replace(/\/{2,}/g, '/');
+    }
 
     function getGithubSettings() {
       return {
-        repo: (localStorage.getItem(GITHUB_KEYS.repo) || 'sseoyi/profile').trim(),
-        branch: (localStorage.getItem(GITHUB_KEYS.branch) || 'main').trim(),
-        path: (localStorage.getItem(GITHUB_KEYS.path) || 'data.json').trim(),
-        token: localStorage.getItem(GITHUB_KEYS.token) || ''
+        repo: cleanRepositoryPath(localStorage.getItem(GITHUB_KEYS.repo) || 'sseoyi/profile'),
+        branch: String(localStorage.getItem(GITHUB_KEYS.branch) || 'main').trim(),
+        path: cleanRepositoryPath(localStorage.getItem(GITHUB_KEYS.path) || 'data.json'),
+        token: String(localStorage.getItem(GITHUB_KEYS.token) || '').trim()
       };
     }
 
@@ -1994,19 +2001,25 @@
     }
 
     function saveGithubSettings(notify = true) {
-      const repo = githubRepo.value.trim() || 'sseoyi/profile';
-      const branch = githubBranch.value.trim() || 'main';
-      const path = githubDataPath.value.trim() || 'data.json';
-      const token = githubToken.value.trim();
-      localStorage.setItem(GITHUB_KEYS.repo, repo);
-      localStorage.setItem(GITHUB_KEYS.branch, branch);
-      localStorage.setItem(GITHUB_KEYS.path, path);
-      localStorage.setItem(GITHUB_KEYS.token, token);
-      githubRepo.value = repo;
-      githubBranch.value = branch;
-      githubDataPath.value = path;
-      if (notify) setGithubStatus('Đã lưu cài đặt và token trên trình duyệt này.', 'success');
-      return { repo, branch, path, token };
+      const settings = {
+        repo: cleanRepositoryPath(githubRepo.value || 'sseoyi/profile'),
+        branch: String(githubBranch.value || 'main').trim(),
+        path: cleanRepositoryPath(githubDataPath.value || 'data.json'),
+        token: String(githubToken.value || '').trim()
+      };
+
+      localStorage.setItem(GITHUB_KEYS.repo, settings.repo);
+      localStorage.setItem(GITHUB_KEYS.branch, settings.branch);
+      localStorage.setItem(GITHUB_KEYS.path, settings.path);
+      localStorage.setItem(GITHUB_KEYS.token, settings.token);
+
+      githubRepo.value = settings.repo;
+      githubBranch.value = settings.branch;
+      githubDataPath.value = settings.path;
+      githubToken.value = settings.token;
+
+      if (notify) setGithubStatus('Đã lưu cài đặt GitHub trên trình duyệt này.', 'success');
+      return settings;
     }
 
     function setGithubStatus(message, type = '') {
@@ -2014,10 +2027,10 @@
       githubStatus.className = `github-status${type ? ` ${type}` : ''}`;
     }
 
-    function openGithubSettings() {
+    function openGithubSettings(message = '', type = '') {
       if (!document.body.classList.contains('edit-mode')) return;
       fillGithubSettings();
-      setGithubStatus('');
+      setGithubStatus(message, type);
       githubSettingsModal.classList.add('open');
       githubSettingsModal.setAttribute('aria-hidden', 'false');
     }
@@ -2061,18 +2074,18 @@
     function cacheSiteData(data, asDraft = false) {
       if (!data || typeof data !== 'object') return;
       try {
-        localStorage.setItem('fanartistEditableContent', JSON.stringify(data.content || {}));
-        localStorage.setItem('fanartistEditableHtml', JSON.stringify(data.html || {}));
-        localStorage.setItem('fanartistEditableLinks', JSON.stringify(data.links || {}));
+        localStorage.setItem('artistEditableContent', JSON.stringify(data.content || {}));
+        localStorage.setItem('artistEditableHtml', JSON.stringify(data.html || {}));
+        localStorage.setItem('artistEditableLinks', JSON.stringify(data.links || {}));
         const assets = data.assets || {};
-        if (assets.profileImage) localStorage.setItem('fanartistMintImage', assets.profileImage);
-        else localStorage.removeItem('fanartistMintImage');
-        if (assets.qrImage) localStorage.setItem('fanartistPaymentQr', assets.qrImage);
-        else localStorage.removeItem('fanartistPaymentQr');
-        if (assets.patternImage) localStorage.setItem('fanartistShopPattern', assets.patternImage);
-        else localStorage.removeItem('fanartistShopPattern');
+        if (assets.profileImage) localStorage.setItem('artistMintImage', assets.profileImage);
+        else localStorage.removeItem('artistMintImage');
+        if (assets.qrImage) localStorage.setItem('artistPaymentQr', assets.qrImage);
+        else localStorage.removeItem('artistPaymentQr');
+        if (assets.patternImage) localStorage.setItem('artistShopPattern', assets.patternImage);
+        else localStorage.removeItem('artistShopPattern');
         localStorage.setItem(FEEDBACK_STORAGE_KEY, JSON.stringify(Array.isArray(assets.feedbackImages) ? assets.feedbackImages : []));
-        localStorage.setItem('fanartistLocalDraft', asDraft ? '1' : '0');
+        localStorage.setItem('artistLocalDraft', asDraft ? '1' : '0');
       } catch (error) {
         console.warn('Unable to cache complete site data:', error);
       }
@@ -2139,198 +2152,169 @@
       return btoa(binary);
     }
 
-    function githubApiPath(owner, repo, filePath) {
-      const safePath = filePath.split('/').filter(Boolean).map(encodeURIComponent).join('/');
-      return `https://api.github.com/repos/${encodeURIComponent(owner)}/${encodeURIComponent(repo)}/contents/${safePath}`;
+    function splitRepository(repoValue) {
+      const parts = cleanRepositoryPath(repoValue).split('/').filter(Boolean);
+      if (parts.length !== 2) {
+        throw new Error('Repository phải có dạng owner/repo, ví dụ sseoyi/profile.');
+      }
+      return { owner: parts[0], repo: parts[1] };
     }
 
-    async function githubJsonRequest(url, options = {}, fallbackMessage = 'GitHub request failed') {
+    function encodeContentPath(filePath) {
+      return cleanRepositoryPath(filePath)
+        .split('/')
+        .filter(Boolean)
+        .map(segment => encodeURIComponent(segment))
+        .join('/');
+    }
+
+    function githubContentsUrl(settings, includeRef = false) {
+      const { owner, repo } = splitRepository(settings.repo);
+      const encodedPath = encodeContentPath(settings.path);
+      if (!encodedPath) throw new Error('Đường dẫn data.json không được để trống.');
+      const base = `https://api.github.com/repos/${encodeURIComponent(owner)}/${encodeURIComponent(repo)}/contents/${encodedPath}`;
+      return includeRef
+        ? `${base}?ref=${encodeURIComponent(settings.branch)}&_=${Date.now()}`
+        : base;
+    }
+
+    async function readGithubResponse(response) {
+      const raw = await response.text();
+      if (!raw) return {};
+      try { return JSON.parse(raw); }
+      catch (error) { return { message: raw }; }
+    }
+
+    async function githubRequest(url, options, fallbackMessage) {
       let response;
       try {
-        response = await fetch(url, {
-          mode: 'cors',
-          credentials: 'omit',
-          cache: 'no-store',
-          ...options
-        });
+        response = await fetch(url, options);
       } catch (networkError) {
-        const error = new Error('Không thể kết nối GitHub API. Hãy tải lại trang bằng Ctrl + F5 rồi thử lại.');
+        const error = new Error('Không kết nối được GitHub API. Kiểm tra mạng hoặc tiện ích chặn api.github.com.');
         error.cause = networkError;
+        error.network = true;
         throw error;
       }
-      const result = await response.json().catch(() => ({}));
+
+      const payload = await readGithubResponse(response);
       if (!response.ok) {
-        const error = new Error(result.message || `${fallbackMessage} (${response.status})`);
+        const error = new Error(payload.message || `${fallbackMessage} (${response.status})`);
         error.status = response.status;
-        error.details = result;
+        error.details = payload;
         throw error;
       }
-      return result;
+      return payload;
     }
 
-    function encodeGitRefPath(value) {
-      return value.split('/').filter(Boolean).map(encodeURIComponent).join('/');
+    function githubHeaders(token, hasBody = false) {
+      const headers = {
+        Accept: 'application/vnd.github+json',
+        Authorization: `Bearer ${token}`
+      };
+      if (hasBody) headers['Content-Type'] = 'application/json';
+      return headers;
     }
 
-    async function createDataJsonCommit({ owner, repo, settings, headers, jsonText }) {
-      const repoApi = `https://api.github.com/repos/${encodeURIComponent(owner)}/${encodeURIComponent(repo)}`;
-      const branchPath = encodeGitRefPath(settings.branch);
-      const dataPath = settings.path.replace(/^\/+/, '').replace(/\/{2,}/g, '/');
+    async function getCurrentDataFile(settings) {
+      try {
+        const file = await githubRequest(
+          githubContentsUrl(settings, true),
+          {
+            method: 'GET',
+            headers: githubHeaders(settings.token, false),
+            cache: 'no-store'
+          },
+          'Không thể đọc data.json hiện tại'
+        );
+        return { exists: true, sha: file.sha || '' };
+      } catch (error) {
+        if (error.status === 404) return { exists: false, sha: '' };
+        throw error;
+      }
+    }
 
-      if (!branchPath) throw new Error('Branch không được để trống.');
-      if (!dataPath) throw new Error('Đường dẫn data.json không được để trống.');
-
-      /* 1. Read the latest branch head. */
-      const ref = await githubJsonRequest(
-        `${repoApi}/git/ref/heads/${branchPath}?_=${Date.now()}`,
-        { headers },
-        'Không thể đọc branch hiện tại'
+    function isShaConflict(error) {
+      const details = JSON.stringify(error.details || {}).toLowerCase();
+      const message = String(error.message || '').toLowerCase();
+      return error.status === 409 || (
+        error.status === 422 && (
+          message.includes('sha') ||
+          message.includes('does not match') ||
+          details.includes('sha') ||
+          details.includes('does not match')
+        )
       );
-      const parentCommitSha = ref.object?.sha;
-      if (!parentCommitSha) throw new Error('Không tìm thấy commit hiện tại của branch.');
+    }
 
-      /* 2. Read the current tree. */
-      const parentCommit = await githubJsonRequest(
-        `${repoApi}/git/commits/${encodeURIComponent(parentCommitSha)}?_=${Date.now()}`,
-        { headers },
-        'Không thể đọc commit hiện tại'
-      );
-      const baseTreeSha = parentCommit.tree?.sha;
-      if (!baseTreeSha) throw new Error('Không tìm thấy tree hiện tại của repository.');
+    async function putDataJson(settings, data, currentSha = '') {
+      const jsonText = `${JSON.stringify(data, null, 2)}\n`;
+      const body = {
+        message: 'Update profile data.json',
+        content: utf8ToBase64(jsonText),
+        branch: settings.branch
+      };
+      if (currentSha) body.sha = currentSha;
 
-      /* 3. Create a blob containing the new data.json. */
-      const blob = await githubJsonRequest(
-        `${repoApi}/git/blobs`,
+      return githubRequest(
+        githubContentsUrl(settings, false),
         {
-          method: 'POST',
-          headers,
-          body: JSON.stringify({
-            content: utf8ToBase64(jsonText),
-            encoding: 'base64'
-          })
+          method: 'PUT',
+          headers: githubHeaders(settings.token, true),
+          body: JSON.stringify(body)
         },
-        'Không thể tạo dữ liệu mới'
+        'Không thể cập nhật data.json'
       );
-
-      /* 4. Create a new tree based on the latest tree. */
-      const tree = await githubJsonRequest(
-        `${repoApi}/git/trees`,
-        {
-          method: 'POST',
-          headers,
-          body: JSON.stringify({
-            base_tree: baseTreeSha,
-            tree: [{
-              path: dataPath,
-              mode: '100644',
-              type: 'blob',
-              sha: blob.sha
-            }]
-          })
-        },
-        'Không thể tạo tree mới'
-      );
-
-      /* 5. Create a commit whose parent is the exact branch head read above. */
-      const commit = await githubJsonRequest(
-        `${repoApi}/git/commits`,
-        {
-          method: 'POST',
-          headers,
-          body: JSON.stringify({
-            message: 'Update profile data.json',
-            tree: tree.sha,
-            parents: [parentCommitSha]
-          })
-        },
-        'Không thể tạo commit mới'
-      );
-
-      /* 6. Move the branch forward without forcing it. */
-      await githubJsonRequest(
-        `${repoApi}/git/refs/heads/${branchPath}`,
-        {
-          method: 'PATCH',
-          headers,
-          body: JSON.stringify({
-            sha: commit.sha,
-            force: false
-          })
-        },
-        'Không thể cập nhật branch'
-      );
-
-      return { commitSha: commit.sha, parentCommitSha };
     }
 
     async function publishDataJson({ exitOnSuccess = false } = {}) {
       if (!document.body.classList.contains('edit-mode')) return;
+
       const settings = saveGithubSettings(false);
-      const repoParts = settings.repo.split('/').filter(Boolean);
-      if (repoParts.length !== 2) {
-        openGithubSettings();
-        setGithubStatus('Repository phải có dạng owner/repo, ví dụ sseoyi/profile.', 'error');
-        return;
-      }
-      if (!settings.token) {
-        openGithubSettings();
-        setGithubStatus('Hãy nhập GitHub access token trước khi publish.', 'error');
+      try {
+        splitRepository(settings.repo);
+        if (!settings.branch) throw new Error('Branch không được để trống.');
+        if (!settings.path) throw new Error('Đường dẫn data.json không được để trống.');
+        if (!settings.token) throw new Error('Hãy nhập GitHub access token trước khi publish.');
+      } catch (error) {
+        openGithubSettings(error.message, 'error');
         return;
       }
 
-      const [owner, repo] = repoParts;
-      /* GitHub's browser CORS preflight only allows Authorization and
-         Content-Type among our custom request headers. Omitting the version
-         header is safe: GitHub defaults REST requests to API version
-         2022-11-28. */
-      const headers = {
-        Accept: 'application/vnd.github+json',
-        Authorization: `Bearer ${settings.token}`,
-        'Content-Type': 'application/json'
-      };
-      const buttons = [editorExit].filter(Boolean);
-      buttons.forEach(button => { button.disabled = true; });
-      const originalExitLabel = editorExit.textContent;
-      editorExit.textContent = 'Đang lưu…';
-      setGithubStatus('Đang tạo commit data.json mới…');
+      const originalLabel = editorExit.textContent;
+      editorExit.disabled = true;
+      editorExit.textContent = 'Đang publish…';
+      setGithubStatus('Đang đọc data.json mới nhất từ GitHub…');
       showToast('Đang publish data.json…');
 
       try {
         const data = collectSiteData();
-        const jsonText = JSON.stringify(data, null, 2) + '\n';
-
-        let publishInfo = null;
+        let result = null;
         let lastError = null;
-        const maxAttempts = 3;
 
-        for (let attempt = 1; attempt <= maxAttempts; attempt += 1) {
+        for (let attempt = 1; attempt <= 3; attempt += 1) {
           try {
-            publishInfo = await createDataJsonCommit({
-              owner,
-              repo,
-              settings,
-              headers,
-              jsonText
-            });
+            const remoteFile = await getCurrentDataFile(settings);
+            setGithubStatus(remoteFile.exists
+              ? `Đã lấy SHA mới nhất. Đang cập nhật (${attempt}/3)…`
+              : `Chưa có data.json. Đang tạo file (${attempt}/3)…`);
+            result = await putDataJson(settings, data, remoteFile.sha);
             lastError = null;
             break;
           } catch (error) {
             lastError = error;
-            const retryable = error.status === 409 || error.status === 422;
-            if (!retryable || attempt === maxAttempts) throw error;
-
-            setGithubStatus(`Branch vừa thay đổi. Đang đồng bộ lại và thử lần ${attempt + 1}/${maxAttempts}…`);
-            await new Promise(resolve => setTimeout(resolve, 500 * attempt));
+            if (!isShaConflict(error) || attempt === 3) throw error;
+            setGithubStatus(`data.json vừa thay đổi. Đang lấy lại SHA và thử lần ${attempt + 1}/3…`);
+            await new Promise(resolve => setTimeout(resolve, 450 * attempt));
           }
         }
 
-        if (!publishInfo) throw lastError || new Error('Không thể tạo commit data.json.');
+        if (!result) throw lastError || new Error('GitHub không trả về kết quả publish.');
 
         cacheSiteData(data, false);
         dataSourceText.textContent = 'đã publish lên data.json';
-        const shortCommit = publishInfo.commitSha ? publishInfo.commitSha.slice(0, 7) : '';
+        const commitSha = result.commit && result.commit.sha ? result.commit.sha.slice(0, 7) : '';
         setGithubStatus(
-          `Publish thành công vào ${settings.repo}/${settings.path}${shortCommit ? ` · commit ${shortCommit}` : ''}.`,
+          `Publish thành công vào ${settings.repo}/${settings.path}${commitSha ? ` · commit ${commitSha}` : ''}.`,
           'success'
         );
 
@@ -2339,22 +2323,25 @@
           editSessionSnapshot = null;
           closeGithubSettings();
           closeFeedbackModal();
-          showToast('Đã lưu, publish và thoát chỉnh sửa');
+          showToast('Đã publish và thoát chỉnh sửa');
         } else {
-          showToast('Đã publish data.json lên GitHub');
+          showToast('Đã publish data.json');
         }
       } catch (error) {
-        console.error(error);
-        openGithubSettings();
-        setGithubStatus(error.message || 'Không thể publish data.json.', 'error');
-        showToast('Publish thất bại — mở GitHub settings để kiểm tra');
+        console.error('GitHub publish failed:', error);
+        let message = error.message || 'Không thể publish data.json.';
+        if (error.status === 401) message = 'Token không hợp lệ hoặc đã hết hạn.';
+        else if (error.status === 403) message = 'Token chưa có quyền Contents: Read and write cho repository này.';
+        else if (error.status === 404) message = 'Không tìm thấy repository, branch hoặc đường dẫn. Kiểm tra lại GitHub settings.';
+        openGithubSettings(message, 'error');
+        showToast('Publish thất bại — thay đổi vẫn được giữ');
       } finally {
-        buttons.forEach(button => { button.disabled = false; });
-        editorExit.textContent = originalExitLabel;
+        editorExit.disabled = false;
+        editorExit.textContent = originalLabel;
       }
     }
 
-    githubSettingsOpen.addEventListener('click', openGithubSettings);
+    githubSettingsOpen.addEventListener('click', () => openGithubSettings());
     githubSettingsClose.addEventListener('click', closeGithubSettings);
     githubSettingsModal.addEventListener('click', event => {
       if (event.target === githubSettingsModal) closeGithubSettings();
@@ -2368,7 +2355,7 @@
 
     async function initializeSite() {
       setEditMode(false);
-      const hasDraft = localStorage.getItem('fanartistLocalDraft') === '1';
+      const hasDraft = localStorage.getItem('artistLocalDraft') === '1';
       if (hasDraft) {
         applySavedEdits();
         dataSourceText.textContent = 'đang dùng bản nháp trên trình duyệt';
