@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updatedAt": "2026-07-20T14:26:02.850Z",
+  "updatedAt": "2026-07-20T14:27:45.036Z",
   "content": {
     "profileName": "Seoyi",
     "profileHandle": "@s_seoyi",
@@ -75,9 +75,9 @@
     {
       "title": "Ship hàng",
       "items": [
-        "Thời gian làm và gửi hàng tùy lịch cá nhân.",
-        "Mình sẽ báo trước khi có chậm trễ.",
-        "Vui lòng quay video mở hàng để hỗ trợ khiếu nại nếu có."
+        "Đối với đơn đã ck, mặc định VTP phí cũ.",
+        "Đối với đơn COD, mình ưu tiên dùng SPX.",
+        "Mình gửi hàng 2 lần/tuần, nhưng sẽ không quá 4 ngày từ ngày chốt."
       ]
     }
   ],
