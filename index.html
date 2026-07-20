@@ -508,11 +508,18 @@
       transition: transform .15s ease, opacity .15s ease;
     }
 
+    .legit-link-config-row {
+      width: 100%;
+      gap: 7px;
+      margin-top: 8px;
+    }
+
     .legit-link-config {
+      display: inline-flex;
+      flex: 1 1 0;
       align-items: center;
       justify-content: center;
-      margin-top: 8px;
-      min-height: 32px;
+      min-height: 34px;
       padding: 0 10px;
       border: 1.5px dashed var(--ink);
       border-radius: 9px;
@@ -1652,10 +1659,13 @@
 </div>
 <div class="legit-actions">
 <a class="legit-action" data-edit-key="legitButton1" data-edit-link-key="legitPostUrl" href="https://facebook.com/" rel="noopener" target="_blank">Bài check legit</a>
-<button class="legit-action" data-edit-key="legitButton2" id="feedbackOpen" type="button">Feedback</button>
-<a class="legit-action" data-edit-key="legitButton3" data-edit-link-key="legitButton3Url" href="https://facebook.com/" rel="noopener" target="_blank">Link mới</a>
+<a class="legit-action" data-edit-key="legitCustomButton2" data-edit-link-key="legitButton2Url" href="https://facebook.com/" rel="noopener" target="_blank">Link 2</a>
+<a class="legit-action" data-edit-key="legitButton3" data-edit-link-key="legitButton3Url" href="https://facebook.com/" rel="noopener" target="_blank">Link 3</a>
 </div>
-<button class="legit-link-config edit-only" id="legitButton3Config" type="button">✎ Nhập tên &amp; link cho nút thứ ba</button>
+<div class="legit-link-config-row edit-only">
+<button class="legit-link-config" id="legitButton2Config" type="button">✎ Sửa nút 2</button>
+<button class="legit-link-config" id="legitButton3Config" type="button">✎ Sửa nút 3</button>
+</div>
 </section>
 <section class="panel" id="rules">
 <h2 class="section-title" data-edit-key="rulesTitle">Rules giao dịch</h2>
@@ -1709,6 +1719,23 @@
     </footer><div class="editor-access-wrap"><button class="editor-access-btn" id="editorAccess" type="button">✎ Edit</button></div><div class="data-source-badge" id="dataSourceBadge">data.json: <span id="dataSourceText">đang kiểm tra…</span></div><div class="editor-toolbar" id="editorToolbar"><span>Chạm vào chữ để sửa · Chuyển qua mọi tab trong cùng một phiên · Nhấp đúp liên kết để đổi URL</span><button class="secondary" id="githubSettingsOpen" type="button">GitHub</button><button class="secondary" id="editorSave" type="button">Hủy thay đổi</button><button id="editorExit" type="button">Lưu &amp; thoát</button></div>
 </main>
 <div aria-hidden="true" class="editor-modal" id="editorModal"><div class="editor-modal-box"><h2>Mở chế độ chỉnh sửa</h2><p>Nhập mật khẩu để hiện các công cụ chỉnh sửa.</p><input autocomplete="current-password" id="editorPassword" placeholder="Password" type="password"/><div class="editor-error" id="editorError"></div><div class="editor-modal-actions"><button class="secondary" id="editorCancel" type="button">Hủy</button><button id="editorUnlock" type="button">Mở khóa</button></div></div></div>
+<div aria-hidden="true" class="editor-modal" id="legitButton2Modal">
+  <div class="editor-modal-box">
+    <h2>Nút liên kết thứ hai</h2>
+    <p>Nhập tên hiển thị và đường dẫn mở khi khách bấm vào nút.</p>
+    <label for="legitButton2Name" style="display:grid;gap:5px;margin-top:9px;font-size:10px;font-weight:800;">Tên nút
+      <input id="legitButton2Name" maxlength="40" placeholder="Ví dụ: Form order" type="text"/>
+    </label>
+    <label for="legitButton2Link" style="display:grid;gap:5px;margin-top:9px;font-size:10px;font-weight:800;">Đường dẫn
+      <input id="legitButton2Link" inputmode="url" placeholder="https://..." spellcheck="false" type="url"/>
+    </label>
+    <div class="editor-error" id="legitButton2Error"></div>
+    <div class="editor-modal-actions">
+      <button class="secondary" id="legitButton2Cancel" type="button">Hủy</button>
+      <button id="legitButton2Save" type="button">Lưu nút</button>
+    </div>
+  </div>
+</div>
 <div aria-hidden="true" class="editor-modal" id="legitButton3Modal">
   <div class="editor-modal-box">
     <h2>Nút liên kết thứ ba</h2>
@@ -2308,10 +2335,12 @@
       feedbackModal.setAttribute('aria-hidden', 'true');
     }
 
-    feedbackOpen.addEventListener('click', event => {
-      event.preventDefault();
-      openFeedbackLibrary();
-    });
+    if (feedbackOpen) {
+      feedbackOpen.addEventListener('click', event => {
+        event.preventDefault();
+        openFeedbackLibrary();
+      });
+    }
     feedbackClose.addEventListener('click', closeFeedbackLibrary);
     feedbackModal.addEventListener('click', event => {
       if (event.target === feedbackModal) closeFeedbackLibrary();
@@ -2352,6 +2381,8 @@
       if (event.key !== 'Escape') return;
       if (feedbackPreview.classList.contains('open')) {
         feedbackPreview.click();
+      } else if (legitButton2Modal?.classList.contains('open')) {
+        closeLegitButton2Modal();
       } else if (legitButton3Modal?.classList.contains('open')) {
         closeLegitButton3Modal();
       } else if (feedbackModal.classList.contains('open')) {
@@ -2947,6 +2978,56 @@
         link.setAttribute('href', nextUrl.trim() || '#');
         showToast('Đã cập nhật đường dẫn — bấm Lưu & thoát để publish');
       });
+    });
+
+    /* Mobile-friendly editor for the second Check legit action button. */
+    const legitButton2 = document.querySelector('[data-edit-link-key="legitButton2Url"]');
+    const legitButton2Config = document.getElementById('legitButton2Config');
+    const legitButton2Modal = document.getElementById('legitButton2Modal');
+    const legitButton2Name = document.getElementById('legitButton2Name');
+    const legitButton2Link = document.getElementById('legitButton2Link');
+    const legitButton2Error = document.getElementById('legitButton2Error');
+    const legitButton2Cancel = document.getElementById('legitButton2Cancel');
+    const legitButton2Save = document.getElementById('legitButton2Save');
+
+    function openLegitButton2Modal() {
+      if (!document.body.classList.contains('edit-mode') || !legitButton2) return;
+      legitButton2Name.value = legitButton2.textContent.trim();
+      legitButton2Link.value = legitButton2.getAttribute('href') || '';
+      legitButton2Error.textContent = '';
+      legitButton2Modal.classList.add('open');
+      legitButton2Modal.setAttribute('aria-hidden', 'false');
+      setTimeout(() => legitButton2Name.focus(), 40);
+    }
+
+    function closeLegitButton2Modal() {
+      legitButton2Modal.classList.remove('open');
+      legitButton2Modal.setAttribute('aria-hidden', 'true');
+    }
+
+    function saveLegitButton2() {
+      const name = legitButton2Name.value.trim();
+      const link = normalizeExternalLink(legitButton2Link.value);
+      if (!name) {
+        legitButton2Error.textContent = 'Hãy nhập tên cho nút.';
+        legitButton2Name.focus();
+        return;
+      }
+      legitButton2.textContent = name;
+      legitButton2.setAttribute('href', link);
+      markLocalDraft();
+      closeLegitButton2Modal();
+      showToast('Đã cập nhật tên và đường dẫn của nút');
+    }
+
+    legitButton2Config.addEventListener('click', openLegitButton2Modal);
+    legitButton2Cancel.addEventListener('click', closeLegitButton2Modal);
+    legitButton2Save.addEventListener('click', saveLegitButton2);
+    legitButton2Link.addEventListener('keydown', event => {
+      if (event.key === 'Enter') saveLegitButton2();
+    });
+    legitButton2Modal.addEventListener('click', event => {
+      if (event.target === legitButton2Modal) closeLegitButton2Modal();
     });
 
     /* Mobile-friendly editor for the third Check legit action button. */
