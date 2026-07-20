@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updatedAt": "2026-07-20T13:55:44.940Z",
+  "updatedAt": "2026-07-20T14:26:02.850Z",
   "content": {
     "profileName": "Seoyi",
     "profileHandle": "@s_seoyi",
@@ -38,7 +38,7 @@
     "footerText": "@s_seoyi"
   },
   "html": {
-    "noticeHtml": "<font color=\"#080809\" face=\"Segoe UI Historic, Segoe UI, Helvetica, Arial, sans-serif\"><span style=\"font-size: 15px; white-space-collapse: preserve;\">오늘 당신에게 좋은 일이 있을 겁니다</span></font>"
+    "noticeHtml": "<font color=\"#080809\" face=\"Segoe UI Historic, Segoe UI, Helvetica, Arial, sans-serif\"><span style=\"font-size: 15px; white-space-collapse: preserve;\">♡ 오늘 당신에게 좋은 일이 있을 겁니다 ♡</span></font>"
   },
   "links": {
     "facebookUrl": "https://facebook.com/",
@@ -49,31 +49,31 @@
   },
   "rules": [
     {
-      "title": "Đặt hàng / đặt vẽ",
+      "title": "Trước giao dịch",
       "items": [
-        "Gửi mô tả, ảnh tham khảo và thời hạn mong muốn.",
-        "Chốt giá trước khi bắt đầu.",
-        "Đơn được xếp lịch sau khi nhận cọc."
+        "Có vấn đề hay thắc mắc hãy hỏi mình trước.",
+        "TH không rep tin nhắn mình nhiều lần: hủy giao dịch.",
+        "Đơn được chốt sau khi mình gửi ttck."
       ]
     },
     {
-      "title": "Thanh toán và hoàn tiền",
+      "title": "Sau giao dịch",
       "items": [
-        "Cọc 50% hoặc theo thỏa thuận của từng đơn.",
-        "Không hoàn cọc sau khi đã bắt đầu làm.",
-        "Đơn gấp hoặc thay đổi lớn có thể tính thêm phí."
+        "Quay vid unbox đầy đủ nhé.",
+        "Hàng về tay bạn có df mình sẽ rf tùy độ nghiêm trọng.",
+        "Chỉ giải quyết trong vòng 5 ngày sau khi nhận hàng."
       ]
     },
     {
-      "title": "Sử dụng tranh",
+      "title": "Thanh toán",
       "items": [
-        "Không repost, trace, xóa chữ ký hoặc dùng cho AI.",
-        "Khi đăng lại vui lòng ghi credit.",
-        "Mục đích thương mại cần hỏi trước."
+        "Nhận ck, COD.",
+        "Hàng sẵn: cọc 50%, hoàn sau 2 tuần.",
+        "Hàng chưa sẵn: cọc 50-70% tùy món, hoàn khi hàng về."
       ]
     },
     {
-      "title": "Ship và thời gian chờ",
+      "title": "Ship hàng",
       "items": [
         "Thời gian làm và gửi hàng tùy lịch cá nhân.",
         "Mình sẽ báo trước khi có chậm trễ.",
