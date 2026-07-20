@@ -1407,7 +1407,7 @@
 </section>
 <footer data-edit-key="footerText">
       Vẽ vì vui ♡ Vui lòng không repost, trace hoặc sử dụng tranh để huấn luyện AI.
-    </footer><div class="editor-access-wrap"><button class="editor-access-btn" id="editorAccess" type="button">✎ Edit</button></div><div class="data-source-badge" id="dataSourceBadge">data.json: <span id="dataSourceText">đang kiểm tra…</span></div><div class="editor-toolbar" id="editorToolbar"><span>Chạm vào chữ để sửa · Nhấp đúp nút/liên kết để đổi URL · Lưu & thoát để publish</span><button class="secondary" id="githubSettingsOpen" type="button">GitHub</button><button class="secondary" id="editorSave" type="button">Hủy thay đổi</button><button id="editorExit" type="button">Lưu &amp; thoát</button></div>
+    </footer><div class="editor-access-wrap"><button class="editor-access-btn" id="editorAccess" type="button">✎ Edit</button></div><div class="data-source-badge" id="dataSourceBadge">data.json: <span id="dataSourceText">đang kiểm tra…</span></div><div class="editor-toolbar" id="editorToolbar"><span>Chạm vào chữ để sửa · Chuyển qua mọi tab trong cùng một phiên · Nhấp đúp liên kết để đổi URL</span><button class="secondary" id="githubSettingsOpen" type="button">GitHub</button><button class="secondary" id="editorSave" type="button">Hủy thay đổi</button><button id="editorExit" type="button">Lưu &amp; thoát</button></div>
 </main>
 <div aria-hidden="true" class="editor-modal" id="editorModal"><div class="editor-modal-box"><h2>Mở chế độ chỉnh sửa</h2><p>Nhập mật khẩu để hiện các công cụ chỉnh sửa.</p><input autocomplete="current-password" id="editorPassword" placeholder="Password" type="password"/><div class="editor-error" id="editorError"></div><div class="editor-modal-actions"><button class="secondary" id="editorCancel" type="button">Hủy</button><button id="editorUnlock" type="button">Mở khóa</button></div></div></div>
 <div aria-hidden="true" class="github-settings-modal" id="githubSettingsModal">
@@ -1511,7 +1511,8 @@
 
     tabButtons.forEach(button => {
       button.addEventListener('click', () => {
-        if (document.body.classList.contains('edit-mode')) return;
+        // Edit mode remains active while moving between tabs, so one password
+        // unlocks the entire page for a single editing session.
         openTab(button.dataset.tab, true);
       });
     });
