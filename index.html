@@ -1,0 +1,1835 @@
+<!DOCTYPE html>
+
+<html lang="vi">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<meta content="#c6e6f1" name="theme-color"/>
+<title>Seoyi — Fanart Profile</title>
+<style>
+    /* Keep poti.ttf in the same folder as this HTML file. */
+    @font-face {
+      font-family: "Poti";
+      src: url("./poti.ttf") format("truetype");
+      font-style: normal;
+      font-weight: 400;
+      font-display: swap;
+    }
+
+    :root {
+      --mint: #c6e6f1;
+      --ink: #231f20;
+      --radius: 22px;
+      --radius-small: 13px;
+    }
+
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      overflow-x: hidden;
+      color: var(--ink);
+      background: var(--mint);
+      font-family: "Google Sans", "Google Sans Text", "Product Sans", Arial, sans-serif;
+    }
+
+    button, input { font: inherit; }
+    button, a { -webkit-tap-highlight-color: transparent; }
+    a { color: inherit; text-decoration: none; }
+
+    .shell {
+      position: relative;
+      z-index: 2;
+      width: min(820px, calc(100% - 24px));
+      margin: 18px auto 34px;
+    }
+
+    /* Minimal falling stars in the empty desktop side gutters */
+    .side-stars {
+      position: fixed;
+      top: 72px;
+      bottom: 0;
+      z-index: 1;
+      width: max(72px, calc((100vw - 880px) / 2));
+      overflow: hidden;
+      pointer-events: none;
+      user-select: none;
+    }
+
+    .side-stars.left { left: 0; }
+    .side-stars.right { right: 0; }
+
+    .side-star {
+      position: absolute;
+      top: -18vh;
+      left: var(--x);
+      color: var(--ink);
+      font-size: var(--size);
+      line-height: 1;
+      opacity: 1;
+      will-change: transform;
+      animation: sideStarFall var(--duration) linear infinite;
+      animation-delay: var(--delay);
+    }
+
+    @keyframes sideStarFall {
+      0% {
+        opacity: 1;
+        transform: translate3d(0, -12vh, 0) rotate(0deg);
+      }
+      100% {
+        opacity: 1;
+        transform: translate3d(var(--drift), 116vh, 0) rotate(var(--spin));
+      }
+    }
+
+    /* Profile hero: one rectangle divided into two equal sections */
+    .profile-card {
+      position: relative;
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+      align-items: stretch;
+      overflow: visible;
+      background: transparent;
+    }
+
+    .art-slot {
+      position: relative;
+      width: 100%;
+      aspect-ratio: 1 / 1;
+      overflow: hidden;
+      background: transparent;
+    }
+
+    .art-slot img {
+      display: none;
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+      object-position: center;
+      background: transparent;
+    }
+
+    .art-placeholder {
+      position: absolute;
+      inset: 0;
+      display: grid;
+      place-items: center;
+      padding: 0;
+      color: var(--ink);
+      text-align: center;
+      font-size: 12px;
+      font-weight: 750;
+      letter-spacing: .03em;
+    }
+
+    .art-placeholder span {
+      display: block;
+      margin-top: 5px;
+      font-size: 10px;
+      font-weight: 600;
+      opacity: .62;
+    }
+
+    .upload-label {
+      position: absolute;
+      left: 10px;
+      bottom: 10px;
+      z-index: 3;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 34px;
+      padding: 0 12px;
+      border: 2px solid var(--ink);
+      border-radius: 10px;
+      color: var(--mint);
+      background: var(--ink);
+      font-size: 10px;
+      font-weight: 800;
+      letter-spacing: .02em;
+      cursor: pointer;
+    }
+
+    .upload-label input { display: none; }
+
+    .profile-info {
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      min-width: 0;
+      padding: clamp(18px, 4.5vw, 42px);
+      color: var(--ink);
+    }
+
+    h1 {
+      margin: 0;
+      font-family: "Poti", "Segoe Script", cursive;
+      font-size: clamp(75px, 12vw, 132px);
+      font-weight: 400;
+      line-height: .82;
+      letter-spacing: 0;
+    }
+
+    .handle {
+      margin: 16px 0 0;
+      font-size: 14px;
+      font-weight: 700;
+      opacity: .82;
+    }
+
+    .mini-tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      margin-top: 18px;
+    }
+
+    .mini-tag {
+      padding: 6px 10px;
+      border: 2px solid var(--ink);
+      border-radius: 999px;
+      color: var(--ink);
+      background: transparent;
+      font-size: 10px;
+      font-weight: 750;
+    }
+
+    .socials {
+      display: flex;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-top: 19px;
+    }
+
+    .social-button {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 38px;
+      padding: 0 15px;
+      border: 2px solid var(--ink);
+      border-radius: 10px;
+      color: var(--mint);
+      background: var(--ink);
+      font-size: 12px;
+      font-weight: 850;
+      text-decoration: none !important;
+      transition: transform .15s ease, opacity .15s ease;
+    }
+
+    .social-button:hover {
+      transform: translateY(-2px);
+      opacity: .9;
+    }
+
+    .notice {
+      position: relative;
+      margin: 14px 0;
+      padding: 13px 16px;
+      border: 2px solid var(--ink);
+      border-radius: 14px;
+      color: var(--ink);
+      background: #ffffff;
+      font-size: 11px;
+      line-height: 1.55;
+    }
+
+    .content-card {
+      overflow: hidden;
+      border: 2px solid var(--ink);
+      border-radius: 18px;
+      color: var(--ink);
+      background: transparent;
+    }
+
+    .shop-pattern {
+      position: relative;
+      z-index: 3;
+      width: 100%;
+      min-height: 72px;
+      overflow: hidden;
+      background-color: var(--ink);
+      background-position: center;
+      background-repeat: repeat-x;
+      background-size: auto 100%;
+    }
+
+    .shop-pattern::after {
+      content: "";
+      position: absolute;
+      left: -8px;
+      right: -8px;
+      bottom: -1px;
+      height: 14px;
+      background:
+        radial-gradient(circle at 8px 0, transparent 8px, var(--mint) 8.5px) 0 0 / 18px 14px repeat-x;
+      pointer-events: none;
+    }
+
+    .shop-pattern.custom-pattern {
+      background-size: cover;
+      background-repeat: no-repeat;
+    }
+
+    .shop-pattern.custom-pattern::after { display: none; }
+
+    .pattern-controls {
+      position: absolute;
+      top: 10px;
+      right: 10px;
+      z-index: 2;
+      display: flex;
+      gap: 6px;
+    }
+
+    .pattern-button {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 30px;
+      padding: 0 10px;
+      border: 1.5px solid var(--mint);
+      border-radius: 8px;
+      color: var(--ink);
+      background: var(--mint);
+      font-size: 9px;
+      font-weight: 850;
+      line-height: 1;
+      cursor: pointer;
+    }
+
+    .pattern-button.secondary {
+      color: var(--mint);
+      background: rgba(35, 31, 32, .68);
+    }
+
+    .pattern-button input { display: none; }
+
+    .tabs {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(max-content, 1fr));
+      gap: 4px;
+      padding: 6px;
+      overflow-x: auto;
+      border-bottom: 2px solid var(--ink);
+      background: var(--ink);
+    }
+
+    .tab-btn {
+      min-height: 38px;
+      padding: 0 10px;
+      border: 0;
+      border-radius: 9px;
+      color: rgba(198, 230, 241, .68);
+      background: transparent;
+      white-space: nowrap;
+      font-size: 11px;
+      font-weight: 800;
+      cursor: pointer;
+    }
+
+    .tab-btn.active {
+      color: var(--ink);
+      background: var(--mint);
+    }
+
+    .panel { display: none; padding: 16px; background: var(--mint); }
+    .panel.active { display: block; animation: show .18s ease; }
+
+    @keyframes show {
+      from { opacity: 0; transform: translateY(3px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .section-title {
+      margin: 0 0 10px;
+      font-size: 18px;
+      letter-spacing: -.02em;
+    }
+
+    .section-note {
+      margin: -4px 0 12px;
+      color: rgba(35, 31, 32, .64);
+      font-size: 11px;
+      line-height: 1.5;
+    }
+
+    .list-card,
+    details,
+    .payment-row,
+    .product {
+      border: 1.5px solid var(--ink);
+      border-radius: 12px;
+      background: #ffffff;
+    }
+
+    .list-card { padding: 12px; }
+    .list-card + .list-card { margin-top: 8px; }
+
+    .account-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+    }
+
+    .account-row + .account-row {
+      margin-top: 9px;
+      padding-top: 9px;
+      border-top: 1px dashed rgba(35, 31, 32, .35);
+    }
+
+    .account-identity {
+      min-width: 0;
+    }
+
+    .account-name-line {
+      display: flex;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 7px;
+    }
+
+    .account-row strong { display: block; font-size: 12px; }
+    .account-row span { color: rgba(35, 31, 32, .62); font-size: 11px; }
+
+    .account-link {
+      flex: 0 0 auto;
+      display: inline-grid;
+      place-items: center;
+      width: 25px;
+      height: 25px;
+      border: 1.5px solid var(--ink);
+      border-radius: 8px;
+      color: #ffffff;
+      background: var(--ink);
+      font-size: 13px;
+      font-weight: 900;
+      line-height: 1;
+      text-decoration: none !important;
+      transition: transform .15s ease, opacity .15s ease;
+    }
+
+    .account-link:hover {
+      transform: translate(1px, -1px);
+      opacity: .86;
+    }
+
+    .legit-actions {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 8px;
+      margin-top: 10px;
+    }
+
+    .legit-action {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 46px;
+      padding: 0 14px;
+      border: 2px solid var(--ink);
+      border-radius: 11px;
+      color: var(--mint);
+      background: var(--ink);
+      font-size: 12px;
+      font-weight: 850;
+      text-align: center;
+      text-decoration: none !important;
+      transition: transform .15s ease, opacity .15s ease;
+    }
+
+    .legit-action:hover {
+      transform: translateY(-2px);
+      opacity: .9;
+    }
+
+    details { overflow: hidden; }
+    details + details { margin-top: 7px; }
+
+    summary {
+      list-style: none;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      padding: 12px;
+      font-size: 12px;
+      font-weight: 800;
+      cursor: pointer;
+    }
+
+    summary::-webkit-details-marker { display: none; }
+    summary::after { content: "+"; color: var(--ink); font-size: 16px; }
+    details[open] summary::after { content: "−"; }
+
+    .details-body {
+      padding: 0 12px 12px;
+      color: rgba(35, 31, 32, .68);
+      font-size: 11px;
+      line-height: 1.65;
+    }
+
+    .details-body ul { margin: 3px 0 0; padding-left: 17px; }
+    .details-body li + li { margin-top: 4px; }
+
+    .payment-layout {
+      display: grid;
+      grid-template-columns: minmax(0, .92fr) minmax(0, 1.08fr);
+      gap: 10px;
+      align-items: stretch;
+    }
+
+    .qr-upload {
+      position: relative;
+      width: 100%;
+      aspect-ratio: 1 / 1;
+      overflow: hidden;
+      border: 1.5px solid var(--ink);
+      border-radius: 12px;
+      background: #ffffff;
+    }
+
+    .qr-upload img {
+      display: none;
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+      background: #ffffff;
+    }
+
+    .qr-placeholder {
+      position: absolute;
+      inset: 0;
+      display: grid;
+      place-items: center;
+      padding: 18px;
+      text-align: center;
+      font-size: 11px;
+      font-weight: 850;
+      line-height: 1.45;
+      cursor: pointer;
+    }
+
+    .qr-placeholder small {
+      display: block;
+      margin-top: 5px;
+      color: rgba(35, 31, 32, .58);
+      font-size: 9px;
+      font-weight: 650;
+    }
+
+    .qr-placeholder input { display: none; }
+
+    .qr-change {
+      position: absolute;
+      right: 8px;
+      bottom: 8px;
+      z-index: 3;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      min-height: 29px;
+      padding: 0 9px;
+      border: 0;
+      border-radius: 8px;
+      color: var(--mint);
+      background: var(--ink);
+      font-size: 9px;
+      font-weight: 850;
+      cursor: pointer;
+    }
+
+    .payment-info {
+      display: flex;
+      flex-direction: column;
+      min-width: 0;
+      padding: 4px 0;
+    }
+
+    .payment-row {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) auto;
+      align-items: center;
+      gap: 8px;
+      padding: 8px 9px;
+      border: 0;
+      border-bottom: 1px solid rgba(35, 31, 32, .2);
+      border-radius: 0;
+      background: transparent;
+    }
+
+    .payment-row:first-child { padding-top: 3px; }
+    .payment-label {
+      color: rgba(35, 31, 32, .52);
+      font-size: 8px;
+      font-weight: 750;
+      text-transform: uppercase;
+      letter-spacing: .06em;
+    }
+
+    .payment-value {
+      margin-top: 1px;
+      font-size: 11px;
+      font-weight: 850;
+      line-height: 1.3;
+      word-break: break-word;
+    }
+
+    .copy-btn {
+      min-height: 27px;
+      padding: 0 8px;
+      border: 0;
+      border-radius: 7px;
+      color: var(--mint);
+      background: var(--ink);
+      font-size: 9px;
+      font-weight: 800;
+      cursor: pointer;
+    }
+
+    .quick-transfer {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 100%;
+      min-height: 39px;
+      margin-top: auto;
+      padding: 0 12px;
+      border: 2px solid var(--ink);
+      border-radius: 10px;
+      color: var(--mint);
+      background: var(--ink);
+      font-size: 11px;
+      font-weight: 850;
+      text-align: center;
+      text-decoration: none !important;
+      transition: transform .15s ease, opacity .15s ease;
+    }
+
+    .quick-transfer:hover {
+      transform: translateY(-2px);
+      opacity: .9;
+    }
+
+    .store-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 8px;
+    }
+
+    .product { overflow: hidden; }
+
+    .product-art {
+      aspect-ratio: 16 / 9;
+      display: grid;
+      place-items: center;
+      color: var(--mint);
+      background: var(--ink);
+      font-size: 25px;
+    }
+
+    .product-body { padding: 10px; }
+    .product-top { display: flex; align-items: flex-start; justify-content: space-between; gap: 8px; }
+    .product h3 { margin: 0; font-size: 12px; }
+    .price { color: var(--ink); font-size: 11px; font-weight: 900; white-space: nowrap; }
+    .product p { margin: 6px 0 9px; color: rgba(35, 31, 32, .62); font-size: 10px; line-height: 1.5; }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 32px;
+      padding: 0 10px;
+      border: 0;
+      border-radius: 8px;
+      color: var(--mint);
+      background: var(--ink);
+      font-size: 10px;
+      font-weight: 800;
+    }
+
+    footer {
+      padding: 13px 5px 0;
+      text-align: center;
+      color: rgba(35, 31, 32, .68);
+      font-size: 10px;
+      line-height: 1.5;
+    }
+
+    .toast {
+      position: fixed;
+      left: 50%;
+      bottom: 20px;
+      z-index: 20;
+      transform: translate(-50%, 14px);
+      opacity: 0;
+      pointer-events: none;
+      padding: 9px 12px;
+      border-radius: 9px;
+      color: var(--mint);
+      background: var(--ink);
+      font-size: 11px;
+      font-weight: 800;
+      transition: .18s ease;
+    }
+
+    .toast.show { opacity: 1; transform: translate(-50%, 0); }
+
+
+
+    /* Global password-protected editor */
+    .edit-only { display: none !important; }
+    body.edit-mode .edit-only { display: inline-flex !important; }
+    body.edit-mode .pattern-controls.edit-only { display: flex !important; }
+    .public-only { display: inline-flex; }
+    body.edit-mode .public-only { display: none !important; }
+
+    .empty-art-mark {
+      font-size: clamp(34px, 7vw, 66px);
+      font-weight: 400;
+      opacity: .16;
+    }
+
+    .editor-access-wrap {
+      display: flex;
+      justify-content: center;
+      padding-top: 12px;
+    }
+
+    .editor-access-btn {
+      min-height: 28px;
+      padding: 0 9px;
+      border: 1px solid rgba(35, 31, 32, .34);
+      border-radius: 999px;
+      color: rgba(35, 31, 32, .62);
+      background: transparent;
+      font-size: 9px;
+      font-weight: 750;
+      cursor: pointer;
+    }
+
+    body.edit-mode .editor-access-wrap { display: none; }
+
+    .editor-toolbar {
+      position: fixed;
+      left: 50%;
+      bottom: 14px;
+      z-index: 80;
+      display: none;
+      align-items: center;
+      gap: 7px;
+      width: min(620px, calc(100% - 24px));
+      padding: 8px;
+      border: 2px solid var(--ink);
+      border-radius: 13px;
+      color: var(--mint);
+      background: var(--ink);
+      box-shadow: 0 8px 26px rgba(35, 31, 32, .18);
+    }
+
+    body.edit-mode .editor-toolbar { display: flex; }
+    .editor-toolbar span { flex: 1; font-size: 9px; line-height: 1.35; opacity: .8; }
+    .editor-toolbar button {
+      min-height: 32px;
+      padding: 0 11px;
+      border: 1.5px solid var(--mint);
+      border-radius: 8px;
+      color: var(--ink);
+      background: var(--mint);
+      font-size: 10px;
+      font-weight: 850;
+      cursor: pointer;
+    }
+    .editor-toolbar button.secondary { color: var(--mint); background: transparent; }
+
+    body.edit-mode [data-edit-key],
+    body.edit-mode [data-edit-html-key] {
+      outline: 1.5px dashed rgba(35, 31, 32, .5);
+      outline-offset: 3px;
+      cursor: text;
+    }
+
+    body.edit-mode [data-edit-link-key] { cursor: alias; }
+    body.edit-mode .shop-pattern { cursor: default; }
+
+    .editor-modal {
+      position: fixed;
+      inset: 0;
+      z-index: 100;
+      display: none;
+      place-items: center;
+      padding: 18px;
+      background: rgba(35, 31, 32, .46);
+    }
+    .editor-modal.open { display: grid; }
+    .editor-modal-box {
+      width: min(360px, 100%);
+      padding: 18px;
+      border: 2px solid var(--ink);
+      border-radius: 16px;
+      background: #fff;
+    }
+    .editor-modal h2 { margin: 0; font-size: 18px; }
+    .editor-modal p { margin: 6px 0 12px; color: rgba(35, 31, 32, .64); font-size: 11px; line-height: 1.5; }
+    .editor-modal input {
+      width: 100%;
+      min-height: 42px;
+      padding: 0 12px;
+      border: 1.5px solid var(--ink);
+      border-radius: 10px;
+      color: var(--ink);
+      background: #fff;
+      outline: none;
+    }
+    .editor-modal-actions { display: flex; justify-content: flex-end; gap: 7px; margin-top: 12px; }
+    .editor-modal-actions button {
+      min-height: 34px;
+      padding: 0 12px;
+      border: 1.5px solid var(--ink);
+      border-radius: 9px;
+      color: var(--mint);
+      background: var(--ink);
+      font-size: 10px;
+      font-weight: 850;
+      cursor: pointer;
+    }
+    .editor-modal-actions button.secondary { color: var(--ink); background: transparent; }
+    .editor-error { min-height: 16px; margin-top: 5px; color: #9f2436; font-size: 10px; font-weight: 750; }
+
+
+
+    /* GitHub data.json publishing settings (visible only after editor unlock) */
+    .github-settings-modal {
+      position: fixed;
+      inset: 0;
+      z-index: 110;
+      display: none;
+      place-items: center;
+      padding: 18px;
+      background: rgba(35, 31, 32, .52);
+    }
+
+    .github-settings-modal.open { display: grid; }
+
+    .github-settings-box {
+      width: min(520px, 100%);
+      max-height: min(720px, calc(100vh - 36px));
+      overflow: auto;
+      padding: 18px;
+      border: 2px solid var(--ink);
+      border-radius: 16px;
+      color: var(--ink);
+      background: #ffffff;
+    }
+
+    .github-settings-head {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 12px;
+      margin-bottom: 14px;
+    }
+
+    .github-settings-head h2 { margin: 0; font-size: 18px; }
+    .github-settings-head p {
+      margin: 5px 0 0;
+      color: rgba(35, 31, 32, .64);
+      font-size: 10px;
+      line-height: 1.5;
+    }
+
+    .github-close {
+      flex: 0 0 auto;
+      width: 31px;
+      height: 31px;
+      border: 1.5px solid var(--ink);
+      border-radius: 9px;
+      color: var(--ink);
+      background: transparent;
+      font-weight: 900;
+      cursor: pointer;
+    }
+
+    .github-fields {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 10px;
+    }
+
+    .github-field { display: grid; gap: 5px; }
+    .github-field.full { grid-column: 1 / -1; }
+    .github-field label {
+      font-size: 9px;
+      font-weight: 850;
+      letter-spacing: .03em;
+      text-transform: uppercase;
+    }
+
+    .github-field input {
+      width: 100%;
+      min-height: 40px;
+      padding: 0 11px;
+      border: 1.5px solid var(--ink);
+      border-radius: 9px;
+      color: var(--ink);
+      background: #ffffff;
+      outline: none;
+      font-size: 11px;
+    }
+
+    .github-token-row {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) auto;
+      gap: 7px;
+    }
+
+    .github-token-toggle {
+      min-height: 40px;
+      padding: 0 10px;
+      border: 1.5px solid var(--ink);
+      border-radius: 9px;
+      color: var(--ink);
+      background: var(--mint);
+      font-size: 9px;
+      font-weight: 850;
+      cursor: pointer;
+    }
+
+    .github-warning {
+      margin: 12px 0 0;
+      padding: 10px 11px;
+      border: 1px dashed rgba(35, 31, 32, .46);
+      border-radius: 10px;
+      color: rgba(35, 31, 32, .72);
+      background: var(--mint);
+      font-size: 9px;
+      line-height: 1.55;
+    }
+
+    .github-status {
+      min-height: 18px;
+      margin-top: 9px;
+      font-size: 10px;
+      font-weight: 750;
+      line-height: 1.45;
+    }
+
+    .github-status.error { color: #9f2436; }
+    .github-status.success { color: #17643f; }
+
+    .github-actions {
+      display: flex;
+      justify-content: flex-end;
+      flex-wrap: wrap;
+      gap: 7px;
+      margin-top: 12px;
+    }
+
+    .github-actions button {
+      min-height: 35px;
+      padding: 0 12px;
+      border: 1.5px solid var(--ink);
+      border-radius: 9px;
+      color: var(--mint);
+      background: var(--ink);
+      font-size: 10px;
+      font-weight: 850;
+      cursor: pointer;
+    }
+
+    .github-actions button.secondary {
+      color: var(--ink);
+      background: transparent;
+    }
+
+    .github-actions button:disabled,
+    .editor-toolbar button:disabled {
+      opacity: .55;
+      cursor: wait;
+    }
+
+    .data-source-badge {
+      display: none;
+      align-items: center;
+      gap: 5px;
+      margin: 9px auto 0;
+      width: fit-content;
+      color: rgba(35, 31, 32, .56);
+      font-size: 8px;
+      font-weight: 750;
+    }
+
+    body.edit-mode .data-source-badge { display: flex; }
+
+    @media (max-width: 980px) {
+      .side-stars { display: none; }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      .side-star { animation: none; display: none; }
+    }
+
+    @media (max-width: 620px) {
+      .shell { width: min(100% - 14px, 820px); margin-top: 7px; }
+      .profile-card { grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); }
+      .art-slot { width: 100%; aspect-ratio: 1 / 1; }
+      .profile-info { padding: 13px 8px 14px; }
+      h1 { font-size: clamp(60px, 19.5vw, 96px); }
+      .handle { margin-top: 10px; font-size: 11px; }
+      .mini-tags { gap: 4px; margin-top: 11px; }
+      .mini-tag { padding: 4px 6px; font-size: 8px; border-width: 1.5px; }
+      .socials { gap: 6px; margin-top: 11px; }
+      .social-button { min-height: 34px; padding: 0 10px; font-size: 10px; }
+      .tabs { grid-template-columns: none; grid-auto-flow: column; grid-auto-columns: max-content; justify-content: start; }
+      .panel { padding: 13px 11px; }
+      .payment-layout { grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 7px; }
+      .payment-info { padding: 0; }
+      .payment-row { padding: 6px 5px; gap: 5px; }
+      .payment-value { font-size: 9px; }
+      .copy-btn { min-height: 24px; padding: 0 6px; font-size: 8px; }
+      .quick-transfer { min-height: 34px; padding: 0 7px; font-size: 9px; }
+      .qr-placeholder { padding: 8px; font-size: 9px; }
+      .qr-placeholder small { font-size: 7px; }
+      .store-grid { grid-template-columns: 1fr; }
+      .editor-toolbar span { display: none; }
+      .editor-toolbar { justify-content: flex-end; }
+      .github-fields { grid-template-columns: 1fr; }
+      .github-field.full { grid-column: auto; }
+    }
+  </style>
+</head>
+<body>
+<div aria-hidden="true" class="side-stars left" id="leftStars"></div>
+<div aria-hidden="true" class="side-stars right" id="rightStars"></div>
+<div aria-label="Dải hoa văn trang trí đầu trang" class="shop-pattern" id="shopPattern">
+<div class="pattern-controls edit-only">
+<label class="pattern-button" title="Tải ảnh pattern của bạn">
+        Đổi pattern
+        <input accept="image/png,image/jpeg,image/webp,image/gif" id="patternInput" type="file"/>
+</label>
+<button class="pattern-button secondary" id="patternReset" type="button">Mặc định</button>
+</div>
+</div>
+<main class="shell">
+<section aria-label="Fanartist profile" class="profile-card">
+<div class="art-slot">
+<img alt="Ảnh PNG của fanartist" id="profileImage"/>
+<div class="art-placeholder" id="imagePlaceholder"><div class="public-only empty-art-mark">♡</div><div class="edit-only">drop your png here ♡<span>transparent background supported</span></div></div>
+<label class="upload-label edit-only" title="Thêm ảnh PNG">
+          add png +
+          <input accept="image/png,image/webp,image/jpeg" id="imageInput" type="file"/>
+</label>
+</div>
+<div class="profile-info">
+<h1 data-edit-key="profileName">Seoyi</h1>
+<p class="handle" data-edit-key="profileHandle">@username</p>
+<div aria-label="Tags" class="mini-tags">
+<span class="mini-tag" data-edit-key="profileTag1">fanart</span>
+<span class="mini-tag" data-edit-key="profileTag2">multifandom</span>
+<span class="mini-tag" data-edit-key="profileTag3">OC</span>
+</div>
+<div aria-label="Social links" class="socials">
+<a class="social-button" data-edit-key="facebookLabel" data-edit-link-key="facebookUrl" href="https://facebook.com/" rel="noopener" target="_blank">Facebook</a>
+<a class="social-button" data-edit-key="youtubeLabel" data-edit-link-key="youtubeUrl" href="https://youtube.com/" rel="noopener" target="_blank">YouTube</a>
+</div>
+</div>
+</section>
+<div class="notice" data-edit-html-key="noticeHtml">
+<strong>Nhắc nhẹ:</strong> Chỉ giao dịch qua những tài khoản và thông tin có trên trang này. Hãy kiểm tra đúng tên trước khi chuyển khoản.
+    </div>
+<section class="content-card">
+<nav aria-label="Thông tin profile" class="tabs">
+<button class="tab-btn active" data-edit-key="tabLegit" data-tab="legit" type="button">Check legit</button>
+<button class="tab-btn" data-edit-key="tabRules" data-tab="rules" type="button">Rules giao dịch</button>
+<button class="tab-btn" data-edit-key="tabPayment" data-tab="payment" type="button">Chuyển khoản</button>
+<button class="tab-btn" data-edit-key="tabStore" data-tab="store" type="button">Store</button>
+</nav>
+<section class="panel active" id="legit">
+<div class="list-card">
+<div class="account-row">
+<div class="account-identity">
+<div class="account-name-line">
+<strong data-edit-key="legitName1">Jim Allies</strong>
+<a aria-label="Mở Facebook của Jim Allies" class="account-link" data-edit-link-key="legitAccountUrl1" href="https://facebook.com/" rel="noopener" target="_blank">↗</a>
+<span data-edit-key="legitHandle1">@jim.allie</span>
+</div>
+</div>
+</div>
+<div class="account-row">
+<div class="account-identity">
+<div class="account-name-line">
+<strong data-edit-key="legitName2">Seoyi</strong>
+<a aria-label="Mở Facebook của Seoyi" class="account-link" data-edit-link-key="legitAccountUrl2" href="https://facebook.com/" rel="noopener" target="_blank">↗</a>
+<span data-edit-key="legitHandle2">@username</span>
+</div>
+</div>
+</div>
+</div>
+<div class="legit-actions">
+<a class="legit-action" data-edit-key="legitButton1" data-edit-link-key="legitPostUrl" href="https://facebook.com/" rel="noopener" target="_blank">Bài check legit</a>
+<a class="legit-action" data-edit-key="legitButton2" data-edit-link-key="feedbackUrl" href="https://facebook.com/" rel="noopener" target="_blank">Feedback</a>
+</div>
+</section>
+<section class="panel" id="rules">
+<h2 class="section-title" data-edit-key="rulesTitle">Rules giao dịch</h2>
+<p class="section-note" data-edit-key="rulesNote">Sửa lại các nội dung mẫu bên dưới theo cách giao dịch của bạn.</p>
+<details open="">
+<summary><span data-edit-key="ruleTitle1">Đặt hàng / đặt vẽ</span></summary>
+<div class="details-body">
+<ul>
+<li data-edit-key="rule1Item1">Gửi mô tả, ảnh tham khảo và thời hạn mong muốn.</li>
+<li data-edit-key="rule1Item2">Chốt giá trước khi bắt đầu.</li>
+<li data-edit-key="rule1Item3">Đơn được xếp lịch sau khi nhận cọc.</li>
+</ul>
+</div>
+</details>
+<details>
+<summary><span data-edit-key="ruleTitle2">Thanh toán và hoàn tiền</span></summary>
+<div class="details-body">
+<ul>
+<li data-edit-key="rule2Item1">Cọc 50% hoặc theo thỏa thuận của từng đơn.</li>
+<li data-edit-key="rule2Item2">Không hoàn cọc sau khi đã bắt đầu làm.</li>
+<li data-edit-key="rule2Item3">Đơn gấp hoặc thay đổi lớn có thể tính thêm phí.</li>
+</ul>
+</div>
+</details>
+<details>
+<summary><span data-edit-key="ruleTitle3">Sử dụng tranh</span></summary>
+<div class="details-body">
+<ul>
+<li data-edit-key="rule3Item1">Không repost, trace, xóa chữ ký hoặc dùng cho AI.</li>
+<li data-edit-key="rule3Item2">Khi đăng lại vui lòng ghi credit.</li>
+<li data-edit-key="rule3Item3">Mục đích thương mại cần hỏi trước.</li>
+</ul>
+</div>
+</details>
+<details>
+<summary><span data-edit-key="ruleTitle4">Ship và thời gian chờ</span></summary>
+<div class="details-body" data-edit-key="ruleBody4">
+            Thời gian làm và gửi hàng tùy lịch cá nhân. Mình sẽ báo trước khi có chậm trễ. Vui lòng quay video mở hàng để hỗ trợ khiếu nại nếu có.
+          </div>
+</details>
+</section>
+<section class="panel" id="payment">
+<h2 class="section-title" data-edit-key="paymentTitle">Thông tin chuyển khoản</h2>
+<div class="payment-layout">
+<div class="qr-upload">
+<img alt="Mã QR chuyển khoản" id="qrImage"/>
+<label class="qr-placeholder" id="qrPlaceholder"><span class="public-only">QR CODE</span><span class="edit-only">Thêm ảnh QR<small>Chọn ảnh vuông từ ngân hàng của bạn</small><input accept="image/png,image/jpeg,image/webp" id="qrInput" type="file"/></span></label>
+<button class="qr-change edit-only" id="qrChange" type="button">Đổi QR</button>
+</div>
+<div class="payment-info">
+<div class="payment-row">
+<div><div class="payment-label" data-edit-key="paymentLabel1">Ngân hàng</div><div class="payment-value" data-edit-key="paymentValue1" id="paymentValue1">MB Bank</div></div>
+<button class="copy-btn" data-copy-target="paymentValue1" type="button">Copy</button>
+</div>
+<div class="payment-row">
+<div><div class="payment-label" data-edit-key="paymentLabel2">Số tài khoản</div><div class="payment-value" data-edit-key="paymentValue2" id="paymentValue2">0000 0000 0000</div></div>
+<button class="copy-btn" data-copy-target="paymentValue2" type="button">Copy</button>
+</div>
+<div class="payment-row">
+<div><div class="payment-label" data-edit-key="paymentLabel3">Chủ tài khoản</div><div class="payment-value" data-edit-key="paymentValue3" id="paymentValue3">NGUYEN VAN A</div></div>
+<button class="copy-btn" data-copy-target="paymentValue3" type="button">Copy</button>
+</div>
+<div class="payment-row">
+<div><div class="payment-label" data-edit-key="paymentLabel4">Nội dung</div><div class="payment-value" data-edit-key="paymentValue4" id="paymentValue4">TÊN + MÃ ĐƠN</div></div>
+<button class="copy-btn" data-copy-target="paymentValue4" type="button">Copy</button>
+</div>
+<!-- Replace app, account number, bank code, name and transfer note below. -->
+<a class="quick-transfer" data-edit-key="quickTransferLabel" data-edit-link-key="quickTransferUrl" href="https://dl.vietqr.io/pay?app=mb&amp;ba=000000000000@mb&amp;tn=TEN%20MA%20DON&amp;bn=NGUYEN%20VAN%20A" rel="noopener" target="_blank">Chuyển khoản nhanh ↗</a>
+</div>
+</div>
+</section>
+<section class="panel" id="store">
+<h2 class="section-title" data-edit-key="storeTitle">Store</h2>
+<p class="section-note" data-edit-key="storeNote">Một vài món fanmade hoặc slot đang mở.</p>
+<div class="store-grid">
+<article class="product">
+<div class="product-art" data-edit-key="productArt1">✦</div>
+<div class="product-body">
+<div class="product-top"><h3 data-edit-key="productTitle1">Sketch request</h3><span class="price" data-edit-key="productPrice1">100K+</span></div>
+<p data-edit-key="productDescription1">Sketch đơn giản một nhân vật, file PNG.</p>
+<a class="btn" data-edit-key="productButton1" data-edit-link-key="productUrl1" href="https://facebook.com/" rel="noopener" target="_blank">Nhắn mình</a>
+</div>
+</article>
+<article class="product">
+<div class="product-art" data-edit-key="productArt2">♡</div>
+<div class="product-body">
+<div class="product-top"><h3 data-edit-key="productTitle2">Sticker set</h3><span class="price" data-edit-key="productPrice2">45K</span></div>
+<p data-edit-key="productDescription2">Set sticker fanmade, số lượng có hạn.</p>
+<a class="btn" data-edit-key="productButton2" data-edit-link-key="productUrl2" href="#">Xem thêm</a>
+</div>
+</article>
+<article class="product">
+<div class="product-art" data-edit-key="productArt3">☆</div>
+<div class="product-body">
+<div class="product-top"><h3 data-edit-key="productTitle3">Art print</h3><span class="price" data-edit-key="productPrice3">60K</span></div>
+<p data-edit-key="productDescription3">Print A5 trên giấy mỹ thuật.</p>
+<a class="btn" data-edit-key="productButton3" data-edit-link-key="productUrl3" href="#">Xem thêm</a>
+</div>
+</article>
+<article class="product">
+<div class="product-art" data-edit-key="productArt4">☁</div>
+<div class="product-body">
+<div class="product-top"><h3 data-edit-key="productTitle4">Free wallpaper</h3><span class="price" data-edit-key="productPrice4">Free</span></div>
+<p data-edit-key="productDescription4">Hình nền điện thoại dành cho follower.</p>
+<a class="btn" data-edit-key="productButton4" data-edit-link-key="productUrl4" href="#">Tải xuống</a>
+</div>
+</article>
+</div>
+</section>
+</section>
+<footer data-edit-key="footerText">
+      Vẽ vì vui ♡ Vui lòng không repost, trace hoặc sử dụng tranh để huấn luyện AI.
+    </footer><div class="editor-access-wrap"><button class="editor-access-btn" id="editorAccess" type="button">✎ Edit</button></div><div class="data-source-badge" id="dataSourceBadge">data.json: <span id="dataSourceText">đang kiểm tra…</span></div><div class="editor-toolbar" id="editorToolbar"><span>Chạm vào chữ để sửa · Nhấp đúp nút/liên kết để đổi URL</span><button class="secondary" id="githubSettingsOpen" type="button">GitHub</button><button id="githubPublish" type="button">Publish data.json</button><button id="editorSave" type="button">Lưu nháp</button><button class="secondary" id="editorExit" type="button">Lưu &amp; thoát</button></div>
+</main>
+<div aria-hidden="true" class="editor-modal" id="editorModal"><div class="editor-modal-box"><h2>Mở chế độ chỉnh sửa</h2><p>Nhập mật khẩu để hiện các công cụ chỉnh sửa.</p><input autocomplete="current-password" id="editorPassword" placeholder="Password" type="password"/><div class="editor-error" id="editorError"></div><div class="editor-modal-actions"><button class="secondary" id="editorCancel" type="button">Hủy</button><button id="editorUnlock" type="button">Mở khóa</button></div></div></div>
+<div aria-hidden="true" class="github-settings-modal" id="githubSettingsModal">
+  <div class="github-settings-box">
+    <div class="github-settings-head">
+      <div><h2>GitHub data.json</h2><p>Trang sẽ đọc <strong>data.json</strong> trong cùng repo mỗi khi mở. Thiết lập mặc định: <strong>sseoyi/profile</strong>.</p></div>
+      <button aria-label="Đóng" class="github-close" id="githubSettingsClose" type="button">×</button>
+    </div>
+    <div class="github-fields">
+      <div class="github-field full"><label for="githubRepo">Repository (owner/repo)</label><input id="githubRepo" spellcheck="false" type="text" value="sseoyi/profile"/></div>
+      <div class="github-field"><label for="githubBranch">Branch</label><input id="githubBranch" spellcheck="false" type="text" value="main"/></div>
+      <div class="github-field"><label for="githubDataPath">Data file</label><input id="githubDataPath" spellcheck="false" type="text" value="data.json"/></div>
+      <div class="github-field full"><label for="githubToken">GitHub access token</label><div class="github-token-row"><input autocomplete="off" id="githubToken" placeholder="github_pat_..." spellcheck="false" type="password"/><button class="github-token-toggle" id="githubTokenToggle" type="button">Hiện</button></div></div>
+    </div>
+    <div class="github-warning">Token được lưu trong localStorage của trình duyệt này và không bị xóa sau khi refresh. Chỉ dùng fine-grained token giới hạn cho repo này với quyền Contents: Read and write. Không nhập token trên máy dùng chung.</div>
+    <div aria-live="polite" class="github-status" id="githubStatus"></div>
+    <div class="github-actions"><button class="secondary" id="githubSaveSettings" type="button">Lưu cài đặt</button><button id="githubPublishModal" type="button">Publish data.json</button></div>
+  </div>
+</div>
+<div aria-live="polite" class="toast" id="toast" role="status">Đã sao chép</div>
+<script>
+    const DATA_FILE_URL = './data.json';
+    const STAR_SHAPES = ['✦', '★', '✧'];
+    const STAR_SETTINGS = [
+      [20, 10, 6, 7],
+      [50, 12, -5, -6],
+      [80, 9, 4, 5]
+    ];
+    const STAR_DURATION = 24;
+    const STAR_GAP = STAR_DURATION / STAR_SETTINGS.length;
+
+    function buildSideStars(container, mirrored = false) {
+      if (!container) return;
+
+      STAR_SETTINGS.forEach((setting, index) => {
+        const [x, size, drift, spinFactor] = setting;
+        const star = document.createElement('span');
+        star.className = 'side-star';
+        star.textContent = STAR_SHAPES[index % STAR_SHAPES.length];
+        star.style.setProperty('--x', `${mirrored ? 100 - x : x}%`);
+        star.style.setProperty('--size', `${size}px`);
+        star.style.setProperty('--duration', `${STAR_DURATION}s`);
+        star.style.setProperty('--delay', `${-(index * STAR_GAP + (mirrored ? STAR_GAP / 2 : 0))}s`);
+        star.style.setProperty('--drift', `${mirrored ? -drift : drift}px`);
+        star.style.setProperty('--spin', `${spinFactor * 18}deg`);
+        container.appendChild(star);
+      });
+    }
+
+    buildSideStars(document.getElementById('leftStars'));
+    buildSideStars(document.getElementById('rightStars'), true);
+
+    const tabButtons = document.querySelectorAll('.tab-btn');
+    const panels = document.querySelectorAll('.panel');
+
+    function openTab(id) {
+      tabButtons.forEach(button => button.classList.toggle('active', button.dataset.tab === id));
+      panels.forEach(panel => panel.classList.toggle('active', panel.id === id));
+    }
+
+    tabButtons.forEach(button => {
+      button.addEventListener('click', event => {
+        if (document.body.classList.contains('edit-mode')) return;
+        openTab(button.dataset.tab);
+      });
+    });
+
+    const toast = document.getElementById('toast');
+    let toastTimer;
+
+    function showToast(message) {
+      toast.textContent = message;
+      toast.classList.add('show');
+      clearTimeout(toastTimer);
+      toastTimer = setTimeout(() => toast.classList.remove('show'), 1700);
+    }
+
+    const imageInput = document.getElementById('imageInput');
+    const profileImage = document.getElementById('profileImage');
+    const imagePlaceholder = document.getElementById('imagePlaceholder');
+
+    function showImage(src) {
+      profileImage.src = src;
+      profileImage.dataset.source = src;
+      profileImage.style.display = 'block';
+      imagePlaceholder.style.display = 'none';
+    }
+
+    function clearProfileImage() {
+      profileImage.removeAttribute('src');
+      delete profileImage.dataset.source;
+      profileImage.style.display = 'none';
+      imagePlaceholder.style.display = '';
+    }
+
+    const savedImage = localStorage.getItem('fanartistMintImage');
+    if (savedImage) showImage(savedImage);
+
+    imageInput.addEventListener('change', event => {
+      const file = event.target.files && event.target.files[0];
+      if (!file) return;
+      if (!file.type.startsWith('image/')) return showToast('Vui lòng chọn một file ảnh');
+      const reader = new FileReader();
+      reader.onload = e => {
+        showImage(e.target.result);
+        try { localStorage.setItem('fanartistMintImage', e.target.result); }
+        catch (error) { showToast('Ảnh đã hiển thị nhưng quá lớn để lưu'); }
+        markLocalDraft();
+      };
+      reader.readAsDataURL(file);
+    });
+
+    const patternInput = document.getElementById('patternInput');
+    const patternReset = document.getElementById('patternReset');
+    const shopPattern = document.getElementById('shopPattern');
+
+    function showPattern(src) {
+      shopPattern.style.backgroundImage = `url("${src}")`;
+      shopPattern.dataset.patternSrc = src;
+      shopPattern.classList.add('custom-pattern');
+    }
+
+    function resetPattern(markDraft = true, notify = true) {
+      shopPattern.style.backgroundImage = '';
+      delete shopPattern.dataset.patternSrc;
+      shopPattern.classList.remove('custom-pattern');
+      localStorage.removeItem('fanartistShopPattern');
+      patternInput.value = '';
+      if (markDraft) markLocalDraft();
+      if (notify) showToast('Đã trở về pattern mặc định');
+    }
+
+    const savedPattern = localStorage.getItem('fanartistShopPattern');
+    if (savedPattern) showPattern(savedPattern);
+
+    patternInput.addEventListener('change', event => {
+      const file = event.target.files && event.target.files[0];
+      if (!file) return;
+      if (!file.type.startsWith('image/')) return showToast('Vui lòng chọn một file ảnh pattern');
+      const reader = new FileReader();
+      reader.onload = e => {
+        showPattern(e.target.result);
+        try {
+          localStorage.setItem('fanartistShopPattern', e.target.result);
+          markLocalDraft();
+          showToast('Đã cập nhật pattern');
+        } catch (error) { showToast('Pattern đã hiển thị nhưng quá lớn để lưu'); }
+      };
+      reader.readAsDataURL(file);
+    });
+    patternReset.addEventListener('click', () => resetPattern(true, true));
+
+    const qrInput = document.getElementById('qrInput');
+    const qrImage = document.getElementById('qrImage');
+    const qrPlaceholder = document.getElementById('qrPlaceholder');
+    const qrChange = document.getElementById('qrChange');
+
+    function showQrImage(src) {
+      qrImage.src = src;
+      qrImage.dataset.source = src;
+      qrImage.style.display = 'block';
+      qrPlaceholder.style.display = 'none';
+      qrChange.style.display = 'inline-flex';
+    }
+
+    function clearQrImage() {
+      qrImage.removeAttribute('src');
+      delete qrImage.dataset.source;
+      qrImage.style.display = 'none';
+      qrPlaceholder.style.display = '';
+      qrChange.style.display = 'none';
+    }
+
+    const savedQrImage = localStorage.getItem('fanartistPaymentQr');
+    if (savedQrImage) showQrImage(savedQrImage);
+    qrChange.addEventListener('click', () => qrInput.click());
+
+    qrInput.addEventListener('change', event => {
+      const file = event.target.files && event.target.files[0];
+      if (!file) return;
+      if (!file.type.startsWith('image/')) return showToast('Vui lòng chọn một file ảnh QR');
+      const reader = new FileReader();
+      reader.onload = e => {
+        showQrImage(e.target.result);
+        try { localStorage.setItem('fanartistPaymentQr', e.target.result); }
+        catch (error) { showToast('QR đã hiển thị nhưng quá lớn để lưu'); }
+        markLocalDraft();
+      };
+      reader.readAsDataURL(file);
+    });
+
+    function currentCopyValue(button) {
+      const targetId = button.dataset.copyTarget;
+      const target = targetId && document.getElementById(targetId);
+      return target ? target.textContent.trim() : '';
+    }
+
+    document.querySelectorAll('[data-copy-target]').forEach(button => {
+      button.addEventListener('click', async () => {
+        const value = currentCopyValue(button);
+        try { await navigator.clipboard.writeText(value); }
+        catch (error) {
+          const helper = document.createElement('textarea');
+          helper.value = value;
+          document.body.appendChild(helper);
+          helper.select();
+          document.execCommand('copy');
+          helper.remove();
+        }
+        showToast('Đã sao chép: ' + value);
+      });
+    });
+
+    /* Password-protected global editor. This is browser-side protection, not server security. */
+    const EDITOR_PASSWORD_HASH = 'b18c32d17ce2426e9c5b6be3e2534b4d683b82b33350fb970795a7ae6d556d43';
+    const editorAccess = document.getElementById('editorAccess');
+    const editorModal = document.getElementById('editorModal');
+    const editorPassword = document.getElementById('editorPassword');
+    const editorError = document.getElementById('editorError');
+    const editorUnlock = document.getElementById('editorUnlock');
+    const editorCancel = document.getElementById('editorCancel');
+    const editorSave = document.getElementById('editorSave');
+    const editorExit = document.getElementById('editorExit');
+
+    function markLocalDraft() {
+      localStorage.setItem('fanartistLocalDraft', '1');
+      const sourceText = document.getElementById('dataSourceText');
+      if (sourceText) sourceText.textContent = 'có thay đổi chưa publish';
+    }
+
+    function savedContent() {
+      try { return JSON.parse(localStorage.getItem('fanartistEditableContent') || '{}'); }
+      catch (error) { return {}; }
+    }
+
+    function savedHtmlContent() {
+      try { return JSON.parse(localStorage.getItem('fanartistEditableHtml') || '{}'); }
+      catch (error) { return {}; }
+    }
+
+    function savedLinks() {
+      try { return JSON.parse(localStorage.getItem('fanartistEditableLinks') || '{}'); }
+      catch (error) { return {}; }
+    }
+
+    function applySavedEdits() {
+      const content = savedContent();
+      document.querySelectorAll('[data-edit-key]').forEach(element => {
+        const key = element.dataset.editKey;
+        if (Object.prototype.hasOwnProperty.call(content, key)) element.textContent = content[key];
+      });
+      const htmlContent = savedHtmlContent();
+      document.querySelectorAll('[data-edit-html-key]').forEach(element => {
+        const key = element.dataset.editHtmlKey;
+        if (Object.prototype.hasOwnProperty.call(htmlContent, key)) element.innerHTML = htmlContent[key];
+        else if (Object.prototype.hasOwnProperty.call(content, key)) element.innerHTML = content[key];
+      });
+      const links = savedLinks();
+      document.querySelectorAll('[data-edit-link-key]').forEach(link => {
+        const key = link.dataset.editLinkKey;
+        if (Object.prototype.hasOwnProperty.call(links, key)) link.href = links[key];
+      });
+    }
+
+    function saveEdits(silent = false) {
+      const content = {};
+      document.querySelectorAll('[data-edit-key]').forEach(element => {
+        content[element.dataset.editKey] = element.textContent.trim();
+      });
+      const htmlContent = {};
+      document.querySelectorAll('[data-edit-html-key]').forEach(element => {
+        htmlContent[element.dataset.editHtmlKey] = element.innerHTML;
+      });
+      const links = {};
+      document.querySelectorAll('[data-edit-link-key]').forEach(link => {
+        links[link.dataset.editLinkKey] = link.getAttribute('href') || '#';
+      });
+      localStorage.setItem('fanartistEditableContent', JSON.stringify(content));
+      localStorage.setItem('fanartistEditableHtml', JSON.stringify(htmlContent));
+      localStorage.setItem('fanartistEditableLinks', JSON.stringify(links));
+      markLocalDraft();
+      if (!silent) showToast('Đã lưu nháp trên trình duyệt');
+    }
+
+    function setEditMode(enabled) {
+      document.body.classList.toggle('edit-mode', enabled);
+      document.querySelectorAll('[data-edit-key], [data-edit-html-key]').forEach(element => {
+        element.contentEditable = enabled ? 'true' : 'false';
+        element.spellcheck = enabled;
+      });
+      sessionStorage.removeItem('fanartistEditorSession');
+    }
+
+    async function sha256(value) {
+      const data = new TextEncoder().encode(value);
+      const digest = await crypto.subtle.digest('SHA-256', data);
+      return Array.from(new Uint8Array(digest)).map(byte => byte.toString(16).padStart(2, '0')).join('');
+    }
+
+    function openEditorModal() {
+      editorModal.classList.add('open');
+      editorModal.setAttribute('aria-hidden', 'false');
+      editorPassword.value = '';
+      editorError.textContent = '';
+      setTimeout(() => editorPassword.focus(), 40);
+    }
+
+    function closeEditorModal() {
+      editorModal.classList.remove('open');
+      editorModal.setAttribute('aria-hidden', 'true');
+    }
+
+    async function unlockEditor() {
+      editorError.textContent = '';
+      const hash = await sha256(editorPassword.value);
+      if (hash !== EDITOR_PASSWORD_HASH) {
+        editorError.textContent = 'Mật khẩu không đúng.';
+        editorPassword.select();
+        return;
+      }
+      closeEditorModal();
+      setEditMode(true);
+      showToast('Đã mở chế độ chỉnh sửa');
+    }
+
+    editorAccess.addEventListener('click', openEditorModal);
+    editorCancel.addEventListener('click', closeEditorModal);
+    editorUnlock.addEventListener('click', unlockEditor);
+    editorPassword.addEventListener('keydown', event => {
+      if (event.key === 'Enter') unlockEditor();
+    });
+    editorModal.addEventListener('click', event => {
+      if (event.target === editorModal) closeEditorModal();
+    });
+    editorSave.addEventListener('click', () => saveEdits());
+    editorExit.addEventListener('click', () => {
+      saveEdits(true);
+      setEditMode(false);
+      showToast('Đã lưu và thoát chỉnh sửa');
+    });
+
+    document.querySelectorAll('[data-edit-link-key]').forEach(link => {
+      link.addEventListener('click', event => {
+        if (document.body.classList.contains('edit-mode')) event.preventDefault();
+      });
+      link.addEventListener('dblclick', event => {
+        if (!document.body.classList.contains('edit-mode')) return;
+        event.preventDefault();
+        const nextUrl = prompt('Nhập đường dẫn mới:', link.getAttribute('href') || '');
+        if (nextUrl === null) return;
+        link.setAttribute('href', nextUrl.trim() || '#');
+        showToast('Đã cập nhật đường dẫn — bấm Lưu để giữ lại');
+      });
+    });
+
+    /* data.json runtime loading + GitHub publishing */
+    const githubSettingsOpen = document.getElementById('githubSettingsOpen');
+    const githubPublish = document.getElementById('githubPublish');
+    const githubSettingsModal = document.getElementById('githubSettingsModal');
+    const githubSettingsClose = document.getElementById('githubSettingsClose');
+    const githubRepo = document.getElementById('githubRepo');
+    const githubBranch = document.getElementById('githubBranch');
+    const githubDataPath = document.getElementById('githubDataPath');
+    const githubToken = document.getElementById('githubToken');
+    const githubTokenToggle = document.getElementById('githubTokenToggle');
+    const githubSaveSettings = document.getElementById('githubSaveSettings');
+    const githubPublishModal = document.getElementById('githubPublishModal');
+    const githubStatus = document.getElementById('githubStatus');
+    const dataSourceText = document.getElementById('dataSourceText');
+
+    const GITHUB_KEYS = {
+      repo: 'fanartistGithubRepo',
+      branch: 'fanartistGithubBranch',
+      path: 'fanartistGithubDataPath',
+      token: 'fanartistGithubToken'
+    };
+
+    function getGithubSettings() {
+      return {
+        repo: (localStorage.getItem(GITHUB_KEYS.repo) || 'sseoyi/profile').trim(),
+        branch: (localStorage.getItem(GITHUB_KEYS.branch) || 'main').trim(),
+        path: (localStorage.getItem(GITHUB_KEYS.path) || 'data.json').trim(),
+        token: localStorage.getItem(GITHUB_KEYS.token) || ''
+      };
+    }
+
+    function fillGithubSettings() {
+      const settings = getGithubSettings();
+      githubRepo.value = settings.repo;
+      githubBranch.value = settings.branch;
+      githubDataPath.value = settings.path;
+      githubToken.value = settings.token;
+    }
+
+    function saveGithubSettings(notify = true) {
+      const repo = githubRepo.value.trim() || 'sseoyi/profile';
+      const branch = githubBranch.value.trim() || 'main';
+      const path = githubDataPath.value.trim() || 'data.json';
+      const token = githubToken.value.trim();
+      localStorage.setItem(GITHUB_KEYS.repo, repo);
+      localStorage.setItem(GITHUB_KEYS.branch, branch);
+      localStorage.setItem(GITHUB_KEYS.path, path);
+      localStorage.setItem(GITHUB_KEYS.token, token);
+      githubRepo.value = repo;
+      githubBranch.value = branch;
+      githubDataPath.value = path;
+      if (notify) setGithubStatus('Đã lưu cài đặt và token trên trình duyệt này.', 'success');
+      return { repo, branch, path, token };
+    }
+
+    function setGithubStatus(message, type = '') {
+      githubStatus.textContent = message;
+      githubStatus.className = `github-status${type ? ` ${type}` : ''}`;
+    }
+
+    function openGithubSettings() {
+      if (!document.body.classList.contains('edit-mode')) return;
+      fillGithubSettings();
+      setGithubStatus('');
+      githubSettingsModal.classList.add('open');
+      githubSettingsModal.setAttribute('aria-hidden', 'false');
+    }
+
+    function closeGithubSettings() {
+      githubSettingsModal.classList.remove('open');
+      githubSettingsModal.setAttribute('aria-hidden', 'true');
+    }
+
+    function collectSiteData() {
+      const content = {};
+      document.querySelectorAll('[data-edit-key]').forEach(element => {
+        content[element.dataset.editKey] = element.textContent.trim();
+      });
+
+      const htmlContent = {};
+      document.querySelectorAll('[data-edit-html-key]').forEach(element => {
+        htmlContent[element.dataset.editHtmlKey] = element.innerHTML;
+      });
+
+      const links = {};
+      document.querySelectorAll('[data-edit-link-key]').forEach(link => {
+        links[link.dataset.editLinkKey] = link.getAttribute('href') || '#';
+      });
+
+      return {
+        version: 1,
+        updatedAt: new Date().toISOString(),
+        content,
+        html: htmlContent,
+        links,
+        assets: {
+          profileImage: profileImage.dataset.source || profileImage.getAttribute('src') || '',
+          qrImage: qrImage.dataset.source || qrImage.getAttribute('src') || '',
+          patternImage: shopPattern.dataset.patternSrc || ''
+        }
+      };
+    }
+
+    function cacheSiteData(data, asDraft = false) {
+      if (!data || typeof data !== 'object') return;
+      try {
+        localStorage.setItem('fanartistEditableContent', JSON.stringify(data.content || {}));
+        localStorage.setItem('fanartistEditableHtml', JSON.stringify(data.html || {}));
+        localStorage.setItem('fanartistEditableLinks', JSON.stringify(data.links || {}));
+        const assets = data.assets || {};
+        if (assets.profileImage) localStorage.setItem('fanartistMintImage', assets.profileImage);
+        else localStorage.removeItem('fanartistMintImage');
+        if (assets.qrImage) localStorage.setItem('fanartistPaymentQr', assets.qrImage);
+        else localStorage.removeItem('fanartistPaymentQr');
+        if (assets.patternImage) localStorage.setItem('fanartistShopPattern', assets.patternImage);
+        else localStorage.removeItem('fanartistShopPattern');
+        localStorage.setItem('fanartistLocalDraft', asDraft ? '1' : '0');
+      } catch (error) {
+        console.warn('Unable to cache complete site data:', error);
+      }
+    }
+
+    function applySiteData(data) {
+      if (!data || typeof data !== 'object') return;
+      const content = data.content || {};
+      document.querySelectorAll('[data-edit-key]').forEach(element => {
+        const key = element.dataset.editKey;
+        if (Object.prototype.hasOwnProperty.call(content, key)) element.textContent = content[key];
+      });
+
+      const htmlContent = data.html || {};
+      document.querySelectorAll('[data-edit-html-key]').forEach(element => {
+        const key = element.dataset.editHtmlKey;
+        if (Object.prototype.hasOwnProperty.call(htmlContent, key)) element.innerHTML = htmlContent[key];
+      });
+
+      const links = data.links || {};
+      document.querySelectorAll('[data-edit-link-key]').forEach(link => {
+        const key = link.dataset.editLinkKey;
+        if (Object.prototype.hasOwnProperty.call(links, key)) link.setAttribute('href', links[key]);
+      });
+
+      const assets = data.assets || {};
+      if (assets.profileImage) showImage(assets.profileImage);
+      else clearProfileImage();
+      if (assets.qrImage) showQrImage(assets.qrImage);
+      else clearQrImage();
+      if (assets.patternImage) showPattern(assets.patternImage);
+      else resetPattern(false, false);
+    }
+
+    async function loadDataJson() {
+      if (location.protocol === 'file:') {
+        dataSourceText.textContent = 'mở local — dùng dữ liệu lưu trên trình duyệt';
+        return false;
+      }
+
+      try {
+        const response = await fetch(`${DATA_FILE_URL}?v=${Date.now()}`, { cache: 'no-store' });
+        if (!response.ok) throw new Error(`HTTP ${response.status}`);
+        const data = await response.json();
+        applySiteData(data);
+        cacheSiteData(data, false);
+        dataSourceText.textContent = 'đã tải từ data.json';
+        return true;
+      } catch (error) {
+        console.warn('Could not load data.json:', error);
+        dataSourceText.textContent = 'không tìm thấy data.json — đang dùng dữ liệu dự phòng';
+        return false;
+      }
+    }
+
+    function utf8ToBase64(value) {
+      const bytes = new TextEncoder().encode(value);
+      let binary = '';
+      const chunkSize = 0x8000;
+      for (let offset = 0; offset < bytes.length; offset += chunkSize) {
+        binary += String.fromCharCode(...bytes.subarray(offset, offset + chunkSize));
+      }
+      return btoa(binary);
+    }
+
+    function githubApiPath(owner, repo, filePath) {
+      const safePath = filePath.split('/').filter(Boolean).map(encodeURIComponent).join('/');
+      return `https://api.github.com/repos/${encodeURIComponent(owner)}/${encodeURIComponent(repo)}/contents/${safePath}`;
+    }
+
+    async function publishDataJson() {
+      if (!document.body.classList.contains('edit-mode')) return;
+      saveEdits(true);
+      const settings = saveGithubSettings(false);
+      const repoParts = settings.repo.split('/').filter(Boolean);
+      if (repoParts.length !== 2) {
+        openGithubSettings();
+        setGithubStatus('Repository phải có dạng owner/repo, ví dụ sseoyi/profile.', 'error');
+        return;
+      }
+      if (!settings.token) {
+        openGithubSettings();
+        setGithubStatus('Hãy nhập GitHub access token trước khi publish.', 'error');
+        return;
+      }
+
+      const [owner, repo] = repoParts;
+      const apiUrl = githubApiPath(owner, repo, settings.path);
+      const headers = {
+        Accept: 'application/vnd.github+json',
+        Authorization: `Bearer ${settings.token}`,
+        'X-GitHub-Api-Version': '2022-11-28',
+        'Content-Type': 'application/json'
+      };
+      const buttons = [githubPublish, githubPublishModal];
+      buttons.forEach(button => { button.disabled = true; });
+      setGithubStatus('Đang kiểm tra data.json trên GitHub…');
+      showToast('Đang publish data.json…');
+
+      try {
+        let sha = '';
+        const currentResponse = await fetch(`${apiUrl}?ref=${encodeURIComponent(settings.branch)}`, { headers });
+        if (currentResponse.ok) {
+          const current = await currentResponse.json();
+          sha = current.sha || '';
+        } else if (currentResponse.status !== 404) {
+          const errorData = await currentResponse.json().catch(() => ({}));
+          throw new Error(errorData.message || `Không thể đọc file hiện tại (${currentResponse.status})`);
+        }
+
+        const data = collectSiteData();
+        const jsonText = JSON.stringify(data, null, 2) + '\n';
+        const body = {
+          message: 'Update profile data.json',
+          content: utf8ToBase64(jsonText),
+          branch: settings.branch
+        };
+        if (sha) body.sha = sha;
+
+        setGithubStatus('Đang ghi data.json vào repo…');
+        const publishResponse = await fetch(apiUrl, {
+          method: 'PUT',
+          headers,
+          body: JSON.stringify(body)
+        });
+        const result = await publishResponse.json().catch(() => ({}));
+        if (!publishResponse.ok) throw new Error(result.message || `GitHub trả về lỗi ${publishResponse.status}`);
+
+        cacheSiteData(data, false);
+        dataSourceText.textContent = 'đã publish lên data.json';
+        setGithubStatus(`Publish thành công vào ${settings.repo}/${settings.path}.`, 'success');
+        showToast('Đã publish data.json lên GitHub');
+      } catch (error) {
+        console.error(error);
+        openGithubSettings();
+        setGithubStatus(error.message || 'Không thể publish data.json.', 'error');
+        showToast('Publish thất bại — mở GitHub settings để kiểm tra');
+      } finally {
+        buttons.forEach(button => { button.disabled = false; });
+      }
+    }
+
+    githubSettingsOpen.addEventListener('click', openGithubSettings);
+    githubSettingsClose.addEventListener('click', closeGithubSettings);
+    githubSettingsModal.addEventListener('click', event => {
+      if (event.target === githubSettingsModal) closeGithubSettings();
+    });
+    githubSaveSettings.addEventListener('click', () => saveGithubSettings(true));
+    githubPublish.addEventListener('click', publishDataJson);
+    githubPublishModal.addEventListener('click', publishDataJson);
+    githubTokenToggle.addEventListener('click', () => {
+      const showing = githubToken.type === 'text';
+      githubToken.type = showing ? 'password' : 'text';
+      githubTokenToggle.textContent = showing ? 'Hiện' : 'Ẩn';
+    });
+
+    async function initializeSite() {
+      setEditMode(false);
+      const hasDraft = localStorage.getItem('fanartistLocalDraft') === '1';
+      if (hasDraft) {
+        applySavedEdits();
+        dataSourceText.textContent = 'đang dùng bản nháp trên trình duyệt';
+      } else {
+        const loaded = await loadDataJson();
+        if (!loaded) applySavedEdits();
+      }
+      fillGithubSettings();
+    }
+
+    initializeSite();
+</script>
+</body>
+</html>
