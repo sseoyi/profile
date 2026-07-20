@@ -2144,41 +2144,114 @@
       return `https://api.github.com/repos/${encodeURIComponent(owner)}/${encodeURIComponent(repo)}/contents/${safePath}`;
     }
 
-    async function fetchGithubFileState(apiUrl, branch, headers) {
-      const separator = apiUrl.includes('?') ? '&' : '?';
-      const requestUrl = `${apiUrl}${separator}ref=${encodeURIComponent(branch)}&_=${Date.now()}`;
-      const response = await fetch(requestUrl, {
-        headers,
-        cache: 'no-store'
-      });
-
-      if (response.ok) {
-        const file = await response.json();
-        return { exists: true, sha: file.sha || '' };
-      }
-
-      if (response.status === 404) return { exists: false, sha: '' };
-
-      const errorData = await response.json().catch(() => ({}));
-      throw new Error(errorData.message || `Không thể đọc file hiện tại (${response.status})`);
-    }
-
-    async function putGithubDataFile(apiUrl, headers, settings, jsonText, sha = '') {
-      const body = {
-        message: 'Update profile data.json',
-        content: utf8ToBase64(jsonText),
-        branch: settings.branch
-      };
-      if (sha) body.sha = sha;
-
-      const response = await fetch(apiUrl, {
-        method: 'PUT',
-        headers,
+    async function githubJsonRequest(url, options = {}, fallbackMessage = 'GitHub request failed') {
+      const response = await fetch(url, {
         cache: 'no-store',
-        body: JSON.stringify(body)
+        ...options
       });
       const result = await response.json().catch(() => ({}));
-      return { response, result };
+      if (!response.ok) {
+        const error = new Error(result.message || `${fallbackMessage} (${response.status})`);
+        error.status = response.status;
+        error.details = result;
+        throw error;
+      }
+      return result;
+    }
+
+    function encodeGitRefPath(value) {
+      return value.split('/').filter(Boolean).map(encodeURIComponent).join('/');
+    }
+
+    async function createDataJsonCommit({ owner, repo, settings, headers, jsonText }) {
+      const repoApi = `https://api.github.com/repos/${encodeURIComponent(owner)}/${encodeURIComponent(repo)}`;
+      const branchPath = encodeGitRefPath(settings.branch);
+      const dataPath = settings.path.replace(/^\/+/, '').replace(/\/{2,}/g, '/');
+
+      if (!branchPath) throw new Error('Branch không được để trống.');
+      if (!dataPath) throw new Error('Đường dẫn data.json không được để trống.');
+
+      /* 1. Read the latest branch head. */
+      const ref = await githubJsonRequest(
+        `${repoApi}/git/ref/heads/${branchPath}?_=${Date.now()}`,
+        { headers },
+        'Không thể đọc branch hiện tại'
+      );
+      const parentCommitSha = ref.object?.sha;
+      if (!parentCommitSha) throw new Error('Không tìm thấy commit hiện tại của branch.');
+
+      /* 2. Read the current tree. */
+      const parentCommit = await githubJsonRequest(
+        `${repoApi}/git/commits/${encodeURIComponent(parentCommitSha)}?_=${Date.now()}`,
+        { headers },
+        'Không thể đọc commit hiện tại'
+      );
+      const baseTreeSha = parentCommit.tree?.sha;
+      if (!baseTreeSha) throw new Error('Không tìm thấy tree hiện tại của repository.');
+
+      /* 3. Create a blob containing the new data.json. */
+      const blob = await githubJsonRequest(
+        `${repoApi}/git/blobs`,
+        {
+          method: 'POST',
+          headers,
+          body: JSON.stringify({
+            content: utf8ToBase64(jsonText),
+            encoding: 'base64'
+          })
+        },
+        'Không thể tạo dữ liệu mới'
+      );
+
+      /* 4. Create a new tree based on the latest tree. */
+      const tree = await githubJsonRequest(
+        `${repoApi}/git/trees`,
+        {
+          method: 'POST',
+          headers,
+          body: JSON.stringify({
+            base_tree: baseTreeSha,
+            tree: [{
+              path: dataPath,
+              mode: '100644',
+              type: 'blob',
+              sha: blob.sha
+            }]
+          })
+        },
+        'Không thể tạo tree mới'
+      );
+
+      /* 5. Create a commit whose parent is the exact branch head read above. */
+      const commit = await githubJsonRequest(
+        `${repoApi}/git/commits`,
+        {
+          method: 'POST',
+          headers,
+          body: JSON.stringify({
+            message: 'Update profile data.json',
+            tree: tree.sha,
+            parents: [parentCommitSha]
+          })
+        },
+        'Không thể tạo commit mới'
+      );
+
+      /* 6. Move the branch forward without forcing it. */
+      await githubJsonRequest(
+        `${repoApi}/git/refs/heads/${branchPath}`,
+        {
+          method: 'PATCH',
+          headers,
+          body: JSON.stringify({
+            sha: commit.sha,
+            force: false
+          })
+        },
+        'Không thể cập nhật branch'
+      );
+
+      return { commitSha: commit.sha, parentCommitSha };
     }
 
     async function publishDataJson({ exitOnSuccess = false } = {}) {
@@ -2197,7 +2270,6 @@
       }
 
       const [owner, repo] = repoParts;
-      const apiUrl = githubApiPath(owner, repo, settings.path);
       const headers = {
         Accept: 'application/vnd.github+json',
         Authorization: `Bearer ${settings.token}`,
@@ -2209,51 +2281,48 @@
       buttons.forEach(button => { button.disabled = true; });
       const originalExitLabel = editorExit.textContent;
       editorExit.textContent = 'Đang lưu…';
-      setGithubStatus('Đang lấy phiên bản data.json mới nhất…');
+      setGithubStatus('Đang tạo commit data.json mới…');
       showToast('Đang publish data.json…');
 
       try {
         const data = collectSiteData();
         const jsonText = JSON.stringify(data, null, 2) + '\n';
 
-        let fileState = await fetchGithubFileState(apiUrl, settings.branch, headers);
-        let publishResult = await putGithubDataFile(
-          apiUrl,
-          headers,
-          settings,
-          jsonText,
-          fileState.sha
-        );
+        let publishInfo = null;
+        let lastError = null;
+        const maxAttempts = 3;
 
-        const firstMessage = String(publishResult.result?.message || '');
-        const isShaConflict =
-          publishResult.response.status === 409 ||
-          publishResult.response.status === 422 ||
-          /sha|does not match|conflict/i.test(firstMessage);
+        for (let attempt = 1; attempt <= maxAttempts; attempt += 1) {
+          try {
+            publishInfo = await createDataJsonCommit({
+              owner,
+              repo,
+              settings,
+              headers,
+              jsonText
+            });
+            lastError = null;
+            break;
+          } catch (error) {
+            lastError = error;
+            const retryable = error.status === 409 || error.status === 422;
+            if (!retryable || attempt === maxAttempts) throw error;
 
-        if (!publishResult.response.ok && isShaConflict) {
-          setGithubStatus('data.json vừa được thay đổi. Đang lấy SHA mới và thử lại…');
-          await new Promise(resolve => setTimeout(resolve, 350));
-          fileState = await fetchGithubFileState(apiUrl, settings.branch, headers);
-          publishResult = await putGithubDataFile(
-            apiUrl,
-            headers,
-            settings,
-            jsonText,
-            fileState.sha
-          );
+            setGithubStatus(`Branch vừa thay đổi. Đang đồng bộ lại và thử lần ${attempt + 1}/${maxAttempts}…`);
+            await new Promise(resolve => setTimeout(resolve, 500 * attempt));
+          }
         }
 
-        if (!publishResult.response.ok) {
-          throw new Error(
-            publishResult.result?.message ||
-            `GitHub trả về lỗi ${publishResult.response.status}`
-          );
-        }
+        if (!publishInfo) throw lastError || new Error('Không thể tạo commit data.json.');
 
         cacheSiteData(data, false);
         dataSourceText.textContent = 'đã publish lên data.json';
-        setGithubStatus(`Publish thành công vào ${settings.repo}/${settings.path}.`, 'success');
+        const shortCommit = publishInfo.commitSha ? publishInfo.commitSha.slice(0, 7) : '';
+        setGithubStatus(
+          `Publish thành công vào ${settings.repo}/${settings.path}${shortCommit ? ` · commit ${shortCommit}` : ''}.`,
+          'success'
+        );
+
         if (exitOnSuccess) {
           setEditMode(false);
           editSessionSnapshot = null;
