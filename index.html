@@ -847,6 +847,8 @@
       background: var(--ink);
     }
 
+    .store-item-image.has-image { background: #ffffff; }
+
     .store-item-img {
       display: none;
       width: 100%;
@@ -854,45 +856,47 @@
       object-fit: cover;
     }
 
-    .store-item-upload-label {
+    .store-item-public-placeholder {
       position: absolute;
       inset: 0;
       display: grid;
       place-items: center;
-      padding: 10px;
-      color: var(--mint);
+      padding: 12px;
+      color: rgba(198, 230, 241, .72);
       text-align: center;
       font-size: 11px;
       font-weight: 800;
-      line-height: 1.4;
-      cursor: pointer;
+      letter-spacing: .02em;
+      pointer-events: none;
     }
 
-    .store-item-upload-label small {
-      display: block;
-      margin-top: 4px;
-      color: rgba(198, 230, 241, .75);
-      font-size: 9px;
-      font-weight: 650;
-    }
+    .store-item-image.has-image .store-item-public-placeholder { display: none; }
 
-    .store-item-upload-label input { display: none; }
-
-    .store-item-change {
+    /* Product image editing works like the profile picture: the control is
+       completely hidden until the whole page has been unlocked for editing. */
+    .store-item-upload-label {
       position: absolute;
-      right: 8px;
+      left: 8px;
       bottom: 8px;
-      z-index: 3;
-      min-height: 28px;
-      padding: 0 9px;
-      border: 0;
+      z-index: 4;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      min-height: 32px;
+      padding: 0 10px;
+      border: 1.5px solid var(--mint);
       border-radius: 8px;
-      color: var(--ink);
-      background: var(--mint);
+      color: var(--mint);
+      background: var(--ink);
       font-size: 9px;
       font-weight: 850;
+      line-height: 1;
       cursor: pointer;
+      box-shadow: 0 3px 10px rgba(35, 31, 32, .16);
     }
+
+    body.edit-mode .store-item-upload-label { display: inline-flex; }
+    .store-item-upload-label input { display: none; }
 
     .store-item-type,
     .store-item-quantity {
@@ -2084,6 +2088,67 @@
       });
     }
 
+    function loadImageElement(src) {
+      return new Promise(resolve => {
+        const image = new Image();
+        image.onload = () => resolve(image);
+        image.onerror = () => resolve(null);
+        image.src = src;
+      });
+    }
+
+    /* Store images are resized before being cached. This prevents several
+       full-resolution phone photos from exceeding localStorage and vanishing
+       after the page is refreshed. WebP keeps transparent PNG backgrounds. */
+    async function prepareStoreImage(file) {
+      const original = await readFileAsDataUrl(file);
+      if (!original) return '';
+
+      const image = await loadImageElement(original);
+      if (!image) return original;
+
+      const maxWidth = 1600;
+      const maxHeight = 1200;
+      const width = image.naturalWidth || image.width;
+      const height = image.naturalHeight || image.height;
+      const scale = Math.min(1, maxWidth / width, maxHeight / height);
+      const targetWidth = Math.max(1, Math.round(width * scale));
+      const targetHeight = Math.max(1, Math.round(height * scale));
+
+      const canvas = document.createElement('canvas');
+      canvas.width = targetWidth;
+      canvas.height = targetHeight;
+      const context = canvas.getContext('2d');
+      if (!context) return original;
+      context.drawImage(image, 0, 0, targetWidth, targetHeight);
+
+      let optimized = '';
+      try { optimized = canvas.toDataURL('image/webp', .86); }
+      catch (error) { optimized = ''; }
+
+      if (!optimized || optimized === 'data:,') {
+        try { optimized = canvas.toDataURL('image/jpeg', .88); }
+        catch (error) { optimized = original; }
+      }
+
+      /* Keep the original when it is already smaller than the converted file. */
+      return optimized && optimized.length < original.length ? optimized : original;
+    }
+
+    function persistStoreDraft() {
+      try {
+        localStorage.setItem(STORE_STORAGE_KEY, JSON.stringify({
+          services: servicesData,
+          stores: storeItemsData
+        }));
+        markLocalDraft();
+        return true;
+      } catch (error) {
+        console.warn('Unable to save Store draft:', error);
+        return false;
+      }
+    }
+
     function makeEditableField(tag, className, text, onInput) {
       const el = document.createElement(tag);
       if (className) el.className = className;
@@ -2092,8 +2157,9 @@
       el.contentEditable = isEditing ? 'true' : 'false';
       el.spellcheck = isEditing;
       el.addEventListener('input', () => {
+        if (!document.body.classList.contains('edit-mode')) return;
         onInput(el.textContent.trim());
-        markLocalDraft();
+        if (!persistStoreDraft()) showToast('Không thể lưu bản nháp Store trên trình duyệt');
       });
       return el;
     }
@@ -2113,9 +2179,13 @@
         deleteBtn.addEventListener('click', () => {
           if (!document.body.classList.contains('edit-mode')) return;
           if (servicesData.length <= 1) { showToast('Cần giữ lại ít nhất một dịch vụ'); return; }
-          servicesData.splice(index, 1);
+          const removed = servicesData.splice(index, 1)[0];
+          if (!persistStoreDraft()) {
+            servicesData.splice(index, 0, removed);
+            showToast('Không thể lưu thay đổi');
+            return;
+          }
           renderServices();
-          markLocalDraft();
           showToast('Đã xóa dịch vụ');
         });
 
@@ -2135,6 +2205,7 @@
     function renderStoreItems() {
       if (!storeItemsContainer) return;
       storeItemsContainer.innerHTML = '';
+      const isEditing = document.body.classList.contains('edit-mode');
 
       storeItemsData.forEach((item, index) => {
         const card = document.createElement('article');
@@ -2147,67 +2218,93 @@
         deleteBtn.addEventListener('click', () => {
           if (!document.body.classList.contains('edit-mode')) return;
           if (storeItemsData.length <= 1) { showToast('Cần giữ lại ít nhất một sản phẩm'); return; }
-          storeItemsData.splice(index, 1);
+          const removed = storeItemsData.splice(index, 1)[0];
+          if (!persistStoreDraft()) {
+            storeItemsData.splice(index, 0, removed);
+            showToast('Không thể lưu thay đổi');
+            return;
+          }
           renderStoreItems();
-          markLocalDraft();
           showToast('Đã xóa sản phẩm');
         });
 
         const imageWrap = document.createElement('div');
-        imageWrap.className = 'store-item-image';
+        imageWrap.className = `store-item-image ${item.image ? 'has-image' : 'no-image'}`;
 
         const img = document.createElement('img');
         img.className = 'store-item-img';
         img.alt = item.name || 'Ảnh sản phẩm';
+        if (item.image) {
+          img.src = item.image;
+          img.style.display = 'block';
+        }
+
+        const placeholder = document.createElement('div');
+        placeholder.className = 'store-item-public-placeholder';
+        placeholder.textContent = 'Ảnh sản phẩm';
 
         const uploadLabel = document.createElement('label');
         uploadLabel.className = 'store-item-upload-label';
-        uploadLabel.innerHTML = '<span class="public-only">Ảnh sản phẩm</span><span class="edit-only">Thêm ảnh<small>Chọn ảnh PNG / JPG</small></span>';
+        uploadLabel.textContent = item.image ? 'Đổi ảnh' : 'add image +';
+        uploadLabel.setAttribute('aria-label', item.image ? 'Đổi ảnh sản phẩm' : 'Thêm ảnh sản phẩm');
 
         const fileInput = document.createElement('input');
         fileInput.type = 'file';
         fileInput.accept = 'image/png,image/jpeg,image/webp';
+        fileInput.disabled = !isEditing;
 
-        function showItemImage(src) {
-          img.src = src;
-          img.style.display = 'block';
-          uploadLabel.style.display = 'none';
-        }
-
-        function clearItemImage() {
-          img.removeAttribute('src');
-          img.style.display = 'none';
-          uploadLabel.style.display = '';
-        }
-
-        if (item.image) showItemImage(item.image); else clearItemImage();
+        uploadLabel.addEventListener('click', event => {
+          if (!document.body.classList.contains('edit-mode')) {
+            event.preventDefault();
+            return;
+          }
+          fileInput.disabled = false;
+        });
 
         fileInput.addEventListener('change', async event => {
+          if (!document.body.classList.contains('edit-mode')) {
+            event.target.value = '';
+            return;
+          }
+
           const file = event.target.files && event.target.files[0];
           if (!file) return;
-          if (!file.type.startsWith('image/')) { showToast('Vui lòng chọn một file ảnh'); return; }
-          const dataUrl = await readFileAsDataUrl(file);
-          if (!dataUrl) { showToast('Không thể đọc ảnh này'); return; }
+          if (!file.type.startsWith('image/')) {
+            showToast('Vui lòng chọn một file ảnh');
+            fileInput.value = '';
+            return;
+          }
+          if (file.size > 15 * 1024 * 1024) {
+            showToast('Ảnh lớn hơn 15 MB — hãy chọn ảnh nhỏ hơn');
+            fileInput.value = '';
+            return;
+          }
+
+          const previousImage = storeItemsData[index].image || '';
+          uploadLabel.textContent = 'Đang lưu…';
+          const dataUrl = await prepareStoreImage(file);
+          if (!dataUrl) {
+            uploadLabel.textContent = previousImage ? 'Đổi ảnh' : 'add image +';
+            showToast('Không thể đọc ảnh này');
+            fileInput.value = '';
+            return;
+          }
+
           storeItemsData[index].image = dataUrl;
-          showItemImage(dataUrl);
-          try { markLocalDraft(); }
-          catch (error) { showToast('Ảnh đã hiển thị nhưng quá lớn để lưu'); }
-          fileInput.value = '';
+          if (!persistStoreDraft()) {
+            storeItemsData[index].image = previousImage;
+            uploadLabel.textContent = previousImage ? 'Đổi ảnh' : 'add image +';
+            showToast('Ảnh quá lớn để lưu — hãy dùng ảnh nhỏ hơn');
+            fileInput.value = '';
+            return;
+          }
+
+          renderStoreItems();
+          showToast('Đã lưu ảnh sản phẩm vào bản nháp');
         });
 
         uploadLabel.appendChild(fileInput);
-
-        const changeBtn = document.createElement('button');
-        changeBtn.type = 'button';
-        changeBtn.className = 'store-item-change edit-only';
-        changeBtn.textContent = 'Đổi ảnh';
-        changeBtn.addEventListener('click', event => {
-          event.preventDefault();
-          if (!document.body.classList.contains('edit-mode')) return;
-          fileInput.click();
-        });
-
-        imageWrap.append(img, uploadLabel, changeBtn);
+        imageWrap.append(img, placeholder, uploadLabel);
 
         const body = document.createElement('div');
         body.className = 'product-body';
@@ -2236,8 +2333,12 @@
       addServiceBtn.addEventListener('click', () => {
         if (!document.body.classList.contains('edit-mode')) return;
         servicesData.push({ name: 'Dịch vụ mới', price: 'Giá', details: 'Mô tả dịch vụ' });
+        if (!persistStoreDraft()) {
+          servicesData.pop();
+          showToast('Không thể lưu dịch vụ mới');
+          return;
+        }
         renderServices();
-        markLocalDraft();
         showToast('Đã thêm dịch vụ — chạm để sửa nội dung');
       });
     }
@@ -2246,8 +2347,12 @@
       addStoreItemBtn.addEventListener('click', () => {
         if (!document.body.classList.contains('edit-mode')) return;
         storeItemsData.push({ name: 'Sản phẩm mới', type: 'Loại', price: 'Giá', quantity: 'Số lượng', image: '' });
+        if (!persistStoreDraft()) {
+          storeItemsData.pop();
+          showToast('Không thể lưu sản phẩm mới');
+          return;
+        }
         renderStoreItems();
-        markLocalDraft();
         showToast('Đã thêm sản phẩm — chạm để sửa nội dung');
       });
     }
