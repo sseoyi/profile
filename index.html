@@ -1035,6 +1035,99 @@
       cursor: pointer;
     }
 
+    /* Compact BGM player. Browsers require a user tap before audio can play. */
+    .bgm-player {
+      display: grid;
+      grid-template-columns: 42px minmax(0, 1fr) 38px auto;
+      align-items: center;
+      gap: 9px;
+      margin: 10px 0;
+      padding: 9px;
+      border: 2px solid var(--ink);
+      border-radius: 14px;
+      color: var(--ink);
+      background: #ffffff;
+    }
+
+    body:not(.edit-mode) .bgm-player.no-source { display: none; }
+
+    .bgm-play,
+    .bgm-volume,
+    .bgm-settings {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 38px;
+      border: 0;
+      border-radius: 10px;
+      color: var(--mint);
+      background: var(--ink);
+      font-size: 12px;
+      font-weight: 900;
+      cursor: pointer;
+      touch-action: manipulation;
+    }
+
+    .bgm-play,
+    .bgm-volume { width: 38px; padding: 0; }
+    .bgm-play:disabled { opacity: .42; cursor: not-allowed; }
+    .bgm-settings { min-width: 74px; padding: 0 11px; font-size: 9px; }
+
+    .bgm-track { min-width: 0; }
+    .bgm-meta {
+      display: flex;
+      align-items: baseline;
+      gap: 7px;
+      min-width: 0;
+      margin-bottom: 4px;
+    }
+    .bgm-kicker {
+      flex: 0 0 auto;
+      font-size: 8px;
+      font-weight: 900;
+      letter-spacing: .08em;
+      opacity: .5;
+    }
+    .bgm-title {
+      min-width: 0;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      font-size: 11px;
+      line-height: 1.2;
+    }
+    .bgm-player.no-source .bgm-title { opacity: .5; }
+
+    .bgm-progress {
+      display: block;
+      width: 100%;
+      height: 18px;
+      margin: 0;
+      accent-color: var(--ink);
+      cursor: pointer;
+    }
+
+    .bgm-modal-box { width: min(430px, 100%); }
+    .bgm-modal-field { display: grid; gap: 5px; margin-top: 10px; }
+    .bgm-modal-field label {
+      font-size: 9px;
+      font-weight: 850;
+      letter-spacing: .03em;
+      text-transform: uppercase;
+    }
+    .bgm-modal-field input {
+      width: 100%;
+      min-height: 42px;
+      padding: 0 12px;
+      border: 1.5px solid var(--ink);
+      border-radius: 10px;
+      color: var(--ink);
+      background: #fff;
+      outline: none;
+      font-size: 11px;
+    }
+    .bgm-remove { margin-right: auto; }
+
     footer {
       padding: 9px 5px 0;
       text-align: center;
@@ -1100,24 +1193,26 @@
     .editor-toolbar {
       position: fixed;
       left: 50%;
-      bottom: 14px;
+      bottom: max(14px, env(safe-area-inset-bottom));
       z-index: 80;
       display: none;
       align-items: center;
       gap: 7px;
-      width: min(620px, calc(100% - 24px));
+      width: min(620px, calc(100vw - 24px));
+      max-width: calc(100vw - 24px);
       padding: 8px;
       border: 2px solid var(--ink);
       border-radius: 13px;
       color: var(--mint);
       background: var(--ink);
       box-shadow: 0 8px 26px rgba(35, 31, 32, .18);
+      transform: translateX(-50%);
     }
 
     body.edit-mode .editor-toolbar { display: flex; }
     .editor-toolbar span { flex: 1; font-size: 9px; line-height: 1.35; opacity: .8; }
     .editor-toolbar button {
-      min-height: 32px;
+      min-height: 36px;
       padding: 0 11px;
       border: 1.5px solid var(--mint);
       border-radius: 8px;
@@ -1125,7 +1220,9 @@
       background: var(--mint);
       font-size: 10px;
       font-weight: 850;
+      line-height: 1.15;
       cursor: pointer;
+      touch-action: manipulation;
     }
     .editor-toolbar button.secondary { color: var(--mint); background: transparent; }
 
@@ -1390,7 +1487,32 @@
       .feedback-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 7px; }
       .feedback-box { padding: 12px; }
       .editor-toolbar span { display: none; }
-      .editor-toolbar { justify-content: flex-end; }
+      body.edit-mode { padding-bottom: calc(84px + env(safe-area-inset-bottom)); }
+      .editor-toolbar {
+        bottom: max(7px, env(safe-area-inset-bottom));
+        width: calc(100vw - 14px);
+        max-width: calc(100vw - 14px);
+        padding: 7px;
+        gap: 6px;
+      }
+      body.edit-mode .editor-toolbar {
+        display: grid;
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+      }
+      .editor-toolbar button {
+        width: 100%;
+        min-width: 0;
+        min-height: 44px;
+        padding: 0 5px;
+        white-space: normal;
+        font-size: 9px;
+      }
+      .bgm-player {
+        grid-template-columns: 40px minmax(0, 1fr) 38px;
+        gap: 7px;
+        padding: 8px;
+      }
+      .bgm-settings { grid-column: 1 / -1; width: 100%; min-height: 36px; }
       .github-fields { grid-template-columns: 1fr; }
       .github-field.full { grid-column: auto; }
     }
@@ -1435,6 +1557,16 @@
 <div class="notice" data-edit-html-key="noticeHtml">
 <strong>Nhắc nhẹ:</strong> Chỉ giao dịch qua những tài khoản và thông tin có trên trang này. Hãy kiểm tra đúng tên trước khi chuyển khoản.
     </div>
+<div aria-label="Trình phát nhạc nền" class="bgm-player no-source" id="bgmPlayer">
+<button aria-label="Phát nhạc" class="bgm-play" id="bgmPlay" type="button">▶</button>
+<div class="bgm-track">
+<div class="bgm-meta"><span class="bgm-kicker">BGM</span><strong class="bgm-title" data-edit-key="bgmTitle" id="bgmTitle">Background music</strong></div>
+<input aria-label="Tiến độ phát nhạc" class="bgm-progress" id="bgmProgress" max="100" min="0" step="0.1" type="range" value="0"/>
+</div>
+<button aria-label="Tắt tiếng" class="bgm-volume" id="bgmMute" type="button">🔊</button>
+<button class="bgm-settings edit-only" id="bgmSettingsOpen" type="button">Đổi nhạc</button>
+<audio id="bgmAudio" loop playsinline preload="metadata"></audio>
+</div>
 <section class="content-card">
 <nav aria-label="Thông tin profile" class="tabs">
 <button class="tab-btn active" data-tab="legit" type="button"><span data-edit-key="tabLegit">Check legit</span></button>
@@ -1520,6 +1652,7 @@
     </footer><div class="editor-access-wrap"><button class="editor-access-btn" id="editorAccess" type="button">✎ Edit</button></div><div class="data-source-badge" id="dataSourceBadge">data.json: <span id="dataSourceText">đang kiểm tra…</span></div><div class="editor-toolbar" id="editorToolbar"><span>Chạm vào chữ để sửa · Chuyển qua mọi tab trong cùng một phiên · Nhấp đúp liên kết để đổi URL</span><button class="secondary" id="githubSettingsOpen" type="button">GitHub</button><button class="secondary" id="editorSave" type="button">Hủy thay đổi</button><button id="editorExit" type="button">Lưu &amp; thoát</button></div>
 </main>
 <div aria-hidden="true" class="editor-modal" id="editorModal"><div class="editor-modal-box"><h2>Mở chế độ chỉnh sửa</h2><p>Nhập mật khẩu để hiện các công cụ chỉnh sửa.</p><input autocomplete="current-password" id="editorPassword" placeholder="Password" type="password"/><div class="editor-error" id="editorError"></div><div class="editor-modal-actions"><button class="secondary" id="editorCancel" type="button">Hủy</button><button id="editorUnlock" type="button">Mở khóa</button></div></div></div>
+<div aria-hidden="true" class="editor-modal" id="bgmSettingsModal"><div class="editor-modal-box bgm-modal-box"><h2>Cài đặt BGM</h2><p>Tải file MP3 lên repository GitHub rồi nhập đường dẫn, ví dụ <strong>./bgm.mp3</strong>. Nhạc chỉ phát sau khi khách chạm nút Play vì giới hạn của trình duyệt.</p><div class="bgm-modal-field"><label for="bgmTitleInput">Tên bài nhạc</label><input id="bgmTitleInput" placeholder="Background music" type="text"/></div><div class="bgm-modal-field"><label for="bgmUrlInput">Đường dẫn MP3 / audio URL</label><input id="bgmUrlInput" placeholder="./bgm.mp3" spellcheck="false" type="url"/></div><div class="editor-error" id="bgmSettingsError"></div><div class="editor-modal-actions"><button class="secondary bgm-remove" id="bgmRemove" type="button">Gỡ nhạc</button><button class="secondary" id="bgmSettingsCancel" type="button">Hủy</button><button id="bgmSettingsSave" type="button">Lưu BGM</button></div></div></div>
 <div aria-hidden="true" class="github-settings-modal" id="githubSettingsModal">
   <div class="github-settings-box">
     <div class="github-settings-head">
@@ -2019,6 +2152,10 @@
     }
 
 
+    const FEEDBACK_STORAGE_KEY = 'ArtistFeedbackImages';
+    const BGM_STORAGE_KEY = 'ArtistBgmUrl';
+    const BGM_VOLUME_KEY = 'ArtistBgmVolume';
+
     const feedbackOpen = document.getElementById('feedbackOpen');
     const feedbackModal = document.getElementById('feedbackModal');
     const feedbackClose = document.getElementById('feedbackClose');
@@ -2157,6 +2294,145 @@
       clearTimeout(toastTimer);
       toastTimer = setTimeout(() => toast.classList.remove('show'), 1700);
     }
+
+    const bgmPlayer = document.getElementById('bgmPlayer');
+    const bgmAudio = document.getElementById('bgmAudio');
+    const bgmPlay = document.getElementById('bgmPlay');
+    const bgmMute = document.getElementById('bgmMute');
+    const bgmProgress = document.getElementById('bgmProgress');
+    const bgmTitle = document.getElementById('bgmTitle');
+    const bgmSettingsOpen = document.getElementById('bgmSettingsOpen');
+    const bgmSettingsModal = document.getElementById('bgmSettingsModal');
+    const bgmTitleInput = document.getElementById('bgmTitleInput');
+    const bgmUrlInput = document.getElementById('bgmUrlInput');
+    const bgmSettingsError = document.getElementById('bgmSettingsError');
+    const bgmSettingsCancel = document.getElementById('bgmSettingsCancel');
+    const bgmSettingsSave = document.getElementById('bgmSettingsSave');
+    const bgmRemove = document.getElementById('bgmRemove');
+    let currentBgmUrl = '';
+
+    function updateBgmControls() {
+      const hasSource = Boolean(currentBgmUrl);
+      bgmPlayer.classList.toggle('no-source', !hasSource);
+      bgmPlay.disabled = !hasSource;
+      bgmPlay.textContent = bgmAudio.paused ? '▶' : '❚❚';
+      bgmPlay.setAttribute('aria-label', bgmAudio.paused ? 'Phát nhạc' : 'Tạm dừng nhạc');
+      bgmMute.textContent = bgmAudio.muted || bgmAudio.volume === 0 ? '🔇' : '🔊';
+      bgmMute.setAttribute('aria-label', bgmAudio.muted ? 'Bật tiếng' : 'Tắt tiếng');
+    }
+
+    function setBgmUrl(value, { persist = true, draft = false } = {}) {
+      const nextUrl = String(value || '').trim();
+      currentBgmUrl = nextUrl;
+      bgmAudio.pause();
+      bgmProgress.value = '0';
+
+      if (nextUrl) {
+        bgmAudio.src = nextUrl;
+        bgmAudio.load();
+      } else {
+        bgmAudio.removeAttribute('src');
+        bgmAudio.load();
+      }
+
+      if (persist) {
+        if (nextUrl) localStorage.setItem(BGM_STORAGE_KEY, nextUrl);
+        else localStorage.removeItem(BGM_STORAGE_KEY);
+      }
+      if (draft) markLocalDraft();
+      updateBgmControls();
+    }
+
+    function openBgmSettings() {
+      if (!document.body.classList.contains('edit-mode')) return;
+      bgmTitleInput.value = bgmTitle.textContent.trim();
+      bgmUrlInput.value = currentBgmUrl;
+      bgmSettingsError.textContent = '';
+      bgmSettingsModal.classList.add('open');
+      bgmSettingsModal.setAttribute('aria-hidden', 'false');
+      window.setTimeout(() => bgmUrlInput.focus(), 40);
+    }
+
+    function closeBgmSettings() {
+      bgmSettingsModal.classList.remove('open');
+      bgmSettingsModal.setAttribute('aria-hidden', 'true');
+    }
+
+    bgmPlay.addEventListener('click', async () => {
+      if (!currentBgmUrl) {
+        showToast('Mở Edit → Đổi nhạc để thêm BGM');
+        return;
+      }
+      try {
+        if (bgmAudio.paused) await bgmAudio.play();
+        else bgmAudio.pause();
+      } catch (error) {
+        showToast('Không phát được nhạc. Hãy kiểm tra đường dẫn MP3.');
+      }
+      updateBgmControls();
+    });
+
+    bgmMute.addEventListener('click', () => {
+      bgmAudio.muted = !bgmAudio.muted;
+      updateBgmControls();
+    });
+
+    bgmAudio.addEventListener('play', updateBgmControls);
+    bgmAudio.addEventListener('pause', updateBgmControls);
+    bgmAudio.addEventListener('ended', updateBgmControls);
+    bgmAudio.addEventListener('timeupdate', () => {
+      if (!Number.isFinite(bgmAudio.duration) || bgmAudio.duration <= 0) return;
+      bgmProgress.value = String((bgmAudio.currentTime / bgmAudio.duration) * 100);
+    });
+    bgmAudio.addEventListener('loadedmetadata', () => { bgmProgress.value = '0'; });
+
+    bgmProgress.addEventListener('input', () => {
+      if (!Number.isFinite(bgmAudio.duration) || bgmAudio.duration <= 0) return;
+      bgmAudio.currentTime = (Number(bgmProgress.value) / 100) * bgmAudio.duration;
+    });
+
+    bgmSettingsOpen.addEventListener('click', openBgmSettings);
+    bgmTitle.addEventListener('input', () => {
+      if (!document.body.classList.contains('edit-mode')) return;
+      try {
+        const content = savedContent();
+        content.bgmTitle = bgmTitle.textContent.trim();
+        localStorage.setItem('ArtistEditableContent', JSON.stringify(content));
+      } catch (error) {}
+      markLocalDraft();
+    });
+    bgmSettingsCancel.addEventListener('click', closeBgmSettings);
+    bgmSettingsModal.addEventListener('click', event => {
+      if (event.target === bgmSettingsModal) closeBgmSettings();
+    });
+    bgmSettingsSave.addEventListener('click', () => {
+      const title = bgmTitleInput.value.trim() || 'Background music';
+      const url = bgmUrlInput.value.trim();
+      if (!url) {
+        bgmSettingsError.textContent = 'Nhập đường dẫn MP3, ví dụ ./bgm.mp3.';
+        return;
+      }
+      bgmTitle.textContent = title;
+      try {
+        const content = savedContent();
+        content.bgmTitle = title;
+        localStorage.setItem('ArtistEditableContent', JSON.stringify(content));
+      } catch (error) {}
+      setBgmUrl(url, { persist: true, draft: true });
+      closeBgmSettings();
+      showToast('Đã cập nhật BGM — bấm Lưu & thoát để publish');
+    });
+    bgmRemove.addEventListener('click', () => {
+      setBgmUrl('', { persist: true, draft: true });
+      closeBgmSettings();
+      showToast('Đã gỡ BGM');
+    });
+
+    try {
+      const savedVolume = Number(localStorage.getItem(BGM_VOLUME_KEY));
+      if (Number.isFinite(savedVolume) && savedVolume >= 0 && savedVolume <= 1) bgmAudio.volume = savedVolume;
+    } catch (error) {}
+    setBgmUrl(localStorage.getItem(BGM_STORAGE_KEY) || '', { persist: false, draft: false });
 
     const imageInput = document.getElementById('imageInput');
     const profileImage = document.getElementById('profileImage');
@@ -2314,6 +2590,7 @@
       'ArtistPaymentQr',
       'ArtistShopPattern',
       'ArtistFeedbackImages',
+      'ArtistBgmUrl',
       'ArtistRulesData',
       'ArtistStoreData',
       'ArtistLocalDraft'
@@ -2406,6 +2683,7 @@
       storeItemsData = (storeSaved && storeSaved.stores) || cloneDefaultStoreItems();
       renderStoreAndServices();
       setFeedbackImages(readFeedbackImages(), false, false);
+      setBgmUrl(localStorage.getItem(BGM_STORAGE_KEY) || '', { persist: false, draft: false });
     }
 
 
@@ -2469,6 +2747,7 @@
       editSessionSnapshot = null;
       closeGithubSettings();
       closeFeedbackLibrary();
+      closeBgmSettings();
       showToast('Đã hủy thay đổi');
     });
 
@@ -2600,7 +2879,8 @@
           profileImage: profileImage.dataset.source || profileImage.getAttribute('src') || '',
           qrImage: qrImage.dataset.source || qrImage.getAttribute('src') || '',
           patternImage: shopPattern.dataset.patternSrc || '',
-          feedbackImages: feedbackImages.slice()
+          feedbackImages: feedbackImages.slice(),
+          bgmUrl: currentBgmUrl
         }
       };
     }
@@ -2625,6 +2905,8 @@
         if (assets.patternImage) localStorage.setItem('ArtistShopPattern', assets.patternImage);
         else localStorage.removeItem('ArtistShopPattern');
         localStorage.setItem(FEEDBACK_STORAGE_KEY, JSON.stringify(Array.isArray(assets.feedbackImages) ? assets.feedbackImages : []));
+        if (assets.bgmUrl) localStorage.setItem(BGM_STORAGE_KEY, assets.bgmUrl);
+        else localStorage.removeItem(BGM_STORAGE_KEY);
         localStorage.setItem('ArtistLocalDraft', asDraft ? '1' : '0');
       } catch (error) {
         console.warn('Unable to cache complete site data:', error);
@@ -2667,6 +2949,7 @@
       if (assets.patternImage) showPattern(assets.patternImage);
       else resetPattern(false, false);
       setFeedbackImages(Array.isArray(assets.feedbackImages) ? assets.feedbackImages : [], true, false);
+      setBgmUrl(assets.bgmUrl || '', { persist: true, draft: false });
     }
 
     async function loadDataJson() {
@@ -2957,6 +3240,7 @@
           editSessionSnapshot = null;
           closeGithubSettings();
           closeFeedbackLibrary();
+          closeBgmSettings();
           showToast('Đã publish và thoát chỉnh sửa');
         } else {
           showToast('Đã publish data.json');
@@ -2988,6 +3272,10 @@
       const showing = githubToken.type === 'text';
       githubToken.type = showing ? 'password' : 'text';
       githubTokenToggle.textContent = showing ? 'Hiện' : 'Ẩn';
+    });
+
+    document.addEventListener('keydown', event => {
+      if (event.key === 'Escape' && bgmSettingsModal.classList.contains('open')) closeBgmSettings();
     });
 
     async function initializeSite() {
