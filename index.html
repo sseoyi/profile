@@ -5,7 +5,7 @@
 <meta charset="utf-8"/>
 <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
 <meta content="#c6e6f1" name="theme-color"/>
-<title>Seoyi — Fanart Profile</title>
+<title>Seoyi — Profile</title>
 <link rel="preconnect" href="https://fonts.googleapis.com"/>
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
 <link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@400..800&amp;display=swap" rel="stylesheet"/>
@@ -1237,9 +1237,9 @@
 </div>
 </div>
 <main class="shell">
-<section aria-label="Fanartist profile" class="profile-card">
+<section aria-label="Artist profile" class="profile-card">
 <div class="art-slot">
-<img alt="Ảnh PNG của fanartist" id="profileImage"/>
+<img alt="Ảnh PNG của Artist" id="profileImage"/>
 <div class="art-placeholder" id="imagePlaceholder"><div class="public-only empty-art-mark">♡</div><div class="edit-only">drop your png here ♡<span>transparent background supported</span></div></div>
 <label class="upload-label edit-only" title="Thêm ảnh PNG">
           add png +
@@ -1517,7 +1517,7 @@
       });
     });
 
-    const FEEDBACK_STORAGE_KEY = 'fanartistFeedbackImages';
+    const FEEDBACK_STORAGE_KEY = 'ArtistFeedbackImages';
     const feedbackOpen = document.getElementById('feedbackOpen');
     const feedbackModal = document.getElementById('feedbackModal');
     const feedbackClose = document.getElementById('feedbackClose');
@@ -1675,7 +1675,7 @@
       imagePlaceholder.style.display = '';
     }
 
-    const savedImage = localStorage.getItem('fanartistMintImage');
+    const savedImage = localStorage.getItem('ArtistMintImage');
     if (savedImage) showImage(savedImage);
 
     imageInput.addEventListener('change', event => {
@@ -1685,7 +1685,7 @@
       const reader = new FileReader();
       reader.onload = e => {
         showImage(e.target.result);
-        try { localStorage.setItem('fanartistMintImage', e.target.result); }
+        try { localStorage.setItem('ArtistMintImage', e.target.result); }
         catch (error) { showToast('Ảnh đã hiển thị nhưng quá lớn để lưu'); }
         markLocalDraft();
       };
@@ -1706,13 +1706,13 @@
       shopPattern.style.backgroundImage = '';
       delete shopPattern.dataset.patternSrc;
       shopPattern.classList.remove('custom-pattern');
-      localStorage.removeItem('fanartistShopPattern');
+      localStorage.removeItem('ArtistShopPattern');
       patternInput.value = '';
       if (markDraft) markLocalDraft();
       if (notify) showToast('Đã trở về pattern mặc định');
     }
 
-    const savedPattern = localStorage.getItem('fanartistShopPattern');
+    const savedPattern = localStorage.getItem('ArtistShopPattern');
     if (savedPattern) showPattern(savedPattern);
 
     patternInput.addEventListener('change', event => {
@@ -1723,7 +1723,7 @@
       reader.onload = e => {
         showPattern(e.target.result);
         try {
-          localStorage.setItem('fanartistShopPattern', e.target.result);
+          localStorage.setItem('ArtistShopPattern', e.target.result);
           markLocalDraft();
           showToast('Đã cập nhật pattern');
         } catch (error) { showToast('Pattern đã hiển thị nhưng quá lớn để lưu'); }
@@ -1753,7 +1753,7 @@
       qrChange.style.display = 'none';
     }
 
-    const savedQrImage = localStorage.getItem('fanartistPaymentQr');
+    const savedQrImage = localStorage.getItem('ArtistPaymentQr');
     if (savedQrImage) showQrImage(savedQrImage);
     qrChange.addEventListener('click', () => qrInput.click());
 
@@ -1764,7 +1764,7 @@
       const reader = new FileReader();
       reader.onload = e => {
         showQrImage(e.target.result);
-        try { localStorage.setItem('fanartistPaymentQr', e.target.result); }
+        try { localStorage.setItem('ArtistPaymentQr', e.target.result); }
         catch (error) { showToast('QR đã hiển thị nhưng quá lớn để lưu'); }
         markLocalDraft();
       };
@@ -1806,14 +1806,14 @@
     let editSessionSnapshot = null;
 
     const EDIT_STORAGE_KEYS = [
-      'fanartistEditableContent',
-      'fanartistEditableHtml',
-      'fanartistEditableLinks',
-      'fanartistMintImage',
-      'fanartistPaymentQr',
-      'fanartistShopPattern',
-      'fanartistFeedbackImages',
-      'fanartistLocalDraft'
+      'ArtistEditableContent',
+      'ArtistEditableHtml',
+      'ArtistEditableLinks',
+      'ArtistMintImage',
+      'ArtistPaymentQr',
+      'ArtistShopPattern',
+      'ArtistFeedbackImages',
+      'ArtistLocalDraft'
     ];
 
     function captureEditSession() {
@@ -1841,23 +1841,23 @@
     }
 
     function markLocalDraft() {
-      localStorage.setItem('fanartistLocalDraft', '1');
+      localStorage.setItem('ArtistLocalDraft', '1');
       const sourceText = document.getElementById('dataSourceText');
       if (sourceText) sourceText.textContent = 'có thay đổi chưa publish';
     }
 
     function savedContent() {
-      try { return JSON.parse(localStorage.getItem('fanartistEditableContent') || '{}'); }
+      try { return JSON.parse(localStorage.getItem('ArtistEditableContent') || '{}'); }
       catch (error) { return {}; }
     }
 
     function savedHtmlContent() {
-      try { return JSON.parse(localStorage.getItem('fanartistEditableHtml') || '{}'); }
+      try { return JSON.parse(localStorage.getItem('ArtistEditableHtml') || '{}'); }
       catch (error) { return {}; }
     }
 
     function savedLinks() {
-      try { return JSON.parse(localStorage.getItem('fanartistEditableLinks') || '{}'); }
+      try { return JSON.parse(localStorage.getItem('ArtistEditableLinks') || '{}'); }
       catch (error) { return {}; }
     }
 
@@ -1887,7 +1887,7 @@
         element.contentEditable = enabled ? 'true' : 'false';
         element.spellcheck = enabled;
       });
-      sessionStorage.removeItem('fanartistEditorSession');
+      sessionStorage.removeItem('ArtistEditorSession');
     }
 
     async function sha256(value) {
@@ -1971,10 +1971,10 @@
     const dataSourceText = document.getElementById('dataSourceText');
 
     const GITHUB_KEYS = Object.freeze({
-      repo: 'fanartistGithubRepo',
-      branch: 'fanartistGithubBranch',
-      path: 'fanartistGithubDataPath',
-      token: 'fanartistGithubToken'
+      repo: 'ArtistGithubRepo',
+      branch: 'ArtistGithubBranch',
+      path: 'ArtistGithubDataPath',
+      token: 'ArtistGithubToken'
     });
 
     function cleanRepositoryPath(value) {
@@ -2075,18 +2075,18 @@
     function cacheSiteData(data, asDraft = false) {
       if (!data || typeof data !== 'object') return;
       try {
-        localStorage.setItem('fanartistEditableContent', JSON.stringify(data.content || {}));
-        localStorage.setItem('fanartistEditableHtml', JSON.stringify(data.html || {}));
-        localStorage.setItem('fanartistEditableLinks', JSON.stringify(data.links || {}));
+        localStorage.setItem('ArtistEditableContent', JSON.stringify(data.content || {}));
+        localStorage.setItem('ArtistEditableHtml', JSON.stringify(data.html || {}));
+        localStorage.setItem('ArtistEditableLinks', JSON.stringify(data.links || {}));
         const assets = data.assets || {};
-        if (assets.profileImage) localStorage.setItem('fanartistMintImage', assets.profileImage);
-        else localStorage.removeItem('fanartistMintImage');
-        if (assets.qrImage) localStorage.setItem('fanartistPaymentQr', assets.qrImage);
-        else localStorage.removeItem('fanartistPaymentQr');
-        if (assets.patternImage) localStorage.setItem('fanartistShopPattern', assets.patternImage);
-        else localStorage.removeItem('fanartistShopPattern');
+        if (assets.profileImage) localStorage.setItem('ArtistMintImage', assets.profileImage);
+        else localStorage.removeItem('ArtistMintImage');
+        if (assets.qrImage) localStorage.setItem('ArtistPaymentQr', assets.qrImage);
+        else localStorage.removeItem('ArtistPaymentQr');
+        if (assets.patternImage) localStorage.setItem('ArtistShopPattern', assets.patternImage);
+        else localStorage.removeItem('ArtistShopPattern');
         localStorage.setItem(FEEDBACK_STORAGE_KEY, JSON.stringify(Array.isArray(assets.feedbackImages) ? assets.feedbackImages : []));
-        localStorage.setItem('fanartistLocalDraft', asDraft ? '1' : '0');
+        localStorage.setItem('ArtistLocalDraft', asDraft ? '1' : '0');
       } catch (error) {
         console.warn('Unable to cache complete site data:', error);
       }
@@ -2445,7 +2445,7 @@
 
     async function initializeSite() {
       setEditMode(false);
-      const hasDraft = localStorage.getItem('fanartistLocalDraft') === '1';
+      const hasDraft = localStorage.getItem('ArtistLocalDraft') === '1';
       if (hasDraft) {
         applySavedEdits();
         dataSourceText.textContent = 'đang dùng bản nháp trên trình duyệt';
