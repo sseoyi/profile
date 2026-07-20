@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updatedAt": "2026-07-20T10:23:50.252Z",
+  "updatedAt": "2026-07-20T10:31:11.660Z",
   "content": {
     "profileName": "Seoyi",
     "profileHandle": "@s_seoyi",
@@ -30,10 +30,10 @@
     "paymentValue3": "MAI TUYET PHUONG",
     "paymentLabel4": "Nội dung",
     "paymentValue4": "TÊN FACEBOOK",
-    "storeTitle": "Store",
-    "storeNote": "Hàng có sẵn",
-    "servicesTitle": "Dịch vụ",
-    "storesTitle": "Sản phẩm",
+    "storeTitle": "Dịch vụ và Hàng sẵn",
+    "storeNote": "Hãy liên hệ mình để chốt nhé!",
+    "servicesTitle": "Services",
+    "storesTitle": "Store",
     "footerText": "@s_seoyi"
   },
   "html": {
@@ -83,29 +83,43 @@
   "store": {
     "services": [
       {
-        "name": "Sketch request",
-        "price": "100K+",
-        "details": "Sketch đơn giản một nhân vật, file PNG."
+        "name": "Patreon",
+        "price": "145k / gói $5",
+        "details": "Nhận gói qua link gift, không cần gửi mình tài khoản của bạn."
       },
       {
-        "name": "Art print",
-        "price": "60K",
-        "details": "Print A5 trên giấy mỹ thuật."
+        "name": "Viettelpost phí cũ",
+        "price": "2k / 4 đơn",
+        "details": "+500đ / đơnFREE 2 đơn đầu"
       }
     ],
     "stores": [
       {
-        "name": "Sticker set",
-        "type": "Sticker fanmade",
-        "price": "45K",
-        "quantity": "Số lượng có hạn",
+        "name": "ALNST - Clique Sticker set",
+        "type": "Gồm 6c/setSticker die-cut, cán hologram",
+        "price": "30k",
+        "quantity": "4 set",
         "image": ""
       },
       {
-        "name": "Free wallpaper",
-        "type": "Wallpaper điện thoại",
-        "price": "Free",
-        "quantity": "Không giới hạn",
+        "name": "ALNST - Clique  Phonecharm",
+        "type": "Gồm phonecharm + dây đeo",
+        "price": "45kset   |   15k/phonecharm",
+        "quantity": "Set: Ivan (1), Luka (1), Hyuna (2)Phonecharm: Sua (2), Mizi (2), Ivan (3), Till (3)",
+        "image": ""
+      },
+      {
+        "name": "ALNST - Clique Badge",
+        "type": "Badge mini 3.2cmCán holo sao",
+        "price": "15k/c",
+        "quantity": "Sua (2), Mizi (2), Ivan (4), Till (3), Luka (2), Hyuna (1)",
+        "image": ""
+      },
+      {
+        "name": "ALNST - Clique Standee",
+        "type": "Gồm 1 standee 5cm đế tim + dây móc bi",
+        "price": "30k/c",
+        "quantity": "Sua (1), Mizi (1), Ivan (2), Till (1)",
         "image": ""
       }
     ]
