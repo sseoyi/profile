@@ -1101,6 +1101,7 @@
       position: fixed;
       left: 50%;
       bottom: 14px;
+      transform: translateX(-50%);
       z-index: 80;
       display: none;
       align-items: center;
@@ -2967,43 +2968,4 @@
         if (error.status === 401) message = 'Token không hợp lệ hoặc đã hết hạn.';
         else if (error.status === 403) message = 'GitHub từ chối quyền ghi. Token cần quyền Contents: Read and write cho đúng repository.';
         else if (error.status === 404) message = 'Không tìm thấy repository hoặc branch. Kiểm tra Repository và Branch trong GitHub settings.';
-        else if (error.status === 413) message = 'data.json quá lớn. Hãy giảm kích thước hoặc số lượng ảnh feedback.';
-
-        const diagnostic = error.status ? `HTTP ${error.status}: ${message}` : message;
-        openGithubSettings(diagnostic, 'error');
-        showToast(`Publish thất bại: ${message}`);
-      } finally {
-        editorExit.disabled = false;
-        editorExit.textContent = originalLabel;
-      }
-    }
-
-    githubSettingsOpen.addEventListener('click', () => openGithubSettings());
-    githubSettingsClose.addEventListener('click', closeGithubSettings);
-    githubSettingsModal.addEventListener('click', event => {
-      if (event.target === githubSettingsModal) closeGithubSettings();
-    });
-    githubSaveSettings.addEventListener('click', () => saveGithubSettings(true));
-    githubTokenToggle.addEventListener('click', () => {
-      const showing = githubToken.type === 'text';
-      githubToken.type = showing ? 'password' : 'text';
-      githubTokenToggle.textContent = showing ? 'Hiện' : 'Ẩn';
-    });
-
-    async function initializeSite() {
-      setEditMode(false);
-      const hasDraft = localStorage.getItem('ArtistLocalDraft') === '1';
-      if (hasDraft) {
-        applySavedEdits();
-        dataSourceText.textContent = 'đang dùng bản nháp trên trình duyệt';
-      } else {
-        const loaded = await loadDataJson();
-        if (!loaded) applySavedEdits();
-      }
-      fillGithubSettings();
-    }
-
-    initializeSite();
-</script>
-</body>
-</html>
+        else if (error.status === 413) message = 'data.json quá lớn. Hãy giảm kích thước hoặc số lư
