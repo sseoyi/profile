@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updatedAt": "2026-07-20T14:35:16.661Z",
+  "updatedAt": "2026-07-20T14:51:55.723Z",
   "content": {
     "profileName": "Seoyi",
     "profileHandle": "@s_seoyi",
@@ -19,7 +19,8 @@
     "legitName2": "Alex Mint",
     "legitHandle2": "@aleciarf",
     "legitButton1": "Post check legit",
-    "legitButton2": "Feedback",
+    "legitCustomButton2": "Form ship",
+    "legitButton3": "Tracking",
     "rulesTitle": "Một số lưu ý khi giao dịch với mình:",
     "rulesNote": "",
     "paymentTitle": "Chỉ dùng STK dưới.",
@@ -45,7 +46,9 @@
     "youtubeUrl": "https://www.youtube.com/@s_seoyi",
     "legitAccountUrl1": "https://www.facebook.com/sseoyi/",
     "legitAccountUrl2": "https://www.facebook.com/aleciarf",
-    "legitPostUrl": "https://www.facebook.com/share/p/1K8FRDkab3/"
+    "legitPostUrl": "https://www.facebook.com/share/p/1K8FRDkab3/",
+    "legitButton2Url": "https://docs.google.com/forms/d/e/1FAIpQLSdHaBSyK_aCcmxJ7oCKA3iLYu9W3Sfer7nJE6TPL9pFIpu_4Q/viewform",
+    "legitButton3Url": "https://sseoyi.github.io/tracker"
   },
   "rules": [
     {
