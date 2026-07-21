@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updatedAt": "2026-07-20T15:06:40.042Z",
+  "updatedAt": "2026-07-21T03:41:49.206Z",
   "content": {
     "profileName": "Seoyi",
     "profileHandle": "@s_seoyi",
@@ -19,11 +19,11 @@
     "legitName2": "Alex Mint",
     "legitHandle2": "@aleciarf",
     "legitButton1": "Post check legit",
-    "legitCustomButton2": "Form ship",
-    "legitButton3": "Tracking",
-    "rulesTitle": "Một số lưu ý khi giao dịch với mình:",
+    "legitCustomButton2": "Link 2",
+    "legitButton3": "Link 3",
+    "rulesTitle": "Rules",
     "rulesNote": "",
-    "paymentTitle": "Chỉ dùng STK dưới.",
+    "paymentTitle": "Thông tin chuyển khoản",
     "paymentLabel1": "Ngân hàng",
     "paymentValue1": "VPBANK  | MOMO",
     "paymentLabel2": "Số tài khoản",
@@ -39,48 +39,48 @@
     "footerText": "@s_seoyi"
   },
   "html": {
-    "noticeHtml": "<font color=\"#080809\" face=\"Segoe UI Historic, Segoe UI, Helvetica, Arial, sans-serif\"><span style=\"font-size: 15px; white-space-collapse: preserve;\">♡ 오늘 당신에게 좋은 일이 있을 겁니다 ♡</span></font>"
+    "noticeHtml": "<font color=\"#080809\" face=\"Segoe UI Historic, Segoe UI, Helvetica, Arial, sans-serif\"><span style=\"font-size: 15px; white-space-collapse: preserve;\">오늘 당신에게 좋은 일이 있을 겁니다</span></font>"
   },
   "links": {
-    "facebookUrl": "https://www.facebook.com/share/1Jet8S3nPz/",
+    "facebookUrl": "https://facebook.com/",
     "youtubeUrl": "https://www.youtube.com/@s_seoyi",
     "legitAccountUrl1": "https://www.facebook.com/sseoyi/",
     "legitAccountUrl2": "https://www.facebook.com/aleciarf",
     "legitPostUrl": "https://www.facebook.com/share/p/1K8FRDkab3/",
-    "legitButton2Url": "https://docs.google.com/forms/d/e/1FAIpQLSdHaBSyK_aCcmxJ7oCKA3iLYu9W3Sfer7nJE6TPL9pFIpu_4Q/viewform",
-    "legitButton3Url": "https://sseoyi.github.io/tracker"
+    "legitButton2Url": "https://facebook.com/",
+    "legitButton3Url": "https://facebook.com/"
   },
   "rules": [
     {
-      "title": "Trước giao dịch",
+      "title": "Đặt hàng / đặt vẽ",
       "items": [
-        "Có vấn đề hay thắc mắc hãy hỏi mình trước.",
-        "TH không rep tin nhắn mình nhiều lần: hủy giao dịch.",
-        "Đơn được chốt sau khi mình gửi ttck."
+        "Gửi mô tả, ảnh tham khảo và thời hạn mong muốn.",
+        "Chốt giá trước khi bắt đầu.",
+        "Đơn được xếp lịch sau khi nhận cọc."
       ]
     },
     {
-      "title": "Sau giao dịch",
+      "title": "Thanh toán và hoàn tiền",
       "items": [
-        "Quay vid unbox đầy đủ nhé.",
-        "Hàng về tay bạn có df mình sẽ rf tùy độ nghiêm trọng.",
-        "Chỉ giải quyết trong vòng 5 ngày sau khi nhận hàng."
+        "Cọc 50% hoặc theo thỏa thuận của từng đơn.",
+        "Không hoàn cọc sau khi đã bắt đầu làm.",
+        "Đơn gấp hoặc thay đổi lớn có thể tính thêm phí."
       ]
     },
     {
-      "title": "Thanh toán",
+      "title": "Sử dụng tranh",
       "items": [
-        "Nhận ck, COD.",
-        "Hàng sẵn: cọc 50%, hoàn sau 2 tuần.",
-        "Hàng chưa sẵn: cọc 50-70% tùy món, hoàn khi hàng về."
+        "Không repost, trace, xóa chữ ký hoặc dùng cho AI.",
+        "Khi đăng lại vui lòng ghi credit.",
+        "Mục đích thương mại cần hỏi trước."
       ]
     },
     {
-      "title": "Ship hàng",
+      "title": "Ship và thời gian chờ",
       "items": [
-        "Đối với đơn đã ck, mặc định VTP phí cũ.",
-        "Đối với đơn COD, mình ưu tiên dùng SPX.",
-        "Mình gửi hàng 2 lần/tuần, nhưng sẽ không quá 4 ngày từ ngày chốt."
+        "Thời gian làm và gửi hàng tùy lịch cá nhân.",
+        "Mình sẽ báo trước khi có chậm trễ.",
+        "Vui lòng quay video mở hàng để hỗ trợ khiếu nại nếu có."
       ]
     }
   ],
@@ -106,7 +106,7 @@
         "image": ""
       },
       {
-        "name": "ALNST - Clique Keycharm",
+        "name": "ALNST - Clique  Phonecharm",
         "type": "Gồm phonecharm + dây đeo",
         "price": "45kset   |   15k/phonecharm",
         "quantity": "Set: Ivan (1), Luka (1), Hyuna (2)Phonecharm: Sua (2), Mizi (2), Ivan (3), Till (3)",
