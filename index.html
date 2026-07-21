@@ -1064,6 +1064,176 @@
       cursor: pointer;
     }
 
+
+    /* Subtitle-synced karaoke above the BGM player. */
+    .karaoke {
+      position: relative;
+      display: grid;
+      justify-items: center;
+      gap: 5px;
+      min-height: 54px;
+      margin: 7px 0 2px;
+      padding: 7px 12px 3px;
+      color: var(--ink);
+      background: transparent;
+      border: 0;
+      text-align: center;
+    }
+
+    .karaoke-text {
+      width: min(680px, 100%);
+      min-height: 30px;
+      display: grid;
+      place-items: center;
+      color: var(--ink);
+      font-size: 12px;
+      font-weight: 650;
+      line-height: 1.45;
+      white-space: pre-line;
+      opacity: .74;
+      transform: translateY(0);
+      will-change: opacity, transform;
+    }
+
+    .karaoke-text.cue-change {
+      animation: karaokeCueIn .28s cubic-bezier(.22, 1, .36, 1);
+    }
+
+    @keyframes karaokeCueIn {
+      from { transform: translateY(4px); }
+      to { transform: translateY(0); }
+    }
+
+    .karaoke-languages {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 2px;
+      visibility: hidden;
+      opacity: 0;
+      transform: translateY(4px) scale(.94);
+      pointer-events: none;
+    }
+
+    .karaoke-languages.visible {
+      visibility: visible;
+      opacity: 1;
+      transform: translateY(0) scale(1);
+      pointer-events: auto;
+      animation: karaokeLanguagesPop .3s cubic-bezier(.2, .85, .28, 1) both;
+    }
+
+    @keyframes karaokeLanguagesPop {
+      0% { opacity: 0; transform: translateY(5px) scale(.88); }
+      66% { opacity: 1; transform: translateY(-1px) scale(1.05); }
+      100% { opacity: 1; transform: translateY(0) scale(1); }
+    }
+
+    .karaoke-lang {
+      position: relative;
+      min-width: 34px;
+      min-height: 24px;
+      padding: 0 7px;
+      border: 0;
+      border-radius: 999px;
+      color: var(--ink);
+      background: transparent;
+      font-size: 8px;
+      font-weight: 850;
+      letter-spacing: .055em;
+      opacity: .48;
+      cursor: pointer;
+      touch-action: manipulation;
+    }
+
+    .karaoke-lang::after {
+      content: "";
+      position: absolute;
+      inset: 1px;
+      border: 1.2px solid transparent;
+      border-radius: inherit;
+      pointer-events: none;
+    }
+
+    .karaoke-lang.active { opacity: 1; }
+    .karaoke-lang.active::after { border-color: var(--ink); }
+    .karaoke-lang:hover { opacity: .82; }
+
+    .karaoke-editor {
+      margin-top: 13px;
+      padding-top: 12px;
+      border-top: 1px dashed rgba(35, 31, 32, .34);
+    }
+
+    .karaoke-editor-title {
+      margin: 0;
+      font-size: 11px;
+      font-weight: 900;
+    }
+
+    .karaoke-editor-note {
+      margin: 3px 0 9px;
+      color: rgba(35, 31, 32, .62);
+      font-size: 9px;
+      line-height: 1.45;
+    }
+
+    .karaoke-file-list { display: grid; gap: 7px; }
+
+    .karaoke-file-row {
+      display: grid;
+      grid-template-columns: 39px minmax(0, 1fr) auto;
+      align-items: center;
+      gap: 7px;
+      min-width: 0;
+    }
+
+    .karaoke-file-lang {
+      font-size: 9px;
+      font-weight: 900;
+      letter-spacing: .05em;
+    }
+
+    .karaoke-file-picker {
+      display: flex;
+      align-items: center;
+      min-width: 0;
+      min-height: 38px;
+      padding: 0 10px;
+      overflow: hidden;
+      border: 1.5px solid var(--ink);
+      border-radius: 9px;
+      color: var(--ink);
+      background: transparent;
+      font-size: 9px;
+      font-weight: 800;
+      cursor: pointer;
+      touch-action: manipulation;
+    }
+
+    .karaoke-file-picker span {
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    .karaoke-file-picker input { display: none; }
+
+    .karaoke-file-remove {
+      min-width: 34px;
+      min-height: 34px;
+      padding: 0 8px;
+      border: 0;
+      border-radius: 8px;
+      color: rgba(35, 31, 32, .56);
+      background: transparent;
+      font-size: 9px;
+      font-weight: 850;
+      cursor: pointer;
+    }
+
+    .karaoke-file-remove:disabled { opacity: .25; cursor: default; }
+
     /* Compact BGM player. Browsers require a user tap before audio can play. */
     .bgm-player {
       display: grid;
@@ -1134,7 +1304,19 @@
       cursor: pointer;
     }
 
-    .bgm-modal-box { width: min(430px, 100%); }
+    .bgm-modal-box {
+      width: min(430px, 100%);
+      max-height: min(760px, calc(100vh - 36px));
+      overflow: auto;
+      overscroll-behavior: contain;
+    }
+    .bgm-modal-box .editor-modal-actions {
+      position: sticky;
+      bottom: -18px;
+      z-index: 3;
+      padding: 10px 0 max(2px, env(safe-area-inset-bottom));
+      background: #ffffff;
+    }
     .bgm-modal-field { display: grid; gap: 5px; margin-top: 10px; }
     .bgm-modal-field label {
       font-size: 9px;
@@ -1517,7 +1699,9 @@
       .side-star { animation: none; display: none; }
       .tab-btn.tab-enter::before,
       .tab-btn.tab-enter > span,
-      .panel.panel-content-enter { animation: none !important; }
+      .panel.panel-content-enter,
+      .karaoke-text.cue-change,
+      .karaoke-languages.visible { animation: none !important; }
     }
 
     @media (max-width: 700px) {
@@ -1620,9 +1804,14 @@
 </div>
 </div>
 </section>
-<div class="notice" data-edit-html-key="noticeHtml">
-<strong>Nhắc nhẹ:</strong> Chỉ giao dịch qua những tài khoản và thông tin có trên trang này. Hãy kiểm tra đúng tên trước khi chuyển khoản.
-    </div>
+<section aria-label="Lời bài hát karaoke" class="karaoke" id="karaoke">
+<div aria-live="off" class="karaoke-text" id="karaokeText">Nhắc nhẹ: Chỉ giao dịch qua những tài khoản và thông tin có trên trang này. Hãy kiểm tra đúng tên trước khi chuyển khoản.</div>
+<div aria-label="Ngôn ngữ phụ đề" class="karaoke-languages" id="karaokeLanguages">
+<button class="karaoke-lang" data-karaoke-lang="ENG" type="button">ENG</button>
+<button class="karaoke-lang" data-karaoke-lang="VIE" type="button">VIE</button>
+<button class="karaoke-lang active" data-karaoke-lang="KOR" type="button">KOR</button>
+</div>
+</section>
 <div aria-label="Trình phát nhạc nền" class="bgm-player no-source" id="bgmPlayer">
 <button aria-label="Phát nhạc" class="bgm-play" id="bgmPlay" type="button">▶</button>
 <div class="bgm-track">
@@ -1757,7 +1946,17 @@
     </div>
   </div>
 </div>
-<div aria-hidden="true" class="editor-modal" id="bgmSettingsModal"><div class="editor-modal-box bgm-modal-box"><h2>Cài đặt BGM</h2><p>File mặc định là <strong>bgm.mp3</strong> nằm cùng thư mục với file HTML, nên đường dẫn đúng là <strong>./bgm.mp3</strong>. Khách vẫn cần chạm Play một lần vì trình duyệt điện thoại chặn tự phát nhạc.</p><div class="bgm-modal-field"><label for="bgmTitleInput">Tên bài nhạc</label><input id="bgmTitleInput" placeholder="Background music" type="text"/></div><div class="bgm-modal-field"><label>Thay file nhạc</label><label class="bgm-file-picker">Chọn MP3 / M4A / OGG<input accept="audio/*,.mp3,.m4a,.aac,.ogg,.wav" id="bgmFileInput" type="file"/></label><div class="bgm-selected-file" id="bgmSelectedFile">Đang dùng ./bgm.mp3</div></div><div class="bgm-modal-field"><label for="bgmUrlInput">Đường dẫn / audio URL</label><input id="bgmUrlInput" placeholder="./bgm.mp3" spellcheck="false" type="text"/></div><div class="editor-error" id="bgmSettingsError"></div><div class="editor-modal-actions"><button class="secondary bgm-remove" id="bgmRemove" type="button">Gỡ nhạc</button><button class="secondary" id="bgmSettingsCancel" type="button">Hủy</button><button id="bgmSettingsSave" type="button">Lưu BGM</button></div></div></div>
+<div aria-hidden="true" class="editor-modal" id="bgmSettingsModal"><div class="editor-modal-box bgm-modal-box"><h2>Cài đặt BGM</h2><p>File mặc định là <strong>bgm.mp3</strong> nằm cùng thư mục với file HTML, nên đường dẫn đúng là <strong>./bgm.mp3</strong>. Khách vẫn cần chạm Play một lần vì trình duyệt điện thoại chặn tự phát nhạc.</p><div class="bgm-modal-field"><label for="bgmTitleInput">Tên bài nhạc</label><input id="bgmTitleInput" placeholder="Background music" type="text"/></div><div class="bgm-modal-field"><label>Thay file nhạc</label><label class="bgm-file-picker">Chọn MP3 / M4A / OGG<input accept="audio/*,.mp3,.m4a,.aac,.ogg,.wav" id="bgmFileInput" type="file"/></label><div class="bgm-selected-file" id="bgmSelectedFile">Đang dùng ./bgm.mp3</div></div><div class="bgm-modal-field"><label for="bgmUrlInput">Đường dẫn / audio URL</label><input id="bgmUrlInput" placeholder="./bgm.mp3" spellcheck="false" type="text"/></div>
+<div class="karaoke-editor">
+  <h3 class="karaoke-editor-title">Phụ đề karaoke</h3>
+  <p class="karaoke-editor-note">Tải file có timestamp dạng LRC, SRT, VTT hoặc TXT. Phụ đề mặc định khi mở trang là KOR.</p>
+  <div class="karaoke-file-list">
+    <div class="karaoke-file-row"><span class="karaoke-file-lang">ENG</span><label class="karaoke-file-picker"><span id="karaokeFileNameENG">Chọn file ENG</span><input accept=".lrc,.srt,.vtt,.txt,text/plain,text/vtt,application/x-subrip" data-karaoke-file="ENG" type="file"/></label><button aria-label="Xóa phụ đề ENG" class="karaoke-file-remove" data-karaoke-remove="ENG" type="button">Xóa</button></div>
+    <div class="karaoke-file-row"><span class="karaoke-file-lang">VIE</span><label class="karaoke-file-picker"><span id="karaokeFileNameVIE">Chọn file VIE</span><input accept=".lrc,.srt,.vtt,.txt,text/plain,text/vtt,application/x-subrip" data-karaoke-file="VIE" type="file"/></label><button aria-label="Xóa phụ đề VIE" class="karaoke-file-remove" data-karaoke-remove="VIE" type="button">Xóa</button></div>
+    <div class="karaoke-file-row"><span class="karaoke-file-lang">KOR</span><label class="karaoke-file-picker"><span id="karaokeFileNameKOR">Chọn file KOR</span><input accept=".lrc,.srt,.vtt,.txt,text/plain,text/vtt,application/x-subrip" data-karaoke-file="KOR" type="file"/></label><button aria-label="Xóa phụ đề KOR" class="karaoke-file-remove" data-karaoke-remove="KOR" type="button">Xóa</button></div>
+  </div>
+</div>
+<div class="editor-error" id="bgmSettingsError"></div><div class="editor-modal-actions"><button class="secondary bgm-remove" id="bgmRemove" type="button">Gỡ nhạc</button><button class="secondary" id="bgmSettingsCancel" type="button">Hủy</button><button id="bgmSettingsSave" type="button">Lưu BGM</button></div></div></div>
 <div aria-hidden="true" class="github-settings-modal" id="githubSettingsModal">
   <div class="github-settings-box">
     <div class="github-settings-head">
@@ -2360,6 +2559,7 @@
 
     const FEEDBACK_STORAGE_KEY = 'ArtistFeedbackImages';
     const BGM_STORAGE_KEY = 'ArtistBgmUrl';
+    const KARAOKE_STORAGE_KEY = 'ArtistKaraokeData';
     const DEFAULT_BGM_URL = './bgm.mp3';
 
     const feedbackOpen = document.getElementById('feedbackOpen');
@@ -2596,6 +2796,7 @@
       }
       if (draft) markLocalDraft();
       updateBgmControls();
+      if (typeof resetKaraokePlayback === 'function') resetKaraokePlayback();
     }
 
     function bgmExtensionForFile(file) {
@@ -2748,6 +2949,380 @@
       closeBgmSettings();
       showToast('Đã gỡ BGM');
     });
+
+
+    /* Karaoke subtitles: LRC, SRT, WebVTT and timestamped TXT. */
+    const KARAOKE_LANGUAGES = ['ENG', 'VIE', 'KOR'];
+    const karaokeRoot = document.getElementById('karaoke');
+    const karaokeText = document.getElementById('karaokeText');
+    const karaokeLanguages = document.getElementById('karaokeLanguages');
+    const karaokeLanguageButtons = Array.from(document.querySelectorAll('[data-karaoke-lang]'));
+    const karaokeFileInputs = Array.from(document.querySelectorAll('[data-karaoke-file]'));
+    const karaokeRemoveButtons = Array.from(document.querySelectorAll('[data-karaoke-remove]'));
+    const initialKaraokeFallback = karaokeText.textContent.trim();
+
+    let karaokeData = {
+      defaultLanguage: 'KOR',
+      fallbackText: initialKaraokeFallback,
+      tracks: { ENG: null, VIE: null, KOR: null }
+    };
+    let activeKaraokeLanguage = 'KOR';
+    let activeKaraokeCueIndex = -2;
+    let karaokeFrame = 0;
+    let lastKaraokeTime = 0;
+
+    function parseSubtitleTimestamp(value) {
+      const input = String(value || '').trim().replace(',', '.');
+      if (!input) return NaN;
+      const parts = input.split(':').map(Number);
+      if (parts.some(part => !Number.isFinite(part))) return NaN;
+      if (parts.length === 3) return parts[0] * 3600 + parts[1] * 60 + parts[2];
+      if (parts.length === 2) return parts[0] * 60 + parts[1];
+      if (parts.length === 1) return parts[0];
+      return NaN;
+    }
+
+    function cleanSubtitleText(value) {
+      return String(value || '')
+        .replace(/<br\s*\/?>/gi, '\n')
+        .replace(/<[^>]+>/g, '')
+        .replace(/\{\\[^}]+\}/g, '')
+        .trim();
+    }
+
+    function parseLrcSubtitles(rawText) {
+      const cues = [];
+      String(rawText || '').replace(/^\uFEFF/, '').split(/\r?\n/).forEach(line => {
+        const timestamps = [...line.matchAll(/\[(\d{1,3}):(\d{1,2}(?:[.:]\d{1,3})?)\]/g)];
+        if (!timestamps.length) return;
+        const textValue = cleanSubtitleText(line.replace(/\[[^\]]+\]/g, ''));
+        if (!textValue) return;
+        timestamps.forEach(match => {
+          const seconds = Number(match[1]) * 60 + Number(String(match[2]).replace(':', '.'));
+          if (Number.isFinite(seconds)) cues.push({ start: seconds, end: null, text: textValue });
+        });
+      });
+      return cues;
+    }
+
+    function parseBlockSubtitles(rawText) {
+      const normalized = String(rawText || '')
+        .replace(/^\uFEFF/, '')
+        .replace(/\r/g, '')
+        .replace(/^WEBVTT[^\n]*\n+/i, '');
+      const cues = [];
+      normalized.split(/\n{2,}/).forEach(block => {
+        const lines = block.split('\n').map(line => line.trimEnd());
+        const timingIndex = lines.findIndex(line => line.includes('-->'));
+        if (timingIndex < 0) return;
+        const timing = lines[timingIndex].match(/([^\s]+)\s*-->\s*([^\s]+)/);
+        if (!timing) return;
+        const start = parseSubtitleTimestamp(timing[1]);
+        const end = parseSubtitleTimestamp(timing[2]);
+        const textValue = cleanSubtitleText(lines.slice(timingIndex + 1).join('\n'));
+        if (Number.isFinite(start) && textValue) {
+          cues.push({ start, end: Number.isFinite(end) ? end : null, text: textValue });
+        }
+      });
+      return cues;
+    }
+
+    function normalizeSubtitleCues(cues) {
+      const sorted = (Array.isArray(cues) ? cues : [])
+        .filter(cue => cue && Number.isFinite(Number(cue.start)) && String(cue.text || '').trim())
+        .map(cue => ({
+          start: Math.max(0, Number(cue.start)),
+          end: Number.isFinite(Number(cue.end)) ? Number(cue.end) : null,
+          text: cleanSubtitleText(cue.text)
+        }))
+        .sort((a, b) => a.start - b.start);
+
+      return sorted.map((cue, index) => {
+        const nextStart = sorted[index + 1]?.start;
+        let end = cue.end;
+        if (!Number.isFinite(end) || end <= cue.start) {
+          end = Number.isFinite(nextStart) ? nextStart : cue.start + 5;
+        }
+        if (Number.isFinite(nextStart)) end = Math.min(end, nextStart);
+        return { ...cue, end: Math.max(cue.start + .08, end) };
+      });
+    }
+
+    function parseSubtitleFile(rawText, filename = '') {
+      const raw = String(rawText || '');
+      const looksBlockBased = /-->/.test(raw) || /\.(srt|vtt)$/i.test(filename);
+      let cues = looksBlockBased ? parseBlockSubtitles(raw) : parseLrcSubtitles(raw);
+      if (!cues.length) cues = looksBlockBased ? parseLrcSubtitles(raw) : parseBlockSubtitles(raw);
+      return normalizeSubtitleCues(cues);
+    }
+
+    function normalizeKaraokeTrack(track) {
+      if (!track || typeof track !== 'object') return null;
+      const raw = typeof track.raw === 'string' ? track.raw : '';
+      const filename = typeof track.filename === 'string' ? track.filename : '';
+      const cues = normalizeSubtitleCues(Array.isArray(track.cues) && track.cues.length
+        ? track.cues
+        : parseSubtitleFile(raw, filename));
+      if (!raw && !cues.length) return null;
+      return { filename, raw, cues };
+    }
+
+    function normalizeKaraokeData(source) {
+      const input = source && typeof source === 'object' ? source : {};
+      const tracksSource = input.tracks && typeof input.tracks === 'object' ? input.tracks : {};
+      const tracks = {};
+      KARAOKE_LANGUAGES.forEach(language => { tracks[language] = normalizeKaraokeTrack(tracksSource[language]); });
+      return {
+        defaultLanguage: 'KOR',
+        fallbackText: typeof input.fallbackText === 'string' && input.fallbackText.trim()
+          ? input.fallbackText.trim()
+          : initialKaraokeFallback,
+        tracks
+      };
+    }
+
+    function getKaraokePayload() {
+      const tracks = {};
+      KARAOKE_LANGUAGES.forEach(language => {
+        const track = karaokeData.tracks[language];
+        tracks[language] = track ? {
+          filename: track.filename || '',
+          raw: track.raw || '',
+          cues: track.cues.map(cue => ({ start: cue.start, end: cue.end, text: cue.text }))
+        } : null;
+      });
+      return {
+        defaultLanguage: 'KOR',
+        fallbackText: karaokeData.fallbackText,
+        tracks
+      };
+    }
+
+    function readCachedKaraokeData() {
+      try {
+        const raw = localStorage.getItem(KARAOKE_STORAGE_KEY);
+        return raw ? normalizeKaraokeData(JSON.parse(raw)) : null;
+      } catch (error) {
+        return null;
+      }
+    }
+
+    function persistKaraokeData(draft = true) {
+      try {
+        localStorage.setItem(KARAOKE_STORAGE_KEY, JSON.stringify(getKaraokePayload()));
+        if (draft) markLocalDraft();
+        return true;
+      } catch (error) {
+        console.warn('Unable to save karaoke subtitles:', error);
+        showToast('Không thể lưu phụ đề trong trình duyệt');
+        return false;
+      }
+    }
+
+    function updateKaraokeEditorLabels() {
+      KARAOKE_LANGUAGES.forEach(language => {
+        const track = karaokeData.tracks[language];
+        const label = document.getElementById(`karaokeFileName${language}`);
+        const remove = document.querySelector(`[data-karaoke-remove="${language}"]`);
+        if (label) {
+          label.textContent = track
+            ? `${track.filename || `Phụ đề ${language}`} · ${track.cues.length} dòng`
+            : `Chọn file ${language}`;
+        }
+        if (remove) remove.disabled = !track;
+      });
+    }
+
+    function setActiveKaraokeLanguage(language, notifyMissing = false) {
+      const next = KARAOKE_LANGUAGES.includes(language) ? language : 'KOR';
+      if (!karaokeData.tracks[next] && notifyMissing) {
+        showToast(`Chưa tải phụ đề ${next}`);
+        return;
+      }
+      activeKaraokeLanguage = next;
+      activeKaraokeCueIndex = -2;
+      karaokeLanguageButtons.forEach(button => {
+        const active = button.dataset.karaokeLang === next;
+        button.classList.toggle('active', active);
+        button.setAttribute('aria-pressed', String(active));
+      });
+      renderKaraokeAt(bgmAudio.currentTime || 0, false);
+    }
+
+    function findActiveKaraokeCue(cues, time) {
+      let low = 0;
+      let high = cues.length - 1;
+      let candidate = -1;
+      while (low <= high) {
+        const middle = (low + high) >> 1;
+        if (cues[middle].start <= time) {
+          candidate = middle;
+          low = middle + 1;
+        } else {
+          high = middle - 1;
+        }
+      }
+      if (candidate < 0) return -1;
+      return time < cues[candidate].end ? candidate : -1;
+    }
+
+    function setKaraokeText(value, cueIndex, animate = true) {
+      const nextText = String(value || '');
+      if (cueIndex !== activeKaraokeCueIndex || karaokeText.textContent !== nextText) {
+        karaokeText.textContent = nextText;
+        activeKaraokeCueIndex = cueIndex;
+        if (animate && nextText) {
+          karaokeText.classList.remove('cue-change');
+          void karaokeText.offsetWidth;
+          karaokeText.classList.add('cue-change');
+        }
+      }
+    }
+
+    function renderKaraokeAt(time, animate = true) {
+      const track = karaokeData.tracks[activeKaraokeLanguage];
+      const cues = track?.cues || [];
+      const currentTime = Math.max(0, Number(time) || 0);
+
+      if (!cues.length) {
+        setKaraokeText(karaokeData.fallbackText, -1, false);
+        karaokeText.style.opacity = bgmAudio.paused ? '.74' : '.58';
+        karaokeText.style.transform = 'translateY(0)';
+        return;
+      }
+
+      const cueIndex = findActiveKaraokeCue(cues, currentTime);
+      if (cueIndex < 0) {
+        setKaraokeText('', -1, false);
+        karaokeText.style.opacity = '0';
+        karaokeText.style.transform = 'translateY(2px)';
+        return;
+      }
+
+      const cue = cues[cueIndex];
+      setKaraokeText(cue.text, cueIndex, animate);
+      const length = Math.max(.08, cue.end - cue.start);
+      const fadeDuration = Math.min(.42, Math.max(.14, length * .16));
+      const fadeIn = Math.min(1, Math.max(0, (currentTime - cue.start) / fadeDuration));
+      const fadeOut = Math.min(1, Math.max(0, (cue.end - currentTime) / fadeDuration));
+      const opacity = Math.min(fadeIn, fadeOut, 1);
+      karaokeText.style.opacity = String(opacity);
+      karaokeText.style.transform = `translateY(${(1 - opacity) * 2}px)`;
+    }
+
+    function stopKaraokeClock() {
+      if (karaokeFrame) cancelAnimationFrame(karaokeFrame);
+      karaokeFrame = 0;
+    }
+
+    function runKaraokeClock() {
+      stopKaraokeClock();
+      const tick = () => {
+        const time = bgmAudio.currentTime || 0;
+        if (time + .75 < lastKaraokeTime) activeKaraokeCueIndex = -2;
+        lastKaraokeTime = time;
+        renderKaraokeAt(time, true);
+        if (!bgmAudio.paused && !bgmAudio.ended) karaokeFrame = requestAnimationFrame(tick);
+      };
+      tick();
+    }
+
+    function resetKaraokePlayback() {
+      stopKaraokeClock();
+      activeKaraokeCueIndex = -2;
+      lastKaraokeTime = 0;
+      const track = karaokeData.tracks[activeKaraokeLanguage];
+      if (track?.cues?.length) {
+        setKaraokeText(track.cues[0].text, -3, false);
+        karaokeText.style.opacity = '.72';
+      } else {
+        setKaraokeText(karaokeData.fallbackText, -1, false);
+        karaokeText.style.opacity = '.74';
+      }
+      karaokeText.style.transform = 'translateY(0)';
+    }
+
+    function setKaraokeData(source, { persist = false, draft = false } = {}) {
+      karaokeData = normalizeKaraokeData(source);
+      activeKaraokeLanguage = 'KOR';
+      updateKaraokeEditorLabels();
+      setActiveKaraokeLanguage('KOR', false);
+      resetKaraokePlayback();
+      if (persist) persistKaraokeData(draft);
+    }
+
+    function extractLegacyNoticeText(data) {
+      const legacyHtml = data?.html?.noticeHtml;
+      if (typeof legacyHtml !== 'string' || !legacyHtml.trim()) return '';
+      const helper = document.createElement('div');
+      helper.innerHTML = legacyHtml;
+      return helper.textContent.replace(/\s+/g, ' ').trim();
+    }
+
+    karaokeLanguageButtons.forEach(button => {
+      button.addEventListener('click', () => setActiveKaraokeLanguage(button.dataset.karaokeLang, true));
+    });
+
+    karaokeFileInputs.forEach(input => {
+      input.addEventListener('change', async event => {
+        const language = input.dataset.karaokeFile;
+        const file = event.target.files && event.target.files[0];
+        if (!file || !KARAOKE_LANGUAGES.includes(language)) return;
+        if (file.size > 2 * 1024 * 1024) {
+          showToast('File phụ đề lớn hơn 2 MB');
+          input.value = '';
+          return;
+        }
+        const raw = await file.text();
+        const cues = parseSubtitleFile(raw, file.name);
+        if (!cues.length) {
+          showToast(`Không đọc được timestamp trong file ${language}`);
+          input.value = '';
+          return;
+        }
+        karaokeData.tracks[language] = { filename: file.name, raw, cues };
+        if (!persistKaraokeData(true)) {
+          karaokeData.tracks[language] = null;
+          input.value = '';
+          return;
+        }
+        updateKaraokeEditorLabels();
+        if (language === activeKaraokeLanguage) resetKaraokePlayback();
+        showToast(`Đã thêm ${cues.length} dòng phụ đề ${language}`);
+        input.value = '';
+      });
+    });
+
+    karaokeRemoveButtons.forEach(button => {
+      button.addEventListener('click', () => {
+        const language = button.dataset.karaokeRemove;
+        if (!KARAOKE_LANGUAGES.includes(language) || !karaokeData.tracks[language]) return;
+        karaokeData.tracks[language] = null;
+        persistKaraokeData(true);
+        updateKaraokeEditorLabels();
+        if (language === activeKaraokeLanguage) resetKaraokePlayback();
+        showToast(`Đã xóa phụ đề ${language}`);
+      });
+    });
+
+    bgmAudio.addEventListener('play', () => {
+      karaokeLanguages.classList.add('visible');
+      runKaraokeClock();
+    });
+    bgmAudio.addEventListener('pause', () => {
+      stopKaraokeClock();
+      renderKaraokeAt(bgmAudio.currentTime || 0, false);
+    });
+    bgmAudio.addEventListener('seeking', () => renderKaraokeAt(bgmAudio.currentTime || 0, false));
+    bgmAudio.addEventListener('seeked', () => {
+      activeKaraokeCueIndex = -2;
+      renderKaraokeAt(bgmAudio.currentTime || 0, false);
+      if (!bgmAudio.paused) runKaraokeClock();
+    });
+    bgmAudio.addEventListener('loadedmetadata', resetKaraokePlayback);
+    bgmAudio.addEventListener('emptied', resetKaraokePlayback);
+
+    setKaraokeData(readCachedKaraokeData() || karaokeData, { persist: false, draft: false });
 
     setBgmUrl(getCachedBgmUrl(), { persist: false, draft: false });
 
@@ -2908,6 +3483,7 @@
       'ArtistShopPattern',
       'ArtistFeedbackImages',
       'ArtistBgmUrl',
+      'ArtistKaraokeData',
       'ArtistRulesData',
       'ArtistStoreData',
       'ArtistLocalDraft'
@@ -3002,6 +3578,7 @@
       renderStoreAndServices();
       setFeedbackImages(readFeedbackImages(), false, false);
       setBgmUrl(getCachedBgmUrl(), { persist: false, draft: false });
+      setKaraokeData(readCachedKaraokeData() || karaokeData, { persist: false, draft: false });
     }
 
 
@@ -3300,6 +3877,7 @@
         links,
         rules: rulesData,
         store: { services: servicesData, stores: storeItemsData },
+        karaoke: getKaraokePayload(),
         assets: {
           profileImage: profileImage.dataset.source || profileImage.getAttribute('src') || '',
           qrImage: qrImage.dataset.source || qrImage.getAttribute('src') || '',
@@ -3332,6 +3910,8 @@
         localStorage.setItem(FEEDBACK_STORAGE_KEY, JSON.stringify(Array.isArray(assets.feedbackImages) ? assets.feedbackImages : []));
         if (assets.bgmUrl) localStorage.setItem(BGM_STORAGE_KEY, assets.bgmUrl);
         else localStorage.removeItem(BGM_STORAGE_KEY);
+        if (data.karaoke) localStorage.setItem(KARAOKE_STORAGE_KEY, JSON.stringify(normalizeKaraokeData(data.karaoke)));
+        else localStorage.removeItem(KARAOKE_STORAGE_KEY);
         localStorage.setItem('ArtistLocalDraft', asDraft ? '1' : '0');
       } catch (error) {
         console.warn('Unable to cache complete site data:', error);
@@ -3377,6 +3957,9 @@
       const hasBgmSetting = Object.prototype.hasOwnProperty.call(assets, 'bgmUrl');
       const configuredBgmUrl = hasBgmSetting ? assets.bgmUrl : DEFAULT_BGM_URL;
       setBgmUrl(normalizeBgmUrl(configuredBgmUrl), { persist: true, draft: false });
+      const legacyFallback = extractLegacyNoticeText(data);
+      const karaokeSource = data.karaoke || { fallbackText: legacyFallback || initialKaraokeFallback, tracks: {} };
+      setKaraokeData(karaokeSource, { persist: true, draft: false });
     }
 
     async function loadDataJson() {
